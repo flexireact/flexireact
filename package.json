@@ -1,6 +1,6 @@
 {
   "name": "@flexireact/core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The Modern React Framework - SSR, SSG, Islands, TypeScript, Tailwind, File-based Routing",
   "main": "core/index.js",
   "type": "module",

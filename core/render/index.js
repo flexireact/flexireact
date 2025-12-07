@@ -486,12 +486,20 @@ function buildHtmlDocument(options) {
     <title>${escapeHtml(title)}</title>
     ${faviconLink}
     ${metaTags}
+    <style>
+      :root { --flexi-bg: #0f172a; --flexi-fg: #f8fafc; }
+      html, body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; margin: 0; }
+    </style>
     ${styleTags}
     <script>
       (function() {
         var theme = localStorage.getItem('theme');
         if (theme === 'light') {
           document.documentElement.classList.remove('dark');
+          document.documentElement.style.backgroundColor = '#ffffff';
+          document.documentElement.style.color = '#0f172a';
+          document.body.style.backgroundColor = '#ffffff';
+          document.body.style.color = '#0f172a';
         }
       })();
     </script>
