@@ -76,6 +76,10 @@ const TEMPLATES = {
     name: 'Default',
     description: 'Premium template with modern UI, animations & dark mode',
   },
+  'flexi-ui': {
+    name: 'Flexi UI',
+    description: 'Showcase template with @flexireact/flexi-ui components',
+  },
   minimal: {
     name: 'Minimal',
     description: 'Bare minimum FlexiReact setup',
@@ -868,6 +872,745 @@ export default function HomePage() {
 };
 
 // ============================================================================
+// Flexi UI Template Files
+// ============================================================================
+
+const FLEXI_UI_FILES = {
+  'package.json': (name) => JSON.stringify({
+    name: name,
+    version: "1.0.0",
+    private: true,
+    type: "module",
+    scripts: {
+      dev: "npm run css && flexireact dev",
+      build: "npm run css && flexireact build",
+      start: "flexireact start",
+      css: "npx tailwindcss -i ./app/styles/globals.css -o ./public/styles.css --minify"
+    },
+    dependencies: {
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0",
+      "@flexireact/core": "^1.0.0",
+      "@flexireact/flexi-ui": "^1.0.0",
+      "lucide-react": "^0.400.0"
+    },
+    devDependencies: {
+      "@types/react": "^18.2.0",
+      "@types/react-dom": "^18.2.0",
+      "typescript": "^5.3.0",
+      "tailwindcss": "^3.4.0",
+      "postcss": "^8.4.32",
+      "autoprefixer": "^10.4.16"
+    }
+  }, null, 2),
+
+  'tsconfig.json': TEMPLATE_FILES['tsconfig.json'],
+
+  'tailwind.config.js': () => `/** @type {import('tailwindcss').Config} */
+const { flexiUIPlugin } = require('@flexireact/flexi-ui/tailwind');
+
+module.exports = {
+  darkMode: 'class',
+  content: [
+    './app/**/*.{js,ts,jsx,tsx}',
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './layouts/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@flexireact/flexi-ui/dist/**/*.js',
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'fade-up': 'fadeUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+        'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeUp: {
+          '0%': { opacity: '0', transform: 'translateY(30px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.9)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        glowPulse: {
+          '0%, 100%': { boxShadow: '0 0 20px rgba(0, 255, 156, 0.15)' },
+          '50%': { boxShadow: '0 0 40px rgba(0, 255, 156, 0.3)' },
+        },
+      },
+    },
+  },
+  plugins: [flexiUIPlugin],
+};
+`,
+
+  'postcss.config.js': () => `module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+`,
+
+  'flexireact.config.js': () => `/** @type {import('@flexireact/core').Config} */
+export default {
+  styles: [
+    '/styles.css',
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
+  ],
+  favicon: '/favicon.svg',
+  server: {
+    port: 3000
+  },
+  islands: {
+    enabled: true
+  }
+};
+`,
+
+  // ============================================================================
+  // Components
+  // ============================================================================
+
+  'components/Hero.tsx': () => `import React from 'react';
+import { Button, Badge, Card } from '@flexireact/flexi-ui';
+import { Zap, Github, ArrowRight, Sparkles } from 'lucide-react';
+
+export function Hero() {
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Radial Gradient Background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-gradient-radial from-[#00FF9C]/20 via-[#00FF9C]/5 to-transparent blur-3xl" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gradient-radial from-cyan-500/10 to-transparent blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-gradient-radial from-emerald-500/10 to-transparent blur-3xl" />
+      </div>
+
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
+
+      <div className="container mx-auto px-6 py-32 max-w-6xl">
+        <div className="flex flex-col items-center text-center">
+          {/* Badge */}
+          <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <Badge variant="success" className="mb-8 px-4 py-2 text-sm">
+              <Sparkles className="w-4 h-4 mr-2" />
+              The Modern React Framework
+            </Badge>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-8 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+            Build{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FF9C] via-emerald-400 to-cyan-400">
+              beautiful
+            </span>
+            <br />
+            apps faster
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-xl md:text-2xl text-[#94a3b8] max-w-2xl mb-12 leading-relaxed animate-fade-up" style={{ animationDelay: '0.3s' }}>
+            Flexi UI is a stunning component library with neon emerald accents, 
+            dark-first design, and seamless React integration.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-20 animate-fade-up" style={{ animationDelay: '0.4s' }}>
+            <Button size="lg" className="gap-2 text-base px-8 py-4 h-auto">
+              Get Started
+              <ArrowRight className="w-5 h-5" />
+            </Button>
+            <Button variant="outline" size="lg" className="gap-2 text-base px-8 py-4 h-auto">
+              <Github className="w-5 h-5" />
+              GitHub
+            </Button>
+          </div>
+
+          {/* Terminal Preview */}
+          <Card className="w-full max-w-2xl animate-scale-in animate-glow-pulse" style={{ animationDelay: '0.5s' }}>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                <span className="ml-3 text-xs text-[#64748b]">terminal</span>
+              </div>
+              <pre className="text-left text-sm md:text-base font-mono">
+                <code>
+                  <span className="text-[#64748b]">$</span>{' '}
+                  <span className="text-[#00FF9C]">npm</span> install @flexireact/flexi-ui{'\n'}
+                  <span className="text-[#64748b]">$</span>{' '}
+                  <span className="text-[#00FF9C]">npx</span> create-flexireact my-app{'\n'}
+                  {'\n'}
+                  <span className="text-[#00FF9C]">✓</span> <span className="text-[#f8fafc]">Ready in</span> <span className="text-[#00FF9C]">38ms</span>
+                </code>
+              </pre>
+            </div>
+          </Card>
+        </div>
+      </div>
+    </section>
+  );
+}
+`,
+
+  'components/Features.tsx': () => `import React from 'react';
+import { Card, Badge } from '@flexireact/flexi-ui';
+import { Zap, Folder, Sparkles, Server, Palette, Shield } from 'lucide-react';
+
+const features = [
+  {
+    icon: Zap,
+    title: 'Lightning Fast',
+    description: 'Powered by esbuild for instant builds and sub-second hot module replacement.',
+    badge: 'Performance',
+  },
+  {
+    icon: Folder,
+    title: 'File-based Routing',
+    description: 'Create a file in pages/, get a route automatically. Simple and intuitive.',
+    badge: 'DX',
+  },
+  {
+    icon: Sparkles,
+    title: 'Islands Architecture',
+    description: 'Partial hydration for minimal JavaScript. Only hydrate what needs interactivity.',
+    badge: 'Modern',
+  },
+  {
+    icon: Server,
+    title: 'SSR & SSG',
+    description: 'Server-side rendering and static generation out of the box. SEO friendly.',
+    badge: 'SEO',
+  },
+  {
+    icon: Palette,
+    title: 'Beautiful Design',
+    description: 'Neon emerald accents with dark-first design. Stunning out of the box.',
+    badge: 'UI',
+  },
+  {
+    icon: Shield,
+    title: 'Type Safe',
+    description: 'Full TypeScript support with strict type checking and excellent DX.',
+    badge: 'TypeScript',
+  },
+];
+
+export function Features() {
+  return (
+    <section className="py-32 px-6">
+      <div className="container mx-auto max-w-6xl">
+        {/* Section Header */}
+        <div className="text-center mb-20">
+          <Badge variant="outline" className="mb-6">Features</Badge>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+            Everything you need
+          </h2>
+          <p className="text-xl text-[#94a3b8] max-w-2xl mx-auto">
+            A complete toolkit for building modern web applications with React and Flexi UI.
+          </p>
+        </div>
+
+        {/* Feature Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.map((feature, index) => (
+            <Card 
+              key={index} 
+              className="group p-8 transition-all duration-300 hover:border-[#00FF9C]/50 hover:shadow-[0_0_30px_rgba(0,255,156,0.1)] cursor-default animate-fade-up"
+              style={{ animationDelay: \`\${index * 0.1}s\` }}
+            >
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-xl bg-[#00FF9C]/10 text-[#00FF9C] group-hover:bg-[#00FF9C] group-hover:text-black transition-all duration-300">
+                  <feature.icon className="w-6 h-6" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-lg font-semibold">{feature.title}</h3>
+                  </div>
+                  <p className="text-[#94a3b8] text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+`,
+
+  'components/Showcase.tsx': () => `import React from 'react';
+import { 
+  Button, 
+  Card, 
+  Badge, 
+  Input, 
+  Checkbox,
+  Switch,
+  Progress,
+  Spinner,
+  Avatar,
+  Separator
+} from '@flexireact/flexi-ui';
+import { Mail, Lock, User, Search, Heart, Star, Check } from 'lucide-react';
+
+export function Showcase() {
+  return (
+    <section className="py-32 px-6 relative">
+      {/* Background Gradient */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] rounded-full bg-gradient-radial from-[#00FF9C]/10 to-transparent blur-3xl" />
+      </div>
+
+      <div className="container mx-auto max-w-6xl">
+        {/* Section Header */}
+        <div className="text-center mb-20">
+          <Badge variant="success" className="mb-6">Components</Badge>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+            Beautiful by default
+          </h2>
+          <p className="text-xl text-[#94a3b8] max-w-2xl mx-auto">
+            23+ components designed with attention to detail. Dark mode first, accessible, and customizable.
+          </p>
+        </div>
+
+        {/* Component Showcase Grid */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Buttons Card */}
+          <Card className="p-8">
+            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#00FF9C]" />
+              Buttons
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              <Button>Primary</Button>
+              <Button variant="secondary">Secondary</Button>
+              <Button variant="outline">Outline</Button>
+              <Button variant="ghost">Ghost</Button>
+              <Button variant="danger">Danger</Button>
+              <Button variant="link">Link</Button>
+            </div>
+            <Separator className="my-6" />
+            <div className="flex flex-wrap gap-3">
+              <Button size="sm">Small</Button>
+              <Button size="md">Medium</Button>
+              <Button size="lg">Large</Button>
+            </div>
+            <Separator className="my-6" />
+            <div className="flex flex-wrap gap-3">
+              <Button loading>Loading</Button>
+              <Button disabled>Disabled</Button>
+              <Button className="gap-2">
+                <Heart className="w-4 h-4" /> With Icon
+              </Button>
+            </div>
+          </Card>
+
+          {/* Inputs Card */}
+          <Card className="p-8">
+            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#00FF9C]" />
+              Inputs
+            </h3>
+            <div className="space-y-4">
+              <Input 
+                label="Email" 
+                placeholder="you@example.com" 
+                type="email"
+              />
+              <Input 
+                label="Password" 
+                placeholder="Enter password" 
+                type="password"
+              />
+              <Input 
+                label="Search" 
+                placeholder="Search..." 
+              />
+              <Input 
+                label="With Error" 
+                placeholder="Invalid input" 
+                error
+                helperText="This field is required"
+              />
+            </div>
+          </Card>
+
+          {/* Badges Card */}
+          <Card className="p-8">
+            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#00FF9C]" />
+              Badges & Status
+            </h3>
+            <div className="flex flex-wrap gap-3 mb-6">
+              <Badge>Default</Badge>
+              <Badge variant="success">Success</Badge>
+              <Badge variant="warning">Warning</Badge>
+              <Badge variant="danger">Danger</Badge>
+              <Badge variant="outline">Outline</Badge>
+            </div>
+            <Separator className="my-6" />
+            <h4 className="text-sm font-medium mb-4 text-[#94a3b8]">Progress</h4>
+            <div className="space-y-4">
+              <Progress value={25} />
+              <Progress value={50} />
+              <Progress value={75} />
+              <Progress value={100} />
+            </div>
+          </Card>
+
+          {/* Form Controls Card */}
+          <Card className="p-8">
+            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#00FF9C]" />
+              Form Controls
+            </h3>
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <Checkbox id="terms" />
+                <label htmlFor="terms" className="text-sm">Accept terms and conditions</label>
+              </div>
+              <div className="flex items-center gap-4">
+                <Checkbox id="newsletter" defaultChecked />
+                <label htmlFor="newsletter" className="text-sm">Subscribe to newsletter</label>
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Dark Mode</span>
+                <Switch defaultChecked />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Notifications</span>
+                <Switch />
+              </div>
+              <Separator />
+              <div className="flex items-center gap-4">
+                <Spinner size="sm" />
+                <Spinner />
+                <Spinner size="lg" />
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Avatars Row */}
+        <Card className="p-8 mt-8">
+          <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#00FF9C]" />
+            Avatars
+          </h3>
+          <div className="flex items-center gap-4 flex-wrap">
+            <Avatar size="sm" fallback="JD" />
+            <Avatar fallback="AB" />
+            <Avatar size="lg" fallback="CD" />
+            <Avatar size="xl" fallback="EF" />
+            <Separator orientation="vertical" className="h-12 mx-4" />
+            <div className="flex -space-x-3">
+              <Avatar fallback="A" className="ring-2 ring-[#0a0a0a]" />
+              <Avatar fallback="B" className="ring-2 ring-[#0a0a0a]" />
+              <Avatar fallback="C" className="ring-2 ring-[#0a0a0a]" />
+              <Avatar fallback="+5" className="ring-2 ring-[#0a0a0a]" />
+            </div>
+          </div>
+        </Card>
+      </div>
+    </section>
+  );
+}
+`,
+
+  'components/Footer.tsx': () => `import React from 'react';
+import { Separator } from '@flexireact/flexi-ui';
+import { Github, Twitter, Heart } from 'lucide-react';
+
+export function Footer() {
+  return (
+    <footer className="border-t border-[#1e293b]">
+      <div className="container mx-auto max-w-6xl px-6 py-12">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Logo & Copyright */}
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00FF9C] to-emerald-400 flex items-center justify-center">
+              <span className="text-black font-bold text-sm">F</span>
+            </div>
+            <span className="text-[#94a3b8] text-sm">
+              Built with <Heart className="w-4 h-4 inline text-red-500 mx-1" /> using{' '}
+              <a href="https://github.com/flexireact/flexi-ui" className="text-[#00FF9C] hover:underline">
+                Flexi UI
+              </a>
+            </span>
+          </div>
+
+          {/* Links */}
+          <div className="flex items-center gap-6">
+            <a 
+              href="https://github.com/flexireact/flexi-ui" 
+              className="text-[#94a3b8] hover:text-white transition-colors flex items-center gap-2 text-sm"
+            >
+              <Github className="w-4 h-4" />
+              GitHub
+            </a>
+            <a 
+              href="https://github.com/flexireact/flexireact" 
+              className="text-[#94a3b8] hover:text-white transition-colors text-sm"
+            >
+              Documentation
+            </a>
+            <a 
+              href="https://github.com/flexireact/flexi-ui" 
+              className="text-[#94a3b8] hover:text-white transition-colors text-sm"
+            >
+              Components
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+`,
+
+  'components/Navbar.tsx': () => `import React from 'react';
+import { Button, Badge } from '@flexireact/flexi-ui';
+import { Github, Menu } from 'lucide-react';
+
+export function Navbar() {
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-[#1e293b]/50 bg-[#0a0a0a]/80 backdrop-blur-xl">
+      <nav className="container mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
+        {/* Logo */}
+        <a href="/" className="flex items-center gap-3 group">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#00FF9C] to-emerald-400 flex items-center justify-center shadow-lg shadow-[#00FF9C]/20 group-hover:shadow-[#00FF9C]/40 transition-shadow">
+            <span className="text-black font-black text-lg">F</span>
+          </div>
+          <span className="text-lg font-bold">Flexi UI</span>
+          <Badge variant="outline" className="hidden sm:flex text-xs">v1.0</Badge>
+        </a>
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-2">
+          <Button variant="ghost" size="sm">
+            <a href="https://github.com/flexireact/flexi-ui">Docs</a>
+          </Button>
+          <Button variant="ghost" size="sm">
+            <a href="https://github.com/flexireact/flexi-ui">Components</a>
+          </Button>
+          <Button variant="ghost" size="sm">
+            <a href="https://github.com/flexireact/flexireact">FlexiReact</a>
+          </Button>
+          <div className="w-px h-6 bg-[#1e293b] mx-2" />
+          <Button variant="outline" size="sm" className="gap-2">
+            <Github className="w-4 h-4" />
+            <a href="https://github.com/flexireact/flexi-ui">GitHub</a>
+          </Button>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <Button variant="ghost" size="sm" className="md:hidden">
+          <Menu className="w-5 h-5" />
+        </Button>
+      </nav>
+    </header>
+  );
+}
+`,
+
+  'components/index.ts': () => `export { Hero } from './Hero';
+export { Features } from './Features';
+export { Showcase } from './Showcase';
+export { Footer } from './Footer';
+export { Navbar } from './Navbar';
+`,
+
+  // ============================================================================
+  // Pages & Layouts
+  // ============================================================================
+
+  'layouts/root.tsx': () => `import React from 'react';
+import { ThemeProvider } from '@flexireact/flexi-ui';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+export default function RootLayout({ children }: LayoutProps) {
+  return (
+    <ThemeProvider defaultTheme="dark">
+      <div className="min-h-screen bg-[#0a0a0a] text-white antialiased">
+        <Navbar />
+        <main className="pt-16">{children}</main>
+        <Footer />
+      </div>
+    </ThemeProvider>
+  );
+}
+`,
+
+  'pages/index.tsx': () => `import React from 'react';
+import { Hero } from '../components/Hero';
+import { Features } from '../components/Features';
+import { Showcase } from '../components/Showcase';
+
+export default function HomePage() {
+  return (
+    <>
+      <Hero />
+      <Features />
+      <Showcase />
+    </>
+  );
+}
+`,
+
+  // ============================================================================
+  // Styles
+  // ============================================================================
+
+  'app/styles/globals.css': () => `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --flexi-bg: #0a0a0a;
+    --flexi-fg: #fafafa;
+    --flexi-primary: #00FF9C;
+    --flexi-primary-fg: #000000;
+    --flexi-muted: #94a3b8;
+    --flexi-border: #1e293b;
+    --flexi-card: #0f0f0f;
+  }
+
+  * {
+    border-color: var(--flexi-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--flexi-bg);
+    color: var(--flexi-fg);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: rgba(0, 255, 156, 0.3);
+    color: white;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
+}
+
+/* Animation utilities */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.9); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+`,
+
+  // ============================================================================
+  // Public Assets
+  // ============================================================================
+
+  'public/.gitkeep': () => '',
+  
+  'public/favicon.svg': () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00FF9C"/>
+      <stop offset="100%" style="stop-color:#10b981"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="20" fill="#0a0a0a"/>
+  <text x="50" y="68" font-family="system-ui" font-size="50" font-weight="900" fill="url(#grad)" text-anchor="middle">F</text>
+</svg>`,
+};
+
+// ============================================================================
 // Main
 // ============================================================================
 
@@ -918,9 +1661,14 @@ async function main() {
     fs.mkdirSync(projectPath, { recursive: true });
     
     // Create subdirectories
-    const dirs = templateKey === 'minimal' 
-      ? ['pages', 'public']
-      : ['pages', 'public', 'components', 'components/ui', 'layouts', 'app/styles', 'lib'];
+    let dirs;
+    if (templateKey === 'minimal') {
+      dirs = ['pages', 'public'];
+    } else if (templateKey === 'flexi-ui') {
+      dirs = ['pages', 'public', 'components', 'layouts', 'app/styles'];
+    } else {
+      dirs = ['pages', 'public', 'components', 'components/ui', 'layouts', 'app/styles', 'lib'];
+    }
     
     for (const dir of dirs) {
       fs.mkdirSync(path.join(projectPath, dir), { recursive: true });
@@ -938,7 +1686,14 @@ async function main() {
   spinner2.start();
   
   try {
-    const files = templateKey === 'minimal' ? MINIMAL_FILES : TEMPLATE_FILES;
+    let files;
+    if (templateKey === 'minimal') {
+      files = MINIMAL_FILES;
+    } else if (templateKey === 'flexi-ui') {
+      files = FLEXI_UI_FILES;
+    } else {
+      files = TEMPLATE_FILES;
+    }
     
     for (const [filePath, contentFn] of Object.entries(files)) {
       const fullPath = path.join(projectPath, filePath);
