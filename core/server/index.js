@@ -264,8 +264,8 @@ async function handleApiRoute(req, res, route, loadModule) {
     // Enhanced response
     const enhancedRes = createApiResponse(res);
 
-    // Find handler
-    const handler = module[method] || module.default;
+    // Find handler (check both lowercase and uppercase method names)
+    const handler = module[method] || module[method.toUpperCase()] || module.default;
 
     if (!handler) {
       enhancedRes.status(405).json({ error: 'Method not allowed' });
