@@ -74,11 +74,7 @@ ${c.green}   ╰─────────────────────�
 const TEMPLATES = {
   default: {
     name: 'Default',
-    description: 'Basic FlexiReact app with TypeScript and Tailwind',
-  },
-  'flexi-ui': {
-    name: 'FlexiUI',
-    description: 'FlexiReact with FlexiUI component library',
+    description: 'Premium template with modern UI, animations & dark mode',
   },
   minimal: {
     name: 'Minimal',
@@ -104,10 +100,6 @@ function error(msg) {
 
 function info(msg) {
   console.log(`   ${c.cyan}ℹ${c.reset} ${msg}`);
-}
-
-function step(num, total, msg) {
-  console.log(`   ${c.dim}[${num}/${total}]${c.reset} ${msg}`);
 }
 
 // Spinner
@@ -184,26 +176,6 @@ async function select(question, options) {
   });
 }
 
-// Copy directory recursively
-function copyDir(src, dest) {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest, { recursive: true });
-  }
-
-  const entries = fs.readdirSync(src, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
-
-    if (entry.isDirectory()) {
-      copyDir(srcPath, destPath);
-    } else {
-      fs.copyFileSync(srcPath, destPath);
-    }
-  }
-}
-
 // Check if directory is empty
 function isDirEmpty(dir) {
   if (!fs.existsSync(dir)) return true;
@@ -211,7 +183,7 @@ function isDirEmpty(dir) {
 }
 
 // ============================================================================
-// Template Files (Inline for npm package)
+// Template Files
 // ============================================================================
 
 const TEMPLATE_FILES = {
@@ -224,21 +196,24 @@ const TEMPLATE_FILES = {
       dev: "npm run css && flexireact dev",
       build: "npm run css && flexireact build",
       start: "flexireact start",
-      css: "npx tailwindcss -i ./app/styles/input.css -o ./public/styles.css --minify"
+      css: "npx tailwindcss -i ./app/styles/globals.css -o ./public/styles.css --minify"
     },
     dependencies: {
-      react: "^18.2.0",
+      "react": "^18.2.0",
       "react-dom": "^18.2.0",
       "@flexireact/core": "^1.0.0",
-      ...(template === 'flexi-ui' && { "@flexireact/flexi-ui": "^1.0.0" })
+      "framer-motion": "^11.0.0",
+      "lucide-react": "^0.400.0",
+      "clsx": "^2.1.0",
+      "tailwind-merge": "^2.2.0"
     },
     devDependencies: {
       "@types/react": "^18.2.0",
       "@types/react-dom": "^18.2.0",
-      typescript: "^5.3.0",
-      tailwindcss: "^3.4.0",
-      postcss: "^8.4.32",
-      autoprefixer: "^10.4.16"
+      "typescript": "^5.3.0",
+      "tailwindcss": "^3.4.0",
+      "postcss": "^8.4.32",
+      "autoprefixer": "^10.4.16"
     }
   }, null, 2),
 
@@ -265,8 +240,7 @@ const TEMPLATE_FILES = {
     exclude: ["node_modules", ".flexi"]
   }, null, 2),
 
-  'tailwind.config.js': (name, template) => `/** @type {import('tailwindcss').Config} */
-${template === 'flexi-ui' ? "const { flexiUIPlugin } = require('@flexireact/flexi-ui/tailwind');\n" : ''}
+  'tailwind.config.js': () => `/** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
   content: [
@@ -274,16 +248,71 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
     './layouts/**/*.{js,ts,jsx,tsx}',
-    ${template === 'flexi-ui' ? "'./node_modules/@flexireact/flexi-ui/dist/**/*.js'," : ''}
   ],
   theme: {
     extend: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
+      colors: {
+        border: 'hsl(240 3.7% 15.9%)',
+        input: 'hsl(240 3.7% 15.9%)',
+        ring: 'hsl(142.1 76.2% 36.3%)',
+        background: 'hsl(240 10% 3.9%)',
+        foreground: 'hsl(0 0% 98%)',
+        primary: {
+          DEFAULT: 'hsl(142.1 76.2% 36.3%)',
+          foreground: 'hsl(144.9 80.4% 10%)',
+        },
+        secondary: {
+          DEFAULT: 'hsl(240 3.7% 15.9%)',
+          foreground: 'hsl(0 0% 98%)',
+        },
+        muted: {
+          DEFAULT: 'hsl(240 3.7% 15.9%)',
+          foreground: 'hsl(240 5% 64.9%)',
+        },
+        accent: {
+          DEFAULT: 'hsl(240 3.7% 15.9%)',
+          foreground: 'hsl(0 0% 98%)',
+        },
+        card: {
+          DEFAULT: 'hsl(240 10% 3.9%)',
+          foreground: 'hsl(0 0% 98%)',
+        },
+      },
+      borderRadius: {
+        lg: '0.75rem',
+        md: '0.5rem',
+        sm: '0.25rem',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-out',
+        'fade-up': 'fadeUp 0.5s ease-out',
+        'scale-in': 'scaleIn 0.3s ease-out',
+        'glow': 'glow 2s ease-in-out infinite alternate',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        glow: {
+          '0%': { boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)' },
+          '100%': { boxShadow: '0 0 40px rgba(16, 185, 129, 0.4)' },
+        },
+      },
     },
   },
-  plugins: [${template === 'flexi-ui' ? 'flexiUIPlugin' : ''}],
+  plugins: [],
 };
 `,
 
@@ -295,218 +324,488 @@ module.exports = {
 };
 `,
 
-  'flexireact.config.js': (name, template) => `/** @type {import('@flexireact/core').Config} */
+  'flexireact.config.js': () => `/** @type {import('@flexireact/core').Config} */
 export default {
-  // Styles to include
   styles: [
     '/styles.css',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
   ],
-  
-  // Favicon
   favicon: '/favicon.svg',
-  
-  // Server options
   server: {
     port: 3000
   },
-  
-  // Islands (partial hydration)
   islands: {
     enabled: true
   }
 };
 `,
 
-  'pages/index.tsx': (name, template) => template === 'flexi-ui' ? `import React from 'react';
+  // ============================================================================
+  // Components
+  // ============================================================================
 
-export default function HomePage() {
+  'components/ui/button.tsx': () => `import React from 'react';
+import { cn } from '../../lib/utils';
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'default' | 'outline' | 'ghost';
+  size?: 'default' | 'sm' | 'lg';
+  children: React.ReactNode;
+}
+
+export function Button({ 
+  className, 
+  variant = 'default', 
+  size = 'default',
+  children,
+  ...props 
+}: ButtonProps) {
   return (
-    <div className="py-20">
-      <div className="container mx-auto px-4 text-center">
-        <span className="inline-block px-4 py-1.5 text-sm font-medium rounded-full mb-6" style={{ backgroundColor: 'rgba(0,255,156,0.1)', color: '#00FF9C', border: '1px solid rgba(0,255,156,0.3)' }}>
-          ✨ Welcome to FlexiReact
-        </span>
-        
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">
-          Build amazing apps with{' '}
-          <span style={{ color: '#00FF9C' }}>FlexiReact</span>
-        </h1>
-        
-        <p className="text-lg opacity-70 mb-8 max-w-2xl mx-auto">
-          The modern React framework with TypeScript, Tailwind CSS, SSR, and Islands architecture.
-        </p>
+    <button
+      className={cn(
+        'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+        {
+          'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25': variant === 'default',
+          'border border-border bg-transparent hover:bg-secondary hover:text-foreground': variant === 'outline',
+          'hover:bg-secondary hover:text-foreground': variant === 'ghost',
+        },
+        {
+          'h-10 px-4 py-2 text-sm': size === 'default',
+          'h-9 px-3 text-sm': size === 'sm',
+          'h-12 px-8 text-base': size === 'lg',
+        },
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
+`,
 
-        <div className="flex gap-4 justify-center">
-          <a href="/docs" className="px-6 py-3 font-medium rounded-xl text-black" style={{ backgroundColor: '#00FF9C' }}>
-            Get Started →
-          </a>
-          <a href="https://github.com/flexireact/flexireact" className="px-6 py-3 font-medium rounded-xl border border-[var(--flexi-border)] hover:bg-[var(--flexi-bg-muted)] transition-colors">
-            GitHub
-          </a>
-        </div>
-      </div>
+  'components/ui/card.tsx': () => `import React from 'react';
+import { cn } from '../../lib/utils';
+
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+}
+
+export function Card({ className, children, ...props }: CardProps) {
+  return (
+    <div
+      className={cn(
+        'rounded-xl border border-border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5',
+        className
+      )}
+      {...props}
+    >
+      {children}
     </div>
   );
 }
-` : `import React from 'react';
 
-export default function HomePage() {
+export function CardHeader({ className, children, ...props }: CardProps) {
   return (
-    <div className="py-20 px-4">
-      <div className="max-w-4xl mx-auto text-center">
-        {/* Badge */}
-        <span className="inline-block px-4 py-2 text-sm font-medium rounded-full mb-8 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-          ⚡ The Modern React Framework
-        </span>
-        
-        {/* Title */}
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 text-white">
-          Build amazing apps with{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-            FlexiReact
-          </span>
-        </h1>
-        
-        {/* Subtitle */}
-        <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-          A blazing-fast React framework with TypeScript, Tailwind CSS, SSR, SSG, 
-          Islands architecture, and file-based routing.
-        </p>
+    <div className={cn('flex flex-col space-y-1.5 p-6', className)} {...props}>
+      {children}
+    </div>
+  );
+}
 
-        {/* Buttons */}
-        <div className="flex flex-wrap gap-4 justify-center mb-16">
-          <a 
-            href="https://github.com/flexireact/flexireact" 
-            className="px-8 py-4 bg-emerald-500 text-black font-semibold rounded-xl hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/25"
-          >
-            Get Started →
-          </a>
-          <a 
-            href="https://github.com/flexireact/flexireact" 
-            className="px-8 py-4 bg-slate-800 text-white font-semibold rounded-xl border border-slate-700 hover:bg-slate-700 transition-all"
-          >
-            GitHub
-          </a>
-        </div>
+export function CardTitle({ className, children, ...props }: CardProps) {
+  return (
+    <h3 className={cn('text-lg font-semibold leading-none tracking-tight', className)} {...props}>
+      {children}
+    </h3>
+  );
+}
 
-        {/* Features */}
-        <div className="grid md:grid-cols-3 gap-6 text-left">
-          <div className="p-6 rounded-2xl bg-slate-800/50 border border-slate-700">
-            <div className="text-3xl mb-3">⚡</div>
-            <h3 className="text-lg font-semibold text-white mb-2">Lightning Fast</h3>
-            <p className="text-slate-400 text-sm">Powered by esbuild for instant builds and sub-second HMR.</p>
-          </div>
-          <div className="p-6 rounded-2xl bg-slate-800/50 border border-slate-700">
-            <div className="text-3xl mb-3">🏝️</div>
-            <h3 className="text-lg font-semibold text-white mb-2">Islands Architecture</h3>
-            <p className="text-slate-400 text-sm">Partial hydration for minimal JavaScript and maximum performance.</p>
-          </div>
-          <div className="p-6 rounded-2xl bg-slate-800/50 border border-slate-700">
-            <div className="text-3xl mb-3">📁</div>
-            <h3 className="text-lg font-semibold text-white mb-2">File-based Routing</h3>
-            <p className="text-slate-400 text-sm">Create a file in pages/, get a route automatically.</p>
-          </div>
-        </div>
-      </div>
+export function CardDescription({ className, children, ...props }: CardProps) {
+  return (
+    <p className={cn('text-sm text-muted-foreground', className)} {...props}>
+      {children}
+    </p>
+  );
+}
+
+export function CardContent({ className, children, ...props }: CardProps) {
+  return (
+    <div className={cn('p-6 pt-0', className)} {...props}>
+      {children}
     </div>
   );
 }
 `,
 
-  'layouts/root.tsx': (name, template) => template === 'flexi-ui' ? `import React from 'react';
+  'components/ui/badge.tsx': () => `import React from 'react';
+import { cn } from '../../lib/utils';
 
-interface LayoutProps {
+interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: 'default' | 'secondary' | 'outline';
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: LayoutProps) {
+export function Badge({ className, variant = 'default', children, ...props }: BadgeProps) {
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--flexi-bg)', color: 'var(--flexi-fg)' }}>
-      <header className="sticky top-0 z-50 w-full border-b border-[var(--flexi-border)] backdrop-blur-sm" style={{ backgroundColor: 'rgba(2, 6, 23, 0.8)' }}>
-        <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #00FF9C, #00CC7D)' }}>
-              <span className="text-black font-bold text-sm">F</span>
-            </div>
-            <span className="font-bold text-xl">FlexiReact</span>
-          </a>
-          <div className="flex items-center gap-4">
-            <a href="/" className="text-sm opacity-70 hover:opacity-100">Home</a>
-            <a href="/about" className="text-sm opacity-70 hover:opacity-100">About</a>
-          </div>
-        </nav>
-      </header>
-      <main className="flex-1">
-        {children}
-      </main>
-      <footer className="border-t border-[var(--flexi-border)] py-8 text-center text-sm opacity-70">
-        Built with FlexiReact
-      </footer>
+    <div
+      className={cn(
+        'inline-flex items-center rounded-full px-3 py-1 text-xs font-medium transition-colors',
+        {
+          'bg-primary/10 text-primary border border-primary/20': variant === 'default',
+          'bg-secondary text-secondary-foreground': variant === 'secondary',
+          'border border-border text-foreground': variant === 'outline',
+        },
+        className
+      )}
+      {...props}
+    >
+      {children}
     </div>
   );
 }
-` : `import React from 'react';
+`,
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+  'components/Navbar.tsx': () => `import React from 'react';
+import { Button } from './ui/button';
 
-export default function RootLayout({ children }: LayoutProps) {
+export function Navbar() {
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
-      <header className="sticky top-0 z-50 border-b border-slate-700 bg-slate-900/80 backdrop-blur-sm">
-        <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2 font-bold text-xl">
-            <span className="text-emerald-400">⚡</span> FlexiReact
-          </a>
-          <div className="flex items-center gap-6">
-            <a href="/" className="text-sm text-slate-400 hover:text-white">Home</a>
-            <a href="/about" className="text-sm text-slate-400 hover:text-white">About</a>
-            <a href="https://github.com/flexireact/flexireact" className="text-sm px-4 py-2 bg-emerald-500 text-black rounded-lg font-medium hover:bg-emerald-400">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
+      <nav className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+        <a href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-emerald-400">
+            <svg className="h-4 w-4 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <span className="text-lg font-bold">FlexiReact</span>
+        </a>
+        
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" asChild>
+            <a href="https://github.com/flexireact/flexireact">Docs</a>
+          </Button>
+          <Button variant="ghost" size="sm" asChild>
+            <a href="https://github.com/flexireact/flexireact" className="flex items-center gap-2">
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
               GitHub
             </a>
+          </Button>
+        </div>
+      </nav>
+    </header>
+  );
+}
+`,
+
+  'components/Hero.tsx': () => `import React from 'react';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+
+export function Hero() {
+  return (
+    <section className="relative overflow-hidden">
+      {/* Gradient Background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+          <div className="h-[600px] w-[600px] rounded-full bg-gradient-to-r from-primary/20 via-emerald-500/10 to-cyan-500/20 blur-3xl" />
+        </div>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2">
+          <div className="h-[400px] w-[400px] rounded-full bg-gradient-to-l from-primary/10 to-transparent blur-3xl" />
+        </div>
+      </div>
+
+      <div className="container mx-auto max-w-6xl px-4 py-24 sm:py-32 lg:py-40">
+        <div className="flex flex-col items-center text-center">
+          {/* Badge */}
+          <Badge className="mb-6 animate-fade-in">
+            <span className="mr-1">⚡</span> The Modern React Framework
+          </Badge>
+
+          {/* Title */}
+          <h1 className="mb-6 max-w-4xl animate-fade-up text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            Build{' '}
+            <span className="bg-gradient-to-r from-primary via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              blazing fast
+            </span>{' '}
+            web apps
+          </h1>
+
+          {/* Subtitle */}
+          <p className="mb-10 max-w-2xl animate-fade-up text-lg text-muted-foreground sm:text-xl" style={{ animationDelay: '0.1s' }}>
+            A modern React framework with TypeScript, Tailwind CSS, SSR, SSG, 
+            Islands architecture, and file-based routing. Ship faster.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+            <Button size="lg" className="gap-2">
+              Start Building
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Button>
+            <Button variant="outline" size="lg" asChild>
+              <a href="https://github.com/flexireact/flexireact" className="gap-2">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                GitHub
+              </a>
+            </Button>
           </div>
-        </nav>
-      </header>
-      <main className="flex-1">
-        {children}
-      </main>
-      <footer className="border-t border-slate-700 py-8 text-center text-sm text-slate-500">
-        Built with ❤️ using FlexiReact
-      </footer>
+
+          {/* Code Preview */}
+          <div className="mt-16 w-full max-w-2xl animate-fade-up rounded-xl border border-border bg-card/50 p-4 backdrop-blur-sm" style={{ animationDelay: '0.3s' }}>
+            <div className="flex items-center gap-2 border-b border-border pb-3">
+              <div className="h-3 w-3 rounded-full bg-red-500/80" />
+              <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
+              <div className="h-3 w-3 rounded-full bg-green-500/80" />
+              <span className="ml-2 text-xs text-muted-foreground">terminal</span>
+            </div>
+            <pre className="mt-4 overflow-x-auto text-left text-sm">
+              <code className="text-muted-foreground">
+                <span className="text-muted-foreground/60">$</span>{' '}
+                <span className="text-primary">npx</span> create-flexireact@latest my-app{'\n'}
+                <span className="text-muted-foreground/60">$</span>{' '}
+                <span className="text-primary">cd</span> my-app{'\n'}
+                <span className="text-muted-foreground/60">$</span>{' '}
+                <span className="text-primary">npm</span> run dev{'\n'}
+                {'\n'}
+                <span className="text-emerald-400">✓</span> Ready in <span className="text-primary">38ms</span>
+              </code>
+            </pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+`,
+
+  'components/Features.tsx': () => `import React from 'react';
+import { Card, CardHeader, CardTitle, CardDescription } from './ui/card';
+
+const features = [
+  {
+    icon: (
+      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    ),
+    title: 'Lightning Fast',
+    description: 'Powered by esbuild for instant builds and sub-second hot module replacement.',
+  },
+  {
+    icon: (
+      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+      </svg>
+    ),
+    title: 'File-based Routing',
+    description: 'Create a file in pages/, get a route automatically. Simple and intuitive.',
+  },
+  {
+    icon: (
+      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+      </svg>
+    ),
+    title: 'Islands Architecture',
+    description: 'Partial hydration for minimal JavaScript. Only hydrate what needs interactivity.',
+  },
+  {
+    icon: (
+      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+      </svg>
+    ),
+    title: 'SSR & SSG',
+    description: 'Server-side rendering and static generation out of the box. SEO friendly.',
+  },
+];
+
+export function Features() {
+  return (
+    <section className="container mx-auto max-w-6xl px-4 py-24">
+      <div className="mb-12 text-center">
+        <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
+          Everything you need
+        </h2>
+        <p className="mx-auto max-w-2xl text-muted-foreground">
+          A complete toolkit for building modern web applications with React.
+        </p>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {features.map((feature, index) => (
+          <Card key={index} className="group cursor-default">
+            <CardHeader>
+              <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                {feature.icon}
+              </div>
+              <CardTitle>{feature.title}</CardTitle>
+              <CardDescription>{feature.description}</CardDescription>
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
+    </section>
+  );
+}
+`,
+
+  'components/Footer.tsx': () => `import React from 'react';
+
+export function Footer() {
+  return (
+    <footer className="border-t border-border">
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Built with</span>
+            <span className="text-red-500">❤️</span>
+            <span>using</span>
+            <a href="https://github.com/flexireact/flexireact" className="font-medium text-foreground hover:text-primary transition-colors">
+              FlexiReact
+            </a>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <a href="https://github.com/flexireact/flexireact" className="hover:text-foreground transition-colors">
+              GitHub
+            </a>
+            <a href="https://github.com/flexireact/flexireact" className="hover:text-foreground transition-colors">
+              Documentation
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+`,
+
+  'components/index.ts': () => `export { Navbar } from './Navbar';
+export { Hero } from './Hero';
+export { Features } from './Features';
+export { Footer } from './Footer';
+export { Button } from './ui/button';
+export { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
+export { Badge } from './ui/badge';
+`,
+
+  // ============================================================================
+  // Lib
+  // ============================================================================
+
+  'lib/utils.ts': () => `import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+`,
+
+  // ============================================================================
+  // Pages & Layouts
+  // ============================================================================
+
+  'layouts/root.tsx': () => `import React from 'react';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+export default function RootLayout({ children }: LayoutProps) {
+  return (
+    <div className="relative min-h-screen bg-background text-foreground antialiased">
+      <Navbar />
+      <main>{children}</main>
+      <Footer />
     </div>
   );
 }
 `,
 
-  'app/styles/input.css': () => `@tailwind base;
+  'pages/index.tsx': () => `import React from 'react';
+import { Hero } from '../components/Hero';
+import { Features } from '../components/Features';
+
+export default function HomePage() {
+  return (
+    <>
+      <Hero />
+      <Features />
+    </>
+  );
+}
+`,
+
+  // ============================================================================
+  // Styles
+  // ============================================================================
+
+  'app/styles/globals.css': () => `@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --flexi-bg: #0f172a;
-    --flexi-fg: #f8fafc;
-    --flexi-bg-subtle: #1e293b;
-    --flexi-bg-muted: #334155;
-    --flexi-border: #475569;
-    --flexi-fg-muted: #94a3b8;
-    --flexi-primary: #10b981;
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 142.1 76.2% 36.3%;
+    --primary-foreground: 144.9 80.4% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 142.1 76.2% 36.3%;
+    --radius: 0.75rem;
   }
-  
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background-color: #0f172a;
-    color: #f8fafc;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
 }
 `,
+
+  // ============================================================================
+  // Public Assets
+  // ============================================================================
 
   'public/.gitkeep': () => '',
   
@@ -517,10 +816,55 @@ export default function RootLayout({ children }: LayoutProps) {
       <stop offset="100%" style="stop-color:#06b6d4"/>
     </linearGradient>
   </defs>
-  <rect width="100" height="100" rx="20" fill="#0f172a"/>
-  <path d="M25 70V30h30v10H37v8h15v10H37v12H25z" fill="url(#grad)"/>
-  <circle cx="65" cy="65" r="8" fill="url(#grad)"/>
+  <rect width="100" height="100" rx="20" fill="#0a0a0a"/>
+  <path d="M50 20L30 55h15v25l20-35H50V20z" fill="url(#grad)"/>
 </svg>`,
+};
+
+// Minimal template files
+const MINIMAL_FILES = {
+  'package.json': (name) => JSON.stringify({
+    name: name,
+    version: "1.0.0",
+    private: true,
+    type: "module",
+    scripts: {
+      dev: "flexireact dev",
+      build: "flexireact build",
+      start: "flexireact start"
+    },
+    dependencies: {
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0",
+      "@flexireact/core": "^1.0.0"
+    },
+    devDependencies: {
+      "@types/react": "^18.2.0",
+      "@types/react-dom": "^18.2.0",
+      "typescript": "^5.3.0"
+    }
+  }, null, 2),
+
+  'tsconfig.json': TEMPLATE_FILES['tsconfig.json'],
+
+  'flexireact.config.js': () => `export default {
+  server: { port: 3000 }
+};
+`,
+
+  'pages/index.tsx': () => `import React from 'react';
+
+export default function HomePage() {
+  return (
+    <div style={{ padding: '2rem', fontFamily: 'system-ui' }}>
+      <h1>Welcome to FlexiReact</h1>
+      <p>Edit pages/index.tsx to get started.</p>
+    </div>
+  );
+}
+`,
+
+  'public/.gitkeep': () => '',
 };
 
 // ============================================================================
@@ -548,50 +892,55 @@ async function main() {
 
   // Check if directory exists
   if (fs.existsSync(projectPath) && !isDirEmpty(projectPath)) {
-    error(`Directory "${projectName}" already exists and is not empty`);
+    error(`Directory ${projectName} already exists and is not empty`);
     process.exit(1);
   }
 
-  console.log('');
-
   // Select template
+  console.log('');
   const templateOptions = Object.entries(TEMPLATES).map(([key, value]) => ({
     key,
     ...value,
   }));
   
   const selectedTemplate = await select('Select a template:', templateOptions);
-  const template = selectedTemplate.key;
+  const templateKey = selectedTemplate.key;
 
   console.log('');
-  console.log(`   ${c.dim}Creating project in${c.reset} ${c.cyan}${projectPath}${c.reset}`);
+  log(`Creating project in ${c.cyan}${projectPath}${c.reset}`);
   console.log('');
 
   // Create project directory
   const spinner1 = new Spinner('Creating project structure...');
   spinner1.start();
-
+  
   try {
     fs.mkdirSync(projectPath, { recursive: true });
-    fs.mkdirSync(path.join(projectPath, 'pages'), { recursive: true });
-    fs.mkdirSync(path.join(projectPath, 'layouts'), { recursive: true });
-    fs.mkdirSync(path.join(projectPath, 'app', 'styles'), { recursive: true });
-    fs.mkdirSync(path.join(projectPath, 'public'), { recursive: true });
-    fs.mkdirSync(path.join(projectPath, 'components'), { recursive: true });
+    
+    // Create subdirectories
+    const dirs = templateKey === 'minimal' 
+      ? ['pages', 'public']
+      : ['pages', 'public', 'components', 'components/ui', 'layouts', 'app/styles', 'lib'];
+    
+    for (const dir of dirs) {
+      fs.mkdirSync(path.join(projectPath, dir), { recursive: true });
+    }
     
     spinner1.stop(true);
   } catch (err) {
     spinner1.stop(false);
-    error(`Failed to create directory: ${err.message}`);
+    error(`Failed to create project structure: ${err.message}`);
     process.exit(1);
   }
 
   // Write template files
   const spinner2 = new Spinner('Writing template files...');
   spinner2.start();
-
+  
   try {
-    for (const [filePath, generator] of Object.entries(TEMPLATE_FILES)) {
+    const files = templateKey === 'minimal' ? MINIMAL_FILES : TEMPLATE_FILES;
+    
+    for (const [filePath, contentFn] of Object.entries(files)) {
       const fullPath = path.join(projectPath, filePath);
       const dir = path.dirname(fullPath);
       
@@ -599,51 +948,25 @@ async function main() {
         fs.mkdirSync(dir, { recursive: true });
       }
       
-      const content = generator(projectName, template);
+      const content = contentFn(projectName, templateKey);
       fs.writeFileSync(fullPath, content);
     }
     
     spinner2.stop(true);
   } catch (err) {
     spinner2.stop(false);
-    error(`Failed to write files: ${err.message}`);
+    error(`Failed to write template files: ${err.message}`);
     process.exit(1);
   }
 
-  // Create .gitignore
+  // Create README
   const spinner3 = new Spinner('Creating configuration files...');
   spinner3.start();
-
+  
   try {
-    fs.writeFileSync(path.join(projectPath, '.gitignore'), `# Dependencies
-node_modules/
+    const readmeContent = `# ${projectName}
 
-# Build
-.flexi/
-dist/
-build/
-
-# Environment
-.env
-.env.local
-.env.*.local
-
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-npm-debug.log*
-`);
-
-    fs.writeFileSync(path.join(projectPath, 'README.md'), `# ${projectName}
-
-A FlexiReact application.
+A modern web application built with [FlexiReact](https://github.com/flexireact/flexireact).
 
 ## Getting Started
 
@@ -657,9 +980,9 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Learn More
 
 - [FlexiReact Documentation](https://github.com/flexireact/flexireact)
-- [FlexiUI Components](https://github.com/flexireact/flexi-ui)
-`);
+`;
 
+    fs.writeFileSync(path.join(projectPath, 'README.md'), readmeContent);
     spinner3.stop(true);
   } catch (err) {
     spinner3.stop(false);
@@ -667,7 +990,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
     process.exit(1);
   }
 
-  // Done!
+  // Success message
   console.log(SUCCESS_BANNER(projectName));
 }
 
