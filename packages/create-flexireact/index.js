@@ -983,76 +983,64 @@ export default {
 
   'components/Hero.tsx': () => `import React from 'react';
 import { Button, Badge, Card } from '@flexireact/flexi-ui';
-import { Zap, Github, ArrowRight, Sparkles } from 'lucide-react';
+import { Github, ArrowRight, Sparkles } from 'lucide-react';
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Radial Gradient Background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-gradient-radial from-[#00FF9C]/20 via-[#00FF9C]/5 to-transparent blur-3xl" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gradient-radial from-cyan-500/10 to-transparent blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-gradient-radial from-emerald-500/10 to-transparent blur-3xl" />
+    <section className="hero-section">
+      <div className="hero-bg">
+        <div className="hero-glow hero-glow-1" />
+        <div className="hero-glow hero-glow-2" />
+        <div className="hero-glow hero-glow-3" />
       </div>
-
-      {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
+      <div className="hero-grid" />
 
       <div className="container mx-auto px-6 py-32 max-w-6xl">
         <div className="flex flex-col items-center text-center">
-          {/* Badge */}
-          <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <div className="animate-fade-in">
             <Badge variant="success" className="mb-8 px-4 py-2 text-sm">
               <Sparkles className="w-4 h-4 mr-2" />
               The Modern React Framework
             </Badge>
           </div>
 
-          {/* Title */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-8 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-            Build{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FF9C] via-emerald-400 to-cyan-400">
-              beautiful
-            </span>
+          <h1 className="hero-title animate-fade-up">
+            Build <span className="hero-gradient">beautiful</span>
             <br />
             apps faster
           </h1>
 
-          {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-[#94a3b8] max-w-2xl mb-12 leading-relaxed animate-fade-up" style={{ animationDelay: '0.3s' }}>
+          <p className="hero-subtitle animate-fade-up">
             Flexi UI is a stunning component library with neon emerald accents, 
             dark-first design, and seamless React integration.
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-20 animate-fade-up" style={{ animationDelay: '0.4s' }}>
-            <Button size="lg" className="gap-2 text-base px-8 py-4 h-auto">
+          <div className="hero-buttons animate-fade-up">
+            <Button size="lg" className="gap-2 px-8 py-4">
               Get Started
               <ArrowRight className="w-5 h-5" />
             </Button>
-            <Button variant="outline" size="lg" className="gap-2 text-base px-8 py-4 h-auto">
+            <Button variant="outline" size="lg" className="gap-2 px-8 py-4">
               <Github className="w-5 h-5" />
               GitHub
             </Button>
           </div>
 
-          {/* Terminal Preview */}
-          <Card className="w-full max-w-2xl animate-scale-in animate-glow-pulse" style={{ animationDelay: '0.5s' }}>
+          <Card className="terminal-card animate-scale-in">
             <div className="p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                <span className="ml-3 text-xs text-[#64748b]">terminal</span>
+              <div className="terminal-dots">
+                <div className="dot dot-red" />
+                <div className="dot dot-yellow" />
+                <div className="dot dot-green" />
+                <span className="terminal-label">terminal</span>
               </div>
-              <pre className="text-left text-sm md:text-base font-mono">
+              <pre className="terminal-code">
                 <code>
-                  <span className="text-[#64748b]">$</span>{' '}
-                  <span className="text-[#00FF9C]">npm</span> install @flexireact/flexi-ui{'\n'}
-                  <span className="text-[#64748b]">$</span>{' '}
-                  <span className="text-[#00FF9C]">npx</span> create-flexireact my-app{'\n'}
-                  {'\n'}
-                  <span className="text-[#00FF9C]">✓</span> <span className="text-[#f8fafc]">Ready in</span> <span className="text-[#00FF9C]">38ms</span>
+                  <span className="dim">$</span> <span className="green">npm</span> install @flexireact/flexi-ui
+                  <br />
+                  <span className="dim">$</span> <span className="green">npx</span> create-flexireact my-app
+                  <br /><br />
+                  <span className="green">✓</span> Ready in <span className="green">38ms</span>
                 </code>
               </pre>
             </div>
@@ -1127,11 +1115,11 @@ export function Features() {
           {features.map((feature, index) => (
             <Card 
               key={index} 
-              className="group p-8 transition-all duration-300 hover:border-[#00FF9C]/50 hover:shadow-[0_0_30px_rgba(0,255,156,0.1)] cursor-default animate-fade-up"
+              className="group p-8 feature-card"
               style={{ animationDelay: (index * 0.1) + 's' }}
             >
               <div className="flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-[#00FF9C]/10 text-[#00FF9C] group-hover:bg-[#00FF9C] group-hover:text-black transition-all duration-300">
+                <div className="feature-icon">
                   <feature.icon className="w-6 h-6" />
                 </div>
                 <div className="flex-1">
@@ -1590,6 +1578,159 @@ export default function HomePage() {
     transform: scale(1); 
   }
 }
+
+/* Feature card styles */
+.feature-card {
+  transition: all 0.3s;
+  cursor: default;
+  animation: fadeUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.feature-card:hover {
+  border-color: rgba(0, 255, 156, 0.5);
+  box-shadow: 0 0 30px rgba(0, 255, 156, 0.1);
+}
+
+.feature-icon {
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  background-color: rgba(0, 255, 156, 0.1);
+  color: #00FF9C;
+  transition: all 0.3s;
+}
+
+.group:hover .feature-icon {
+  background-color: #00FF9C;
+  color: black;
+}
+
+/* Hero section styles */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+}
+
+.hero-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(64px);
+}
+
+.hero-glow-1 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(0,255,156,0.2), rgba(0,255,156,0.05), transparent);
+}
+
+.hero-glow-2 {
+  top: 0;
+  right: 0;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(6,182,212,0.1), transparent);
+}
+
+.hero-glow-3 {
+  bottom: 0;
+  left: 0;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(16,185,129,0.1), transparent);
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.hero-title {
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+  line-height: 1.1;
+}
+
+.hero-gradient {
+  background: linear-gradient(to right, #00FF9C, #34d399, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: #94a3b8;
+  max-width: 42rem;
+  margin-bottom: 3rem;
+  line-height: 1.7;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 5rem;
+}
+
+/* Terminal styles */
+.terminal-card {
+  width: 100%;
+  max-width: 42rem;
+}
+
+.terminal-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dot-red { background-color: rgba(239,68,68,0.8); }
+.dot-yellow { background-color: rgba(234,179,8,0.8); }
+.dot-green { background-color: rgba(34,197,94,0.8); }
+
+.terminal-label {
+  margin-left: 0.75rem;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.terminal-code {
+  text-align: left;
+  font-size: 0.875rem;
+  font-family: ui-monospace, monospace;
+}
+
+.dim { color: #64748b; }
+.green { color: #00FF9C; }
 `,
 
   // ============================================================================
