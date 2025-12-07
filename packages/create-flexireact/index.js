@@ -295,13 +295,16 @@ module.exports = {
 };
 `,
 
-  'flexireact.config.js': (name, template) => `/** @type {import('flexireact').Config} */
+  'flexireact.config.js': (name, template) => `/** @type {import('@flexireact/core').Config} */
 export default {
   // Styles to include
   styles: [
     '/styles.css',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
   ],
+  
+  // Favicon
+  favicon: '/favicon.svg',
   
   // Server options
   server: {
@@ -506,6 +509,18 @@ export default function RootLayout({ children }: LayoutProps) {
 `,
 
   'public/.gitkeep': () => '',
+  
+  'public/favicon.svg': () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="20" fill="#0f172a"/>
+  <path d="M25 70V30h30v10H37v8h15v10H37v12H25z" fill="url(#grad)"/>
+  <circle cx="65" cy="65" r="8" fill="url(#grad)"/>
+</svg>`,
 };
 
 // ============================================================================

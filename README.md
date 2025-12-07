@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/flexireact"><img src="https://img.shields.io/npm/v/flexireact.svg" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/@flexireact/core"><img src="https://img.shields.io/npm/v/@flexireact/core.svg" alt="npm version" /></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
   <a href="#"><img src="https://img.shields.io/badge/TypeScript-Ready-blue.svg" alt="TypeScript Ready" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Tailwind-CSS-38B2AC.svg" alt="Tailwind CSS" /></a>
@@ -140,8 +140,9 @@
 
 ```bash
 # Create a new project
-npx flexireact create myapp
-cd myapp
+npx create-flexireact@latest my-app
+cd my-app
+npm install
 
 # Start development server
 npm run dev
