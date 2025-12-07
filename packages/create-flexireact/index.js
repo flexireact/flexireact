@@ -1128,7 +1128,7 @@ export function Features() {
             <Card 
               key={index} 
               className="group p-8 transition-all duration-300 hover:border-[#00FF9C]/50 hover:shadow-[0_0_30px_rgba(0,255,156,0.1)] cursor-default animate-fade-up"
-              style={{ animationDelay: \`\${index * 0.1}s\` }}
+              style={{ animationDelay: (index * 0.1) + 's' }}
             >
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-xl bg-[#00FF9C]/10 text-[#00FF9C] group-hover:bg-[#00FF9C] group-hover:text-black transition-all duration-300">
