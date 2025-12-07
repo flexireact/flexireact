@@ -357,6 +357,22 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
 }
 
+const baseStyles = 'inline-flex items-center justify-center rounded-lg ' +
+  'font-medium transition-all duration-200 focus-visible:outline-none ' +
+  'focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50';
+
+const variants = {
+  default: 'bg-primary text-black hover:bg-primary/90',
+  outline: 'border border-border bg-transparent hover:bg-secondary',
+  ghost: 'hover:bg-secondary hover:text-foreground',
+};
+
+const sizes = {
+  default: 'h-10 px-4 py-2 text-sm',
+  sm: 'h-9 px-3 text-sm',
+  lg: 'h-12 px-8 text-base',
+};
+
 export function Button({ 
   className, 
   variant = 'default', 
@@ -366,20 +382,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={cn(
-        'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
-        {
-          'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25': variant === 'default',
-          'border border-border bg-transparent hover:bg-secondary hover:text-foreground': variant === 'outline',
-          'hover:bg-secondary hover:text-foreground': variant === 'ghost',
-        },
-        {
-          'h-10 px-4 py-2 text-sm': size === 'default',
-          'h-9 px-3 text-sm': size === 'sm',
-          'h-12 px-8 text-base': size === 'lg',
-        },
-        className
-      )}
+      className={cn(baseStyles, variants[variant], sizes[size], className)}
       {...props}
     >
       {children}
@@ -395,15 +398,13 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
+const cardStyles = 'rounded-xl border border-border bg-card ' +
+  'text-card-foreground shadow-sm transition-all duration-300 ' +
+  'hover:border-primary/50';
+
 export function Card({ className, children, ...props }: CardProps) {
   return (
-    <div
-      className={cn(
-        'rounded-xl border border-border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5',
-        className
-      )}
-      {...props}
-    >
+    <div className={cn(cardStyles, className)} {...props}>
       {children}
     </div>
   );
@@ -419,7 +420,7 @@ export function CardHeader({ className, children, ...props }: CardProps) {
 
 export function CardTitle({ className, children, ...props }: CardProps) {
   return (
-    <h3 className={cn('text-lg font-semibold leading-none tracking-tight', className)} {...props}>
+    <h3 className={cn('text-lg font-semibold', className)} {...props}>
       {children}
     </h3>
   );
@@ -471,33 +472,18 @@ export function Badge({ className, variant = 'default', children, ...props }: Ba
 `,
 
   'components/Navbar.tsx': () => `import React from 'react';
-import { Button } from './ui/button';
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
-      <nav className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <a href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-emerald-400">
-            <svg className="h-4 w-4 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <span className="text-lg font-bold">FlexiReact</span>
+    <header className="navbar">
+      <nav className="navbar-inner">
+        <a href="/" className="logo">
+          <div className="logo-icon">⚡</div>
+          <span className="logo-text">FlexiReact</span>
         </a>
-        
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
-            <a href="https://github.com/flexireact/flexireact">Docs</a>
-          </Button>
-          <Button variant="ghost" size="sm" asChild>
-            <a href="https://github.com/flexireact/flexireact" className="flex items-center gap-2">
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-              GitHub
-            </a>
-          </Button>
+        <div className="nav-links">
+          <a href="https://github.com/flexireact/flexireact">Docs</a>
+          <a href="https://github.com/flexireact/flexireact">GitHub</a>
         </div>
       </nav>
     </header>
@@ -506,83 +492,41 @@ export function Navbar() {
 `,
 
   'components/Hero.tsx': () => `import React from 'react';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
-          <div className="h-[600px] w-[600px] rounded-full bg-gradient-to-r from-primary/20 via-emerald-500/10 to-cyan-500/20 blur-3xl" />
+    <section className="hero">
+      <div className="hero-glow" />
+      <div className="hero-content">
+        <span className="hero-badge">⚡ The Modern React Framework</span>
+        <h1 className="hero-title">
+          Build <span className="gradient-text">blazing fast</span> web apps
+        </h1>
+        <p className="hero-subtitle">
+          A modern React framework with TypeScript, Tailwind CSS, 
+          SSR, SSG, Islands architecture, and file-based routing.
+        </p>
+        <div className="hero-buttons">
+          <a href="https://github.com/flexireact/flexireact" className="btn-primary">
+            Get Started →
+          </a>
+          <a href="https://github.com/flexireact/flexireact" className="btn-outline">
+            GitHub
+          </a>
         </div>
-        <div className="absolute right-0 top-1/2 -translate-y-1/2">
-          <div className="h-[400px] w-[400px] rounded-full bg-gradient-to-l from-primary/10 to-transparent blur-3xl" />
-        </div>
-      </div>
-
-      <div className="container mx-auto max-w-6xl px-4 py-24 sm:py-32 lg:py-40">
-        <div className="flex flex-col items-center text-center">
-          {/* Badge */}
-          <Badge className="mb-6 animate-fade-in">
-            <span className="mr-1">⚡</span> The Modern React Framework
-          </Badge>
-
-          {/* Title */}
-          <h1 className="mb-6 max-w-4xl animate-fade-up text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-            Build{' '}
-            <span className="bg-gradient-to-r from-primary via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              blazing fast
-            </span>{' '}
-            web apps
-          </h1>
-
-          {/* Subtitle */}
-          <p className="mb-10 max-w-2xl animate-fade-up text-lg text-muted-foreground sm:text-xl" style={{ animationDelay: '0.1s' }}>
-            A modern React framework with TypeScript, Tailwind CSS, SSR, SSG, 
-            Islands architecture, and file-based routing. Ship faster.
-          </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-            <Button size="lg" className="gap-2">
-              Start Building
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <a href="https://github.com/flexireact/flexireact" className="gap-2">
-                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                GitHub
-              </a>
-            </Button>
+        <div className="terminal">
+          <div className="terminal-header">
+            <span className="dot red"></span>
+            <span className="dot yellow"></span>
+            <span className="dot green"></span>
           </div>
+          <pre className="terminal-body">
+<span className="dim">$</span> <span className="green">npx</span> create-flexireact my-app
+<span className="dim">$</span> <span className="green">cd</span> my-app
+<span className="dim">$</span> <span className="green">npm</span> run dev
 
-          {/* Code Preview */}
-          <div className="mt-16 w-full max-w-2xl animate-fade-up rounded-xl border border-border bg-card/50 p-4 backdrop-blur-sm" style={{ animationDelay: '0.3s' }}>
-            <div className="flex items-center gap-2 border-b border-border pb-3">
-              <div className="h-3 w-3 rounded-full bg-red-500/80" />
-              <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
-              <div className="h-3 w-3 rounded-full bg-green-500/80" />
-              <span className="ml-2 text-xs text-muted-foreground">terminal</span>
-            </div>
-            <pre className="mt-4 overflow-x-auto text-left text-sm">
-              <code className="text-muted-foreground">
-                <span className="text-muted-foreground/60">$</span>{' '}
-                <span className="text-primary">npx</span> create-flexireact@latest my-app{'\n'}
-                <span className="text-muted-foreground/60">$</span>{' '}
-                <span className="text-primary">cd</span> my-app{'\n'}
-                <span className="text-muted-foreground/60">$</span>{' '}
-                <span className="text-primary">npm</span> run dev{'\n'}
-                {'\n'}
-                <span className="text-emerald-400">✓</span> Ready in <span className="text-primary">38ms</span>
-              </code>
-            </pre>
-          </div>
+<span className="green">✓</span> Ready in 38ms
+          </pre>
         </div>
       </div>
     </section>
@@ -591,70 +535,28 @@ export function Hero() {
 `,
 
   'components/Features.tsx': () => `import React from 'react';
-import { Card, CardHeader, CardTitle, CardDescription } from './ui/card';
 
 const features = [
-  {
-    icon: (
-      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
-    ),
-    title: 'Lightning Fast',
-    description: 'Powered by esbuild for instant builds and sub-second hot module replacement.',
-  },
-  {
-    icon: (
-      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-      </svg>
-    ),
-    title: 'File-based Routing',
-    description: 'Create a file in pages/, get a route automatically. Simple and intuitive.',
-  },
-  {
-    icon: (
-      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-      </svg>
-    ),
-    title: 'Islands Architecture',
-    description: 'Partial hydration for minimal JavaScript. Only hydrate what needs interactivity.',
-  },
-  {
-    icon: (
-      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
-      </svg>
-    ),
-    title: 'SSR & SSG',
-    description: 'Server-side rendering and static generation out of the box. SEO friendly.',
-  },
+  { icon: '⚡', title: 'Lightning Fast', desc: 'Powered by esbuild for instant builds.' },
+  { icon: '📁', title: 'File Routing', desc: 'Create a file, get a route automatically.' },
+  { icon: '🏝️', title: 'Islands', desc: 'Partial hydration for minimal JavaScript.' },
+  { icon: '🚀', title: 'SSR & SSG', desc: 'Server rendering out of the box.' },
 ];
 
 export function Features() {
   return (
-    <section className="container mx-auto max-w-6xl px-4 py-24">
-      <div className="mb-12 text-center">
-        <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
-          Everything you need
-        </h2>
-        <p className="mx-auto max-w-2xl text-muted-foreground">
-          A complete toolkit for building modern web applications with React.
-        </p>
-      </div>
-
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {features.map((feature, index) => (
-          <Card key={index} className="group cursor-default">
-            <CardHeader>
-              <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                {feature.icon}
-              </div>
-              <CardTitle>{feature.title}</CardTitle>
-              <CardDescription>{feature.description}</CardDescription>
-            </CardHeader>
-          </Card>
+    <section className="features">
+      <h2 className="features-title">Everything you need</h2>
+      <p className="features-subtitle">
+        A complete toolkit for building modern web apps.
+      </p>
+      <div className="features-grid">
+        {features.map((f, i) => (
+          <div key={i} className="feature-card">
+            <span className="feature-icon">{f.icon}</span>
+            <h3 className="feature-title">{f.title}</h3>
+            <p className="feature-desc">{f.desc}</p>
+          </div>
         ))}
       </div>
     </section>
@@ -666,25 +568,12 @@ export function Features() {
 
 export function Footer() {
   return (
-    <footer className="border-t border-border">
-      <div className="container mx-auto max-w-6xl px-4 py-8">
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span>Built with</span>
-            <span className="text-red-500">❤️</span>
-            <span>using</span>
-            <a href="https://github.com/flexireact/flexireact" className="font-medium text-foreground hover:text-primary transition-colors">
-              FlexiReact
-            </a>
-          </div>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <a href="https://github.com/flexireact/flexireact" className="hover:text-foreground transition-colors">
-              GitHub
-            </a>
-            <a href="https://github.com/flexireact/flexireact" className="hover:text-foreground transition-colors">
-              Documentation
-            </a>
-          </div>
+    <footer className="footer">
+      <div className="footer-inner">
+        <span>Built with ❤️ using FlexiReact</span>
+        <div className="footer-links">
+          <a href="https://github.com/flexireact/flexireact">GitHub</a>
+          <a href="https://github.com/flexireact/flexireact">Docs</a>
         </div>
       </div>
     </footer>
@@ -758,53 +647,216 @@ export default function HomePage() {
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 142.1 76.2% 36.3%;
-    --primary-foreground: 144.9 80.4% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 142.1 76.2% 36.3%;
-    --radius: 0.75rem;
-  }
-
-  * {
-    border-color: hsl(var(--border));
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+:root {
+  --bg: #0a0a0a;
+  --fg: #fafafa;
+  --primary: #10b981;
+  --muted: #71717a;
+  --border: #27272a;
+  --card: #18181b;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--primary); }
+
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,10,0.8);
+  backdrop-filter: blur(12px);
+}
+.navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo { display: flex; align-items: center; gap: 0.5rem; }
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--primary), #06b6d4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo-text { font-weight: 700; font-size: 1.125rem; }
+.nav-links { display: flex; gap: 1.5rem; }
+.nav-links a { color: var(--muted); font-size: 0.875rem; }
+.nav-links a:hover { color: var(--fg); }
+
+/* Hero */
+.hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(16,185,129,0.15), transparent 70%);
+  pointer-events: none;
+}
+.hero-content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 800px;
+}
+.hero-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.2);
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  color: var(--primary);
+  margin-bottom: 2rem;
+}
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+.gradient-text {
+  background: linear-gradient(90deg, var(--primary), #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-subtitle {
+  font-size: 1.125rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+}
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+.btn-primary {
+  padding: 0.875rem 2rem;
+  background: var(--primary);
+  color: #000;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.9; color: #000; }
+.btn-outline {
+  padding: 0.875rem 2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color 0.2s;
+}
+.btn-outline:hover { border-color: var(--primary); color: var(--fg); }
+
+/* Terminal */
+.terminal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  max-width: 500px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.terminal-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 0.5rem;
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot.red { background: #ef4444; }
+.dot.yellow { background: #eab308; }
+.dot.green { background: #22c55e; }
+.terminal-body {
+  padding: 1rem;
+  font-family: monospace;
+  font-size: 0.875rem;
+  text-align: left;
+  line-height: 1.6;
+}
+.dim { color: var(--muted); }
+.green { color: var(--primary); }
+
+/* Features */
+.features {
+  padding: 6rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.features-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.features-subtitle {
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 3rem;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: border-color 0.2s;
+}
+.feature-card:hover { border-color: var(--primary); }
+.feature-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+.feature-title { font-weight: 600; margin-bottom: 0.5rem; }
+.feature-desc { color: var(--muted); font-size: 0.875rem; line-height: 1.6; }
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 1.5rem;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.footer-links { display: flex; gap: 1.5rem; }
+.footer-links a:hover { color: var(--fg); }
 `,
 
   // ============================================================================
@@ -978,73 +1030,30 @@ export default {
 `,
 
   // ============================================================================
-  // Components
+  // Components - Simple Landing Page
   // ============================================================================
 
   'components/Hero.tsx': () => `import React from 'react';
-import { Button, Badge, Card } from '@flexireact/flexi-ui';
-import { Github, ArrowRight, Sparkles } from 'lucide-react';
+import { Button, Badge } from '@flexireact/flexi-ui';
 
 export function Hero() {
   return (
-    <section className="hero-section">
-      <div className="hero-bg">
-        <div className="hero-glow hero-glow-1" />
-        <div className="hero-glow hero-glow-2" />
-        <div className="hero-glow hero-glow-3" />
-      </div>
-      <div className="hero-grid" />
-
-      <div className="container mx-auto px-6 py-32 max-w-6xl">
-        <div className="flex flex-col items-center text-center">
-          <div className="animate-fade-in">
-            <Badge variant="success" className="mb-8 px-4 py-2 text-sm">
-              <Sparkles className="w-4 h-4 mr-2" />
-              The Modern React Framework
-            </Badge>
-          </div>
-
-          <h1 className="hero-title animate-fade-up">
-            Build <span className="hero-gradient">beautiful</span>
-            <br />
-            apps faster
-          </h1>
-
-          <p className="hero-subtitle animate-fade-up">
-            Flexi UI is a stunning component library with neon emerald accents, 
-            dark-first design, and seamless React integration.
-          </p>
-
-          <div className="hero-buttons animate-fade-up">
-            <Button size="lg" className="gap-2 px-8 py-4">
-              Get Started
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-            <Button variant="outline" size="lg" className="gap-2 px-8 py-4">
-              <Github className="w-5 h-5" />
-              GitHub
-            </Button>
-          </div>
-
-          <Card className="terminal-card animate-scale-in">
-            <div className="p-6">
-              <div className="terminal-dots">
-                <div className="dot dot-red" />
-                <div className="dot dot-yellow" />
-                <div className="dot dot-green" />
-                <span className="terminal-label">terminal</span>
-              </div>
-              <pre className="terminal-code">
-                <code>
-                  <span className="dim">$</span> <span className="green">npm</span> install @flexireact/flexi-ui
-                  <br />
-                  <span className="dim">$</span> <span className="green">npx</span> create-flexireact my-app
-                  <br /><br />
-                  <span className="green">✓</span> Ready in <span className="green">38ms</span>
-                </code>
-              </pre>
-            </div>
-          </Card>
+    <section className="hero">
+      <div className="hero-glow" />
+      <div className="hero-content">
+        <Badge variant="success" className="mb-6">
+          ⚡ Flexi UI Components
+        </Badge>
+        <h1 className="hero-title">
+          Build <span className="gradient-text">beautiful</span> apps
+        </h1>
+        <p className="hero-subtitle">
+          A stunning component library with neon emerald accents,
+          dark-first design, and seamless React integration.
+        </p>
+        <div className="hero-buttons">
+          <Button size="lg">Get Started</Button>
+          <Button variant="outline" size="lg">GitHub</Button>
         </div>
       </div>
     </section>
@@ -1053,267 +1062,27 @@ export function Hero() {
 `,
 
   'components/Features.tsx': () => `import React from 'react';
-import { Card, Badge } from '@flexireact/flexi-ui';
-import { Zap, Folder, Sparkles, Server, Palette, Shield } from 'lucide-react';
+import { Card } from '@flexireact/flexi-ui';
 
 const features = [
-  {
-    icon: Zap,
-    title: 'Lightning Fast',
-    description: 'Powered by esbuild for instant builds and sub-second hot module replacement.',
-    badge: 'Performance',
-  },
-  {
-    icon: Folder,
-    title: 'File-based Routing',
-    description: 'Create a file in pages/, get a route automatically. Simple and intuitive.',
-    badge: 'DX',
-  },
-  {
-    icon: Sparkles,
-    title: 'Islands Architecture',
-    description: 'Partial hydration for minimal JavaScript. Only hydrate what needs interactivity.',
-    badge: 'Modern',
-  },
-  {
-    icon: Server,
-    title: 'SSR & SSG',
-    description: 'Server-side rendering and static generation out of the box. SEO friendly.',
-    badge: 'SEO',
-  },
-  {
-    icon: Palette,
-    title: 'Beautiful Design',
-    description: 'Neon emerald accents with dark-first design. Stunning out of the box.',
-    badge: 'UI',
-  },
-  {
-    icon: Shield,
-    title: 'Type Safe',
-    description: 'Full TypeScript support with strict type checking and excellent DX.',
-    badge: 'TypeScript',
-  },
+  { icon: '⚡', title: 'Fast', desc: 'Powered by esbuild.' },
+  { icon: '📁', title: 'File Routing', desc: 'Automatic routes.' },
+  { icon: '🏝️', title: 'Islands', desc: 'Partial hydration.' },
+  { icon: '🎨', title: 'Beautiful', desc: 'Dark mode first.' },
 ];
 
 export function Features() {
   return (
-    <section className="py-32 px-6">
-      <div className="container mx-auto max-w-6xl">
-        {/* Section Header */}
-        <div className="text-center mb-20">
-          <Badge variant="outline" className="mb-6">Features</Badge>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-            Everything you need
-          </h2>
-          <p className="text-xl text-[#94a3b8] max-w-2xl mx-auto">
-            A complete toolkit for building modern web applications with React and Flexi UI.
-          </p>
-        </div>
-
-        {/* Feature Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <Card 
-              key={index} 
-              className="group p-8 feature-card"
-              style={{ animationDelay: (index * 0.1) + 's' }}
-            >
-              <div className="flex items-start gap-4">
-                <div className="feature-icon">
-                  <feature.icon className="w-6 h-6" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-lg font-semibold">{feature.title}</h3>
-                  </div>
-                  <p className="text-[#94a3b8] text-sm leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-`,
-
-  'components/Showcase.tsx': () => `import React from 'react';
-import { 
-  Button, 
-  Card, 
-  Badge, 
-  Input, 
-  Checkbox,
-  Switch,
-  Progress,
-  Spinner,
-  Avatar,
-  Separator
-} from '@flexireact/flexi-ui';
-import { Mail, Lock, User, Search, Heart, Star, Check } from 'lucide-react';
-
-export function Showcase() {
-  return (
-    <section className="py-32 px-6 relative">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] rounded-full bg-gradient-radial from-[#00FF9C]/10 to-transparent blur-3xl" />
-      </div>
-
-      <div className="container mx-auto max-w-6xl">
-        {/* Section Header */}
-        <div className="text-center mb-20">
-          <Badge variant="success" className="mb-6">Components</Badge>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-            Beautiful by default
-          </h2>
-          <p className="text-xl text-[#94a3b8] max-w-2xl mx-auto">
-            23+ components designed with attention to detail. Dark mode first, accessible, and customizable.
-          </p>
-        </div>
-
-        {/* Component Showcase Grid */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Buttons Card */}
-          <Card className="p-8">
-            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#00FF9C]" />
-              Buttons
-            </h3>
-            <div className="flex flex-wrap gap-3">
-              <Button>Primary</Button>
-              <Button variant="secondary">Secondary</Button>
-              <Button variant="outline">Outline</Button>
-              <Button variant="ghost">Ghost</Button>
-              <Button variant="danger">Danger</Button>
-              <Button variant="link">Link</Button>
-            </div>
-            <Separator className="my-6" />
-            <div className="flex flex-wrap gap-3">
-              <Button size="sm">Small</Button>
-              <Button size="md">Medium</Button>
-              <Button size="lg">Large</Button>
-            </div>
-            <Separator className="my-6" />
-            <div className="flex flex-wrap gap-3">
-              <Button loading>Loading</Button>
-              <Button disabled>Disabled</Button>
-              <Button className="gap-2">
-                <Heart className="w-4 h-4" /> With Icon
-              </Button>
-            </div>
+    <section className="features">
+      <h2 className="features-title">Features</h2>
+      <div className="features-grid">
+        {features.map((f, i) => (
+          <Card key={i} className="feature-card">
+            <span className="feature-icon">{f.icon}</span>
+            <h3>{f.title}</h3>
+            <p>{f.desc}</p>
           </Card>
-
-          {/* Inputs Card */}
-          <Card className="p-8">
-            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#00FF9C]" />
-              Inputs
-            </h3>
-            <div className="space-y-4">
-              <Input 
-                label="Email" 
-                placeholder="you@example.com" 
-                type="email"
-              />
-              <Input 
-                label="Password" 
-                placeholder="Enter password" 
-                type="password"
-              />
-              <Input 
-                label="Search" 
-                placeholder="Search..." 
-              />
-              <Input 
-                label="With Error" 
-                placeholder="Invalid input" 
-                error
-                helperText="This field is required"
-              />
-            </div>
-          </Card>
-
-          {/* Badges Card */}
-          <Card className="p-8">
-            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#00FF9C]" />
-              Badges & Status
-            </h3>
-            <div className="flex flex-wrap gap-3 mb-6">
-              <Badge>Default</Badge>
-              <Badge variant="success">Success</Badge>
-              <Badge variant="warning">Warning</Badge>
-              <Badge variant="danger">Danger</Badge>
-              <Badge variant="outline">Outline</Badge>
-            </div>
-            <Separator className="my-6" />
-            <h4 className="text-sm font-medium mb-4 text-[#94a3b8]">Progress</h4>
-            <div className="space-y-4">
-              <Progress value={25} />
-              <Progress value={50} />
-              <Progress value={75} />
-              <Progress value={100} />
-            </div>
-          </Card>
-
-          {/* Form Controls Card */}
-          <Card className="p-8">
-            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#00FF9C]" />
-              Form Controls
-            </h3>
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <Checkbox id="terms" />
-                <label htmlFor="terms" className="text-sm">Accept terms and conditions</label>
-              </div>
-              <div className="flex items-center gap-4">
-                <Checkbox id="newsletter" defaultChecked />
-                <label htmlFor="newsletter" className="text-sm">Subscribe to newsletter</label>
-              </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Dark Mode</span>
-                <Switch defaultChecked />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Notifications</span>
-                <Switch />
-              </div>
-              <Separator />
-              <div className="flex items-center gap-4">
-                <Spinner size="sm" />
-                <Spinner />
-                <Spinner size="lg" />
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Avatars Row */}
-        <Card className="p-8 mt-8">
-          <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#00FF9C]" />
-            Avatars
-          </h3>
-          <div className="flex items-center gap-4 flex-wrap">
-            <Avatar size="sm" fallback="JD" />
-            <Avatar fallback="AB" />
-            <Avatar size="lg" fallback="CD" />
-            <Avatar size="xl" fallback="EF" />
-            <Separator orientation="vertical" className="h-12 mx-4" />
-            <div className="flex -space-x-3">
-              <Avatar fallback="A" className="ring-2 ring-[#0a0a0a]" />
-              <Avatar fallback="B" className="ring-2 ring-[#0a0a0a]" />
-              <Avatar fallback="C" className="ring-2 ring-[#0a0a0a]" />
-              <Avatar fallback="+5" className="ring-2 ring-[#0a0a0a]" />
-            </div>
-          </div>
-        </Card>
+        ))}
       </div>
     </section>
   );
@@ -1321,51 +1090,12 @@ export function Showcase() {
 `,
 
   'components/Footer.tsx': () => `import React from 'react';
-import { Separator } from '@flexireact/flexi-ui';
-import { Github, Twitter, Heart } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#1e293b]">
-      <div className="container mx-auto max-w-6xl px-6 py-12">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Logo & Copyright */}
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00FF9C] to-emerald-400 flex items-center justify-center">
-              <span className="text-black font-bold text-sm">F</span>
-            </div>
-            <span className="text-[#94a3b8] text-sm">
-              Built with <Heart className="w-4 h-4 inline text-red-500 mx-1" /> using{' '}
-              <a href="https://github.com/flexireact/flexi-ui" className="text-[#00FF9C] hover:underline">
-                Flexi UI
-              </a>
-            </span>
-          </div>
-
-          {/* Links */}
-          <div className="flex items-center gap-6">
-            <a 
-              href="https://github.com/flexireact/flexi-ui" 
-              className="text-[#94a3b8] hover:text-white transition-colors flex items-center gap-2 text-sm"
-            >
-              <Github className="w-4 h-4" />
-              GitHub
-            </a>
-            <a 
-              href="https://github.com/flexireact/flexireact" 
-              className="text-[#94a3b8] hover:text-white transition-colors text-sm"
-            >
-              Documentation
-            </a>
-            <a 
-              href="https://github.com/flexireact/flexi-ui" 
-              className="text-[#94a3b8] hover:text-white transition-colors text-sm"
-            >
-              Components
-            </a>
-          </div>
-        </div>
-      </div>
+    <footer className="footer">
+      <span>Built with Flexi UI</span>
+      <a href="https://github.com/flexireact/flexi-ui">GitHub</a>
     </footer>
   );
 }
@@ -1373,43 +1103,20 @@ export function Footer() {
 
   'components/Navbar.tsx': () => `import React from 'react';
 import { Button, Badge } from '@flexireact/flexi-ui';
-import { Github, Menu } from 'lucide-react';
 
 export function Navbar() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-[#1e293b]/50 bg-[#0a0a0a]/80 backdrop-blur-xl">
-      <nav className="container mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <a href="/" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#00FF9C] to-emerald-400 flex items-center justify-center shadow-lg shadow-[#00FF9C]/20 group-hover:shadow-[#00FF9C]/40 transition-shadow">
-            <span className="text-black font-black text-lg">F</span>
-          </div>
-          <span className="text-lg font-bold">Flexi UI</span>
-          <Badge variant="outline" className="hidden sm:flex text-xs">v1.0</Badge>
+    <header className="navbar">
+      <nav className="navbar-inner">
+        <a href="/" className="logo">
+          <span className="logo-icon">F</span>
+          <span className="logo-text">Flexi UI</span>
+          <Badge variant="outline" className="ml-2">v1.0</Badge>
         </a>
-
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-2">
-          <Button variant="ghost" size="sm">
-            <a href="https://github.com/flexireact/flexi-ui">Docs</a>
-          </Button>
-          <Button variant="ghost" size="sm">
-            <a href="https://github.com/flexireact/flexi-ui">Components</a>
-          </Button>
-          <Button variant="ghost" size="sm">
-            <a href="https://github.com/flexireact/flexireact">FlexiReact</a>
-          </Button>
-          <div className="w-px h-6 bg-[#1e293b] mx-2" />
-          <Button variant="outline" size="sm" className="gap-2">
-            <Github className="w-4 h-4" />
-            <a href="https://github.com/flexireact/flexi-ui">GitHub</a>
-          </Button>
+        <div className="nav-links">
+          <Button variant="ghost" size="sm">Docs</Button>
+          <Button variant="outline" size="sm">GitHub</Button>
         </div>
-
-        {/* Mobile Menu Button */}
-        <Button variant="ghost" size="sm" className="md:hidden">
-          <Menu className="w-5 h-5" />
-        </Button>
       </nav>
     </header>
   );
@@ -1418,7 +1125,6 @@ export function Navbar() {
 
   'components/index.ts': () => `export { Hero } from './Hero';
 export { Features } from './Features';
-export { Showcase } from './Showcase';
 export { Footer } from './Footer';
 export { Navbar } from './Navbar';
 `,
@@ -1452,14 +1158,12 @@ export default function RootLayout({ children }: LayoutProps) {
   'pages/index.tsx': () => `import React from 'react';
 import { Hero } from '../components/Hero';
 import { Features } from '../components/Features';
-import { Showcase } from '../components/Showcase';
 
 export default function HomePage() {
   return (
     <>
       <Hero />
       <Features />
-      <Showcase />
     </>
   );
 }
@@ -1473,264 +1177,145 @@ export default function HomePage() {
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --flexi-bg: #0a0a0a;
-    --flexi-fg: #fafafa;
-    --flexi-primary: #00FF9C;
-    --flexi-primary-fg: #000000;
-    --flexi-muted: #94a3b8;
-    --flexi-border: #1e293b;
-    --flexi-card: #0f0f0f;
-  }
-
-  * {
-    border-color: var(--flexi-border);
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: var(--flexi-bg);
-    color: var(--flexi-fg);
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  ::selection {
-    background-color: rgba(0, 255, 156, 0.3);
-    color: white;
-  }
+:root {
+  --bg: #0a0a0a;
+  --fg: #fafafa;
+  --primary: #00FF9C;
+  --muted: #94a3b8;
+  --border: #1e293b;
+  --card: #0f0f0f;
 }
 
-@layer utilities {
-  .bg-gradient-radial {
-    background: radial-gradient(circle, var(--tw-gradient-stops));
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #0a0a0a;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #1e293b;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #334155;
-  }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
 }
 
-/* Animation utilities */
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
-  opacity: 0;
-}
+a { color: inherit; text-decoration: none; }
 
-.animate-fade-up {
-  animation: fadeUp 0.6s ease-out forwards;
-  opacity: 0;
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,10,0.8);
+  backdrop-filter: blur(12px);
 }
-
-.animate-scale-in {
-  animation: scaleIn 0.4s ease-out forwards;
-  opacity: 0;
+.navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.logo { display: flex; align-items: center; gap: 0.5rem; }
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--primary), #10b981);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  color: #000;
 }
+.logo-text { font-weight: 700; }
+.nav-links { display: flex; gap: 0.5rem; }
 
-@keyframes fadeUp {
-  from { 
-    opacity: 0; 
-    transform: translateY(30px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
-}
-
-@keyframes scaleIn {
-  from { 
-    opacity: 0; 
-    transform: scale(0.9); 
-  }
-  to { 
-    opacity: 1; 
-    transform: scale(1); 
-  }
-}
-
-/* Feature card styles */
-.feature-card {
-  transition: all 0.3s;
-  cursor: default;
-  animation: fadeUp 0.6s ease-out forwards;
-  opacity: 0;
-}
-
-.feature-card:hover {
-  border-color: rgba(0, 255, 156, 0.5);
-  box-shadow: 0 0 30px rgba(0, 255, 156, 0.1);
-}
-
-.feature-icon {
-  padding: 0.75rem;
-  border-radius: 0.75rem;
-  background-color: rgba(0, 255, 156, 0.1);
-  color: #00FF9C;
-  transition: all 0.3s;
-}
-
-.group:hover .feature-icon {
-  background-color: #00FF9C;
-  color: black;
-}
-
-/* Hero section styles */
-.hero-section {
+/* Hero */
+.hero {
   position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  padding-top: 4rem;
 }
-
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  z-index: -10;
-}
-
 .hero-glow {
   position: absolute;
-  border-radius: 9999px;
-  filter: blur(64px);
-}
-
-.hero-glow-1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(circle, rgba(0,255,156,0.2), rgba(0,255,156,0.05), transparent);
-}
-
-.hero-glow-2 {
-  top: 0;
-  right: 0;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(6,182,212,0.1), transparent);
+  background: radial-gradient(circle, rgba(0,255,156,0.15), transparent 70%);
+  pointer-events: none;
 }
-
-.hero-glow-3 {
-  bottom: 0;
-  left: 0;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(16,185,129,0.1), transparent);
+.hero-content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 800px;
 }
-
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  z-index: -10;
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 64px 64px;
-}
-
 .hero-title {
-  font-size: clamp(3rem, 8vw, 5rem);
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  margin-bottom: 2rem;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
   line-height: 1.1;
+  margin-bottom: 1.5rem;
 }
-
-.hero-gradient {
-  background: linear-gradient(to right, #00FF9C, #34d399, #22d3ee);
+.gradient-text {
+  background: linear-gradient(90deg, var(--primary), #10b981);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
-
 .hero-subtitle {
-  font-size: 1.25rem;
-  color: #94a3b8;
-  max-width: 42rem;
-  margin-bottom: 3rem;
+  font-size: 1.125rem;
+  color: var(--muted);
   line-height: 1.7;
+  margin-bottom: 2rem;
 }
-
 .hero-buttons {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
   gap: 1rem;
-  margin-bottom: 5rem;
+  justify-content: center;
 }
 
-/* Terminal styles */
-.terminal-card {
-  width: 100%;
-  max-width: 42rem;
+/* Features */
+.features {
+  padding: 6rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
+.features-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+.feature-card {
+  padding: 1.5rem;
+  text-align: center;
+}
+.feature-card:hover { border-color: var(--primary); }
+.feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+.feature-card h3 { font-weight: 600; margin-bottom: 0.5rem; }
+.feature-card p { color: var(--muted); font-size: 0.875rem; }
 
-.terminal-dots {
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 1.5rem;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-
-.dot-red { background-color: rgba(239,68,68,0.8); }
-.dot-yellow { background-color: rgba(234,179,8,0.8); }
-.dot-green { background-color: rgba(34,197,94,0.8); }
-
-.terminal-label {
-  margin-left: 0.75rem;
-  font-size: 0.75rem;
-  color: #64748b;
-}
-
-.terminal-code {
-  text-align: left;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: var(--muted);
   font-size: 0.875rem;
-  font-family: ui-monospace, monospace;
 }
-
-.dim { color: #64748b; }
-.green { color: #00FF9C; }
+.footer a:hover { color: var(--primary); }
 `,
 
   // ============================================================================
