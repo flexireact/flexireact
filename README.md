@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/logo.png" alt="FlexiReact Logo" width="400" />
+  <img src="./assets/flexireact.webp" alt="FlexiReact Logo" width="400" />
 </p>
 
 <h1 align="center">FlexiReact</h1>
