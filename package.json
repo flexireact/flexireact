@@ -1,6 +1,6 @@
 {
   "name": "@flexireact/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Modern React Framework - SSR, SSG, Islands, TypeScript, Tailwind, File-based Routing",
   "main": "core/index.js",
   "type": "module",
@@ -52,7 +52,9 @@
   "homepage": "https://github.com/flexireact/flexireact#readme",
   "dependencies": {
     "esbuild": "^0.24.0",
-    "picocolors": "^1.1.1"
+    "ora": "^8.1.1",
+    "picocolors": "^1.1.1",
+    "prompts": "^2.4.2"
   },
   "peerDependencies": {
     "react": "^18.0.0",
