@@ -1,0 +1,42 @@
+{
+  "name": "create-flexireact",
+  "version": "1.0.0",
+  "description": "Create FlexiReact apps with one command - The Modern React Framework",
+  "author": "FlexiReact Team",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-flexireact": "./index.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "react",
+    "flexireact",
+    "framework",
+    "ssr",
+    "ssg",
+    "islands",
+    "typescript",
+    "tailwind",
+    "create-app",
+    "cli",
+    "scaffold",
+    "boilerplate"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flexireact/flexireact.git"
+  },
+  "bugs": {
+    "url": "https://github.com/flexireact/flexireact/issues"
+  },
+  "homepage": "https://github.com/flexireact/flexireact#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

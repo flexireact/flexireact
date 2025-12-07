@@ -1,0 +1,32 @@
+# Development
+.git
+.github
+.vscode
+.idea
+
+# Test apps
+test-*
+examples
+
+# Build artifacts
+dist
+*.log
+*.tsbuildinfo
+
+# Config files
+tsconfig.json
+tsup.config.ts
+.eslintrc*
+.prettierrc*
+
+# Packages (published separately)
+packages
+
+# Templates (embedded in create-flexireact)
+templates
+
+# Misc
+*.md
+!README.md
+.gitignore
+.npmrc

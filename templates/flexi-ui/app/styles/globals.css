@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* FlexiUI Theme Variables */
+:root {
+  --flexi-bg: #ffffff;
+  --flexi-bg-subtle: #f8fafc;
+  --flexi-bg-muted: #f1f5f9;
+  --flexi-fg: #0f172a;
+  --flexi-fg-muted: #64748b;
+  --flexi-border: #e2e8f0;
+  --flexi-ring: #00FF9C;
+  --flexi-primary: #00FF9C;
+  --flexi-primary-fg: #000000;
+}
+
+.dark {
+  --flexi-bg: #0a0a0a;
+  --flexi-bg-subtle: #171717;
+  --flexi-bg-muted: #262626;
+  --flexi-fg: #fafafa;
+  --flexi-fg-muted: #a1a1aa;
+  --flexi-border: #27272a;
+  --flexi-ring: #00FF9C;
+  --flexi-primary: #00FF9C;
+  --flexi-primary-fg: #000000;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 255, 156, 0.3);
+  color: white;
+}
+
+/* Focus outline */
+:focus-visible {
+  outline: 2px solid var(--flexi-primary);
+  outline-offset: 2px;
+}

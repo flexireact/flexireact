@@ -1,0 +1,7 @@
+# Development
+.git
+.github
+.vscode
+
+# Misc
+*.log

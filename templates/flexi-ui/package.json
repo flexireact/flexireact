@@ -1,0 +1,25 @@
+{
+  "name": "my-flexiui-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run css && flexireact dev",
+    "build": "npm run css && flexireact build",
+    "start": "flexireact start",
+    "css": "npx tailwindcss -i ./app/styles/input.css -o ./public/styles.css --minify"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@flexireact/flexi-ui": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.3.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.32",
+    "autoprefixer": "^10.4.16"
+  }
+}

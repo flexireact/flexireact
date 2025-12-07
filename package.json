@@ -1,0 +1,73 @@
+{
+  "name": "@flexireact/core",
+  "version": "1.0.0",
+  "description": "The Modern React Framework - SSR, SSG, Islands, TypeScript, Tailwind, File-based Routing",
+  "main": "core/index.js",
+  "type": "module",
+  "bin": {
+    "flexireact": "./cli/index.js",
+    "flexi": "./cli/index.js"
+  },
+  "exports": {
+    ".": "./core/index.js",
+    "./client": "./core/client/index.js",
+    "./server": "./core/server/index.js",
+    "./render": "./core/render/index.js",
+    "./config": "./core/config.js"
+  },
+  "files": [
+    "cli",
+    "core",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "node cli/index.js dev",
+    "build": "node cli/index.js build",
+    "start": "node cli/index.js start",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "react",
+    "framework",
+    "typescript",
+    "tailwind",
+    "ssr",
+    "ssg",
+    "rsc",
+    "islands",
+    "file-based-routing",
+    "nextjs-alternative",
+    "modern"
+  ],
+  "author": "FlexiReact Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flexireact/flexireact.git"
+  },
+  "bugs": {
+    "url": "https://github.com/flexireact/flexireact/issues"
+  },
+  "homepage": "https://github.com/flexireact/flexireact#readme",
+  "dependencies": {
+    "esbuild": "^0.24.0",
+    "picocolors": "^1.1.1"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@types/react": "^18.3.14",
+    "@types/react-dom": "^18.3.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
