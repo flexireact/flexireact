@@ -75,9 +75,8 @@ export function defaultTemplate(projectName: string): TemplateFiles {
 };
 `,
 
-    'flexireact.config.ts': `import type { FlexiConfig } from '@flexireact/core';
-
-const config: FlexiConfig = {
+    'flexireact.config.js': `/** @type {import('@flexireact/core').FlexiConfig} */
+const config = {
   styles: [
     '/styles.css',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
