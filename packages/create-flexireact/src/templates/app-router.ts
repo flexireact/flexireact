@@ -20,7 +20,8 @@ export function appRouterTemplate(projectName: string): TemplateFiles {
       dependencies: {
         react: '^18.2.0',
         'react-dom': '^18.2.0',
-        '@flexireact/core': '^2.0.0',
+        '@flexireact/core': '^2.4.0',
+        '@flexireact/flexi-ui': '^2.0.1',
         clsx: '^2.1.0',
         'tailwind-merge': '^2.2.0',
       },
@@ -91,49 +92,107 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 `,
 
     'app/page.tsx': `import React from 'react';
+import { Button, Card, Badge, Stat, StatGroup } from '@flexireact/flexi-ui';
+
+const features = [
+  { icon: '⚡', title: 'Lightning Fast', desc: 'Powered by esbuild for instant builds' },
+  { icon: '🎨', title: 'FlexiUI', desc: '50+ beautiful components included' },
+  { icon: '📘', title: 'TypeScript', desc: 'Full type safety out of the box' },
+  { icon: '🏝️', title: 'Islands', desc: 'Partial hydration for max performance' },
+  { icon: '🌐', title: 'Edge Ready', desc: 'Deploy anywhere: Node, Bun, Deno, CF' },
+  { icon: '🚀', title: 'SSR + PPR', desc: 'Streaming SSR & Partial Prerendering' },
+];
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-8">
-      <div className="text-center">
-        <div className="w-20 h-20 bg-[#00FF9C] rounded-2xl flex items-center justify-center mx-auto mb-8">
-          <span className="text-black font-bold text-3xl">F</span>
+    <main className="min-h-screen">
+      {/* Hero */}
+      <section className="relative py-32 px-4 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#00FF9C]/5 to-transparent" />
+        <div className="relative max-w-5xl mx-auto text-center">
+          <Badge className="mb-6">v2.4 — Edge Runtime + FlexiUI</Badge>
+          
+          <h1 className="text-6xl font-bold mb-6">
+            Build faster with{' '}
+            <span className="text-[#00FF9C]">FlexiReact</span>
+          </h1>
+          
+          <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+            The modern React framework with TypeScript, Tailwind, SSR, Islands, 
+            Edge Runtime, and 50+ UI components. Better than Next.js.
+          </p>
+          
+          <div className="flex gap-4 justify-center">
+            <Button size="lg">
+              Get Started →
+            </Button>
+            <Button variant="outline" size="lg">
+              Documentation
+            </Button>
+          </div>
         </div>
-        
-        <h1 className="text-5xl font-bold mb-4">
-          Welcome to <span className="text-[#00FF9C]">FlexiReact</span>
-        </h1>
-        
-        <p className="text-gray-400 text-lg mb-8">
-          Using App Router with Next.js style routing
-        </p>
-        
-        <div className="flex gap-4 justify-center">
-          <a 
-            href="https://github.com/nicksdev/flexireact"
-            className="px-6 py-3 bg-[#00FF9C] text-black font-semibold rounded-lg hover:opacity-90 transition"
-          >
-            Get Started →
-          </a>
-          <a 
-            href="https://github.com/nicksdev/flexireact"
-            className="px-6 py-3 border border-gray-700 rounded-lg hover:border-[#00FF9C] transition"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Stats */}
+      <section className="py-16 px-4 border-y border-gray-800">
+        <div className="max-w-5xl mx-auto">
+          <StatGroup columns={4}>
+            <Stat label="Components" value="50+" />
+            <Stat label="Bundle Size" value="~90kb" />
+            <Stat label="Build Time" value="<1s" />
+            <Stat label="Lighthouse" value="100" />
+          </StatGroup>
         </div>
-      </div>
+      </section>
+
+      {/* Features */}
+      <section className="py-24 px-4">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Everything you need
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((f, i) => (
+              <Card key={i} className="p-6 bg-gray-900/50 border-gray-800 hover:border-[#00FF9C]/50 transition">
+                <div className="text-3xl mb-3">{f.icon}</div>
+                <h3 className="font-semibold text-lg mb-2">{f.title}</h3>
+                <p className="text-gray-400 text-sm">{f.desc}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          <Card className="p-12 bg-gradient-to-b from-gray-900 to-gray-900/50 border-gray-800">
+            <h2 className="text-3xl font-bold mb-4">Ready to build?</h2>
+            <p className="text-gray-400 mb-8">Create your app in seconds</p>
+            <code className="block bg-black/50 rounded-lg p-4 mb-8 text-[#00FF9C]">
+              npx create-flexireact my-app
+            </code>
+            <Button size="lg">Start Building →</Button>
+          </Card>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 px-4 border-t border-gray-800 text-center text-gray-500">
+        Built with ❤️ by FlexiReact Team
+      </footer>
     </main>
   );
 }
 `,
 
     'app/loading.tsx': `import React from 'react';
+import { Spinner } from '@flexireact/flexi-ui';
 
 export default function Loading() {
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-[#00FF9C] border-t-transparent rounded-full animate-spin" />
+      <Spinner size="lg" />
     </div>
   );
 }
@@ -142,36 +201,32 @@ export default function Loading() {
     'app/error.tsx': `'use client';
 
 import React from 'react';
+import { Button, Alert } from '@flexireact/flexi-ui';
 
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8">
-      <h1 className="text-4xl font-bold text-red-500 mb-4">Something went wrong</h1>
-      <p className="text-gray-400 mb-8">{error.message}</p>
-      <button 
-        onClick={reset}
-        className="px-6 py-3 bg-[#00FF9C] text-black font-semibold rounded-lg"
-      >
-        Try again
-      </button>
+      <Alert variant="error" className="max-w-md mb-8">
+        <h2 className="font-bold text-lg mb-2">Something went wrong</h2>
+        <p>{error.message}</p>
+      </Alert>
+      <Button onClick={reset}>Try again</Button>
     </div>
   );
 }
 `,
 
     'app/not-found.tsx': `import React from 'react';
+import { Button } from '@flexireact/flexi-ui';
 
 export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8">
-      <h1 className="text-6xl font-bold text-[#00FF9C] mb-4">404</h1>
+      <h1 className="text-8xl font-bold text-[#00FF9C] mb-4">404</h1>
       <p className="text-gray-400 text-xl mb-8">Page not found</p>
-      <a 
-        href="/"
-        className="px-6 py-3 bg-[#00FF9C] text-black font-semibold rounded-lg"
-      >
-        ← Back Home
-      </a>
+      <Button asChild>
+        <a href="/">← Back Home</a>
+      </Button>
     </div>
   );
 }
