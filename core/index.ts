@@ -3,6 +3,9 @@
  * A modern React framework with RSC, SSG, Islands, and more
  */
 
+// Types
+export type { FlexiConfig, Route, RouteType as RouteTypeEnum, PageProps, LayoutProps } from './types.js';
+
 // Core exports
 export { loadConfig, defaultConfig, resolvePaths } from './config.js';
 export { createRequestContext, useRequest, useParams, useQuery, usePathname } from './context.js';
@@ -68,7 +71,7 @@ export {
 } from './plugins/index.js';
 
 // Version
-export const VERSION = '2.0.0';
+export const VERSION = '2.0.1';
 
 // Default export
 export default {

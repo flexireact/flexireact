@@ -63,8 +63,11 @@ export const defaultConfig = {
  * @param {string} projectRoot - Path to project root
  * @returns {Object} Merged configuration
  */
-export async function loadConfig(projectRoot) {
-  const configPath = path.join(projectRoot, 'flexireact.config.js');
+export async function loadConfig(projectRoot: string) {
+  // Try .ts first, then .js
+  const configPathTs = path.join(projectRoot, 'flexireact.config.ts');
+  const configPathJs = path.join(projectRoot, 'flexireact.config.js');
+  const configPath = fs.existsSync(configPathTs) ? configPathTs : configPathJs;
   
   let userConfig = {};
   
@@ -73,8 +76,8 @@ export async function loadConfig(projectRoot) {
       const configUrl = pathToFileURL(configPath).href;
       const module = await import(`${configUrl}?t=${Date.now()}`);
       userConfig = module.default || module;
-    } catch (error) {
-      console.warn('Warning: Failed to load flexireact.config.js:', error.message);
+    } catch (error: any) {
+      console.warn('Warning: Failed to load flexireact config:', error.message);
     }
   }
   
