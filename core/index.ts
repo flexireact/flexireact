@@ -70,6 +70,49 @@ export {
   builtinPlugins 
 } from './plugins/index.js';
 
+// Font Optimization
+export {
+  createFont,
+  googleFont,
+  localFont,
+  generateFontCSS,
+  generateFontPreloadTags,
+  handleFontRequest,
+  fonts,
+  googleFonts
+} from './font/index.js';
+export type { FontConfig, FontResult } from './font/index.js';
+
+// Metadata API
+export {
+  generateMetadataTags,
+  mergeMetadata,
+  generateJsonLd,
+  jsonLd
+} from './metadata/index.js';
+export type { 
+  Metadata, 
+  OpenGraph, 
+  Twitter, 
+  Icons, 
+  Robots, 
+  Viewport,
+  Author
+} from './metadata/index.js';
+
+// Image Optimization
+export {
+  Image,
+  createImageComponent,
+  handleImageOptimization,
+  generateBlurPlaceholder,
+  getImageDimensions,
+  generateSrcSet,
+  imageLoaders,
+  defaultImageConfig
+} from './image/index.js';
+export type { ImageProps, ImageConfig, ImageLoader } from './image/index.js';
+
 // Server Actions
 export {
   serverAction,
@@ -110,7 +153,7 @@ export {
 export type { CookieOptions } from './helpers.js';
 
 // Version
-export const VERSION = '2.2.0';
+export const VERSION = '2.3.0';
 
 // Default export
 export default {

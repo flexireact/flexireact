@@ -17,6 +17,8 @@ import { createRequestContext, RequestContext, RouteContext } from '../context.j
 import { logger } from '../logger.js';
 import { RedirectError, NotFoundError } from '../helpers.js';
 import { executeAction, deserializeArgs } from '../actions/index.js';
+import { handleImageOptimization } from '../image/index.js';
+import { handleFontRequest } from '../font/index.js';
 import React from 'react';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -129,6 +131,16 @@ export async function createServer(options: CreateServerOptions = {}) {
       // Handle server actions
       if (effectivePath === '/_flexi/action' && req.method === 'POST') {
         return await handleServerAction(req, res);
+      }
+
+      // Handle image optimization
+      if (effectivePath.startsWith('/_flexi/image')) {
+        return await handleImageOptimization(req, res, config.images || {});
+      }
+
+      // Handle font requests
+      if (effectivePath.startsWith('/_flexi/font')) {
+        return await handleFontRequest(req, res);
       }
 
       // Rebuild routes in dev mode for hot reload
