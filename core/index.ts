@@ -200,8 +200,16 @@ export {
 } from './helpers.js';
 export type { CookieOptions } from './helpers.js';
 
+// DevTools
+export {
+  devtools,
+  DevToolsOverlay,
+  initPerformanceMonitoring,
+  initNetworkInterceptor
+} from './devtools/index.js';
+
 // Version
-export const VERSION = '2.4.0';
+export const VERSION = '2.5.0';
 
 // Default export
 export default {

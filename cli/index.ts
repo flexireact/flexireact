@@ -12,10 +12,11 @@ import { execSync, spawn } from 'child_process';
 import pc from 'picocolors';
 import prompts from 'prompts';
 import ora from 'ora';
+import { runGenerate, listGenerators } from './generators.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const VERSION = '2.1.0';
+const VERSION = '2.5.0';
 
 // ============================================================================
 // ASCII Logo & Branding
@@ -1090,18 +1091,26 @@ function showHelp(): void {
   log.blank();
   
   console.log(`  ${pc.bold('Commands:')}`);
-  console.log(`    ${pc.cyan('create')} ${pc.dim('<name>')}    Create a new FlexiReact project`);
-  console.log(`    ${pc.cyan('dev')}               Start development server`);
-  console.log(`    ${pc.cyan('build')}             Build for production`);
-  console.log(`    ${pc.cyan('start')}             Start production server`);
-  console.log(`    ${pc.cyan('doctor')}            Check project health`);
-  console.log(`    ${pc.cyan('help')}              Show this help message`);
+  console.log(`    ${pc.cyan('create')} ${pc.dim('<name>')}       Create a new FlexiReact project`);
+  console.log(`    ${pc.cyan('dev')}                  Start development server`);
+  console.log(`    ${pc.cyan('build')}                Build for production`);
+  console.log(`    ${pc.cyan('start')}                Start production server`);
+  console.log(`    ${pc.cyan('generate')} ${pc.dim('<type>')}     Generate component/page/hook/etc (alias: g)`);
+  console.log(`    ${pc.cyan('doctor')}               Check project health`);
+  console.log(`    ${pc.cyan('help')}                 Show this help message`);
+  log.blank();
+  
+  console.log(`  ${pc.bold('Generate Types:')}`);
+  console.log(`    ${pc.dim('page, layout, component, hook, api, action, middleware, context')}`);
+  console.log(`    ${pc.dim('loading, error, not-found')}`);
   log.blank();
   
   console.log(`  ${pc.bold('Examples:')}`);
   console.log(`    ${pc.dim('$')} flexi create my-app`);
   console.log(`    ${pc.dim('$')} flexi dev`);
-  console.log(`    ${pc.dim('$')} flexi build && flexi start`);
+  console.log(`    ${pc.dim('$')} flexi g component Button`);
+  console.log(`    ${pc.dim('$')} flexi g page dashboard`);
+  console.log(`    ${pc.dim('$')} flexi build --analyze`);
   log.blank();
 }
 
@@ -1133,6 +1142,16 @@ async function main(): Promise<void> {
 
     case 'doctor':
       await runDoctor();
+      break;
+
+    case 'generate':
+    case 'g':
+      await runGenerate(args[1], args[2]);
+      break;
+
+    case 'generate:list':
+    case 'g:list':
+      listGenerators();
       break;
 
     case 'version':
