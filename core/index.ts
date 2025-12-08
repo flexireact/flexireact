@@ -15,7 +15,7 @@ export * from './utils.js';
 export { buildRouteTree, matchRoute, findRouteLayouts, RouteType } from './router/index.js';
 
 // Render
-export { renderPage, renderError, renderLoading } from './render/index.js';
+export { renderPage, renderPageStream, streamToResponse, renderError, renderLoading } from './render/index.js';
 
 // Server
 import { createServer } from './server/index.js';
@@ -70,6 +70,20 @@ export {
   builtinPlugins 
 } from './plugins/index.js';
 
+// Server Actions
+export {
+  serverAction,
+  registerAction,
+  getAction,
+  executeAction,
+  callServerAction,
+  formAction,
+  createFormState,
+  bindArgs,
+  useActionContext
+} from './actions/index.js';
+export type { ActionContext, ActionResult, ServerActionFunction } from './actions/index.js';
+
 // Server Helpers
 export {
   // Response helpers
@@ -96,7 +110,7 @@ export {
 export type { CookieOptions } from './helpers.js';
 
 // Version
-export const VERSION = '2.1.0';
+export const VERSION = '2.2.0';
 
 // Default export
 export default {

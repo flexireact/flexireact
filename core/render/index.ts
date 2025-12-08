@@ -92,6 +92,164 @@ export async function renderPage(options) {
 }
 
 /**
+ * Streaming SSR with React 18
+ * Renders the page progressively, sending HTML chunks as they become ready
+ */
+export async function renderPageStream(options: {
+  Component: React.ComponentType<any>;
+  props?: Record<string, any>;
+  layouts?: Array<{ Component: React.ComponentType<any>; props?: Record<string, any> }>;
+  loading?: React.ComponentType | null;
+  error?: React.ComponentType<{ error: Error }> | null;
+  title?: string;
+  meta?: Record<string, string>;
+  scripts?: Array<string | { src?: string; content?: string; type?: string }>;
+  styles?: Array<string | { content: string }>;
+  favicon?: string | null;
+  route?: string;
+  onShellReady?: () => void;
+  onAllReady?: () => void;
+  onError?: (error: Error) => void;
+}): Promise<{ stream: NodeJS.ReadableStream; shellReady: Promise<void> }> {
+  const {
+    Component,
+    props = {},
+    layouts = [],
+    loading = null,
+    error = null,
+    title = 'FlexiReact App',
+    meta = {},
+    scripts = [],
+    styles = [],
+    favicon = null,
+    route = '/',
+    onShellReady,
+    onAllReady,
+    onError
+  } = options;
+
+  const renderStart = Date.now();
+
+  // Build the component tree
+  let element: any = React.createElement(Component, props);
+
+  // Wrap with error boundary if error component exists
+  if (error) {
+    element = React.createElement(ErrorBoundaryWrapper as any, {
+      fallback: error,
+      children: element
+    });
+  }
+
+  // Wrap with Suspense if loading component exists
+  if (loading) {
+    element = React.createElement(React.Suspense as any, {
+      fallback: React.createElement(loading),
+      children: element
+    });
+  }
+
+  // Wrap with layouts
+  for (const layout of [...layouts].reverse()) {
+    if (layout.Component) {
+      element = React.createElement(layout.Component, layout.props, element);
+    }
+  }
+
+  // Create the full document wrapper
+  const DocumentWrapper = ({ children }: { children: React.ReactNode }) => {
+    return React.createElement('html', { lang: 'en', className: 'dark' },
+      React.createElement('head', null,
+        React.createElement('meta', { charSet: 'UTF-8' }),
+        React.createElement('meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }),
+        React.createElement('title', null, title),
+        favicon && React.createElement('link', { rel: 'icon', href: favicon }),
+        ...Object.entries(meta).map(([name, content]) => 
+          React.createElement('meta', { key: name, name, content })
+        ),
+        ...styles.map((style, i) => 
+          typeof style === 'string'
+            ? React.createElement('link', { key: i, rel: 'stylesheet', href: style })
+            : React.createElement('style', { key: i, dangerouslySetInnerHTML: { __html: style.content } })
+        )
+      ),
+      React.createElement('body', null,
+        React.createElement('div', { id: 'root' }, children),
+        ...scripts.map((script, i) => 
+          typeof script === 'string'
+            ? React.createElement('script', { key: i, src: script })
+            : script.src
+              ? React.createElement('script', { key: i, src: script.src, type: script.type })
+              : React.createElement('script', { key: i, type: script.type, dangerouslySetInnerHTML: { __html: script.content } })
+        )
+      )
+    );
+  };
+
+  const fullElement = React.createElement(DocumentWrapper, null, element);
+
+  // Create streaming render
+  let shellReadyResolve: () => void;
+  const shellReady = new Promise<void>((resolve) => {
+    shellReadyResolve = resolve;
+  });
+
+  const { pipe, abort } = renderToPipeableStream(fullElement, {
+    onShellReady() {
+      const renderTime = Date.now() - renderStart;
+      console.log(`⚡ Shell ready in ${renderTime}ms`);
+      shellReadyResolve();
+      onShellReady?.();
+    },
+    onAllReady() {
+      const renderTime = Date.now() - renderStart;
+      console.log(`✨ All content ready in ${renderTime}ms`);
+      onAllReady?.();
+    },
+    onError(err: Error) {
+      console.error('Streaming SSR Error:', err);
+      onError?.(err);
+    }
+  });
+
+  // Create a passthrough stream
+  const { PassThrough } = await import('stream');
+  const passThrough = new PassThrough();
+  
+  // Pipe the render stream to our passthrough
+  pipe(passThrough);
+
+  return {
+    stream: passThrough,
+    shellReady
+  };
+}
+
+/**
+ * Render to stream for HTTP response
+ * Use this in the server to stream HTML to the client
+ */
+export function streamToResponse(
+  res: { write: (chunk: string) => void; end: () => void },
+  stream: NodeJS.ReadableStream,
+  options: { onFinish?: () => void } = {}
+): void {
+  stream.on('data', (chunk) => {
+    res.write(chunk.toString());
+  });
+
+  stream.on('end', () => {
+    res.end();
+    options.onFinish?.();
+  });
+
+  stream.on('error', (err) => {
+    console.error('Stream error:', err);
+    res.end();
+  });
+}
+
+/**
  * Error Boundary Wrapper for SSR
  */
 interface ErrorBoundaryProps {

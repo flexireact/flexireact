@@ -16,6 +16,7 @@ import { getRegisteredIslands, generateAdvancedHydrationScript } from '../island
 import { createRequestContext, RequestContext, RouteContext } from '../context.js';
 import { logger } from '../logger.js';
 import { RedirectError, NotFoundError } from '../helpers.js';
+import { executeAction, deserializeArgs } from '../actions/index.js';
 import React from 'react';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -123,6 +124,11 @@ export async function createServer(options: CreateServerOptions = {}) {
       if (effectivePath.startsWith('/_flexi/component/')) {
         const componentName = effectivePath.slice(18).replace('.js', '');
         return await serveClientComponent(res, config.pagesDir, componentName);
+      }
+
+      // Handle server actions
+      if (effectivePath === '/_flexi/action' && req.method === 'POST') {
+        return await handleServerAction(req, res);
       }
 
       // Rebuild routes in dev mode for hot reload
@@ -314,6 +320,49 @@ async function handleApiRoute(req, res, route, loadModule) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Internal Server Error' }));
     }
+  }
+}
+
+/**
+ * Handles server action requests
+ */
+async function handleServerAction(req, res) {
+  try {
+    // Parse request body
+    const body: any = await parseBody(req);
+    const { actionId, args } = body;
+
+    if (!actionId) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: 'Missing actionId' }));
+      return;
+    }
+
+    // Deserialize arguments
+    const deserializedArgs = deserializeArgs(args || []);
+
+    // Execute the action
+    const result = await executeAction(actionId, deserializedArgs, {
+      request: new Request(`http://${req.headers.host}${req.url}`, {
+        method: req.method,
+        headers: req.headers as any
+      })
+    });
+
+    // Send response
+    res.writeHead(200, { 
+      'Content-Type': 'application/json',
+      'X-Flexi-Action': actionId
+    });
+    res.end(JSON.stringify(result));
+
+  } catch (error: any) {
+    console.error('Server Action Error:', error);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ 
+      success: false, 
+      error: error.message || 'Action execution failed' 
+    }));
   }
 }
 
