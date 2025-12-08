@@ -305,7 +305,7 @@ export function useTheme() {
 `,
 
     // Styles
-    'app/styles/globals.css': `@import "tailwindcss";
+    'app/styles/globals.css': `@import "tailwindcss" source("../..");
 
 /* FlexiReact v2 Theme */
 @theme {

@@ -177,7 +177,7 @@ export default function NotFound() {
 }
 `,
 
-    'app/globals.css': `@import "tailwindcss";
+    'app/globals.css': `@import "tailwindcss" source("..");
 
 @theme {
   --color-background: #0a0a0a;
