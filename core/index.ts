@@ -70,8 +70,33 @@ export {
   builtinPlugins 
 } from './plugins/index.js';
 
+// Server Helpers
+export {
+  // Response helpers
+  redirect,
+  notFound,
+  json,
+  html,
+  text,
+  // Error classes
+  RedirectError,
+  NotFoundError,
+  // Cookies API
+  cookies,
+  // Headers API
+  headers,
+  // Request helpers
+  parseJson,
+  parseFormData,
+  parseSearchParams,
+  getMethod,
+  getPathname,
+  isMethod
+} from './helpers.js';
+export type { CookieOptions } from './helpers.js';
+
 // Version
-export const VERSION = '2.0.1';
+export const VERSION = '2.1.0';
 
 // Default export
 export default {

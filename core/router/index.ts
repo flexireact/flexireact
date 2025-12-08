@@ -96,13 +96,14 @@ export function buildRouteTree(pagesDir, layoutsDir, appDir = null, routesDir = 
  * - api/hello.ts → /api/hello (API route)
  * - dashboard/layout.tsx → layout for /dashboard/*
  */
-function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], parentLayout = null) {
+function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], parentLayout = null, parentMiddleware = null) {
   const entries = fs.readdirSync(currentDir, { withFileTypes: true });
   
   // Find special files in current directory
   let layoutFile = null;
   let loadingFile = null;
   let errorFile = null;
+  let middlewareFile = null;
   
   for (const entry of entries) {
     if (entry.isFile()) {
@@ -114,9 +115,10 @@ function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], p
       if (name === 'layout') layoutFile = fullPath;
       if (name === 'loading') loadingFile = fullPath;
       if (name === 'error') errorFile = fullPath;
+      if (name === '_middleware' || name === 'middleware') middlewareFile = fullPath;
       
       // Skip special files and non-route files
-      if (['layout', 'loading', 'error', 'not-found'].includes(name)) continue;
+      if (['layout', 'loading', 'error', 'not-found', '_middleware', 'middleware'].includes(name)) continue;
       if (!['.tsx', '.jsx', '.ts', '.js'].includes(ext)) continue;
       
       // API routes (in api/ folder or .ts/.js files in api/)
@@ -171,6 +173,7 @@ function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], p
           layout: layoutFile || parentLayout,
           loading: loadingFile,
           error: errorFile,
+          middleware: middlewareFile || parentMiddleware,
           isFlexiRouter: true,
           isServerComponent: isServerComponent(fullPath),
           isClientComponent: isClientComponent(fullPath),
@@ -205,8 +208,9 @@ function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], p
       
       const newSegments = isGroup ? parentSegments : [...parentSegments, segmentName];
       const newLayout = layoutFile || parentLayout;
+      const newMiddleware = middlewareFile || parentMiddleware;
       
-      scanRoutesDirectory(baseDir, fullPath, routes, newSegments, newLayout);
+      scanRoutesDirectory(baseDir, fullPath, routes, newSegments, newLayout, newMiddleware);
     }
   }
 }
@@ -215,17 +219,18 @@ function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], p
  * Scans app directory for Next.js style routing
  * Supports: page.tsx, layout.tsx, loading.tsx, error.tsx, not-found.tsx
  */
-function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], parentLayout = null) {
+function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], parentLayout = null, parentMiddleware = null) {
   const entries = fs.readdirSync(currentDir, { withFileTypes: true });
   
   // Find special files in current directory
-  const specialFiles = {
+  const specialFiles: Record<string, string | null> = {
     page: null,
     layout: null,
     loading: null,
     error: null,
     notFound: null,
-    template: null
+    template: null,
+    middleware: null
   };
 
   for (const entry of entries) {
@@ -239,6 +244,7 @@ function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], pare
       if (name === 'error') specialFiles.error = fullPath;
       if (name === 'not-found') specialFiles.notFound = fullPath;
       if (name === 'template') specialFiles.template = fullPath;
+      if (name === 'middleware' || name === '_middleware') specialFiles.middleware = fullPath;
     }
   }
 
@@ -257,6 +263,7 @@ function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], pare
       error: specialFiles.error,
       notFound: specialFiles.notFound,
       template: specialFiles.template,
+      middleware: specialFiles.middleware || parentMiddleware,
       isAppRouter: true,
       isServerComponent: isServerComponent(specialFiles.page),
       isClientComponent: isClientComponent(specialFiles.page),
@@ -289,8 +296,9 @@ function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], pare
       
       const newSegments = isGroup ? parentSegments : [...parentSegments, segmentName];
       const newLayout = specialFiles.layout || parentLayout;
+      const newMiddleware = specialFiles.middleware || parentMiddleware;
       
-      scanAppDirectory(baseDir, fullPath, routes, newSegments, newLayout);
+      scanAppDirectory(baseDir, fullPath, routes, newSegments, newLayout, newMiddleware);
     }
   }
 }

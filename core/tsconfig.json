@@ -4,6 +4,7 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
     "outDir": "./dist",
     "rootDir": ".",
     "strict": false,
@@ -22,7 +23,8 @@
   },
   "include": [
     "*.ts",
-    "**/*.ts"
+    "**/*.ts",
+    "**/*.tsx"
   ],
   "exclude": ["node_modules", "dist"]
 }

@@ -28,7 +28,8 @@ export async function build(options) {
   const {
     projectRoot,
     config,
-    mode = BuildMode.PRODUCTION
+    mode = BuildMode.PRODUCTION,
+    analyze = false
   } = options;
 
   const startTime = Date.now();
@@ -95,12 +96,79 @@ export async function build(options) {
   console.log(`  Server modules: ${serverResult.outputs.length}`);
   console.log('');
 
+  // Generate bundle analysis if requested
+  let analysis = null;
+  if (analyze) {
+    analysis = generateBundleAnalysis(clientResult, serverResult, outDir);
+  }
+
   return {
     success: true,
     duration,
     manifest,
     clientResult,
-    serverResult
+    serverResult,
+    analysis
+  };
+}
+
+/**
+ * Generates bundle analysis data
+ */
+function generateBundleAnalysis(clientResult, serverResult, outDir) {
+  const files: Record<string, { size: number; gzipSize?: number }> = {};
+  let totalSize = 0;
+  let totalGzipSize = 0;
+
+  // Analyze client outputs
+  for (const output of clientResult.outputs || []) {
+    if (output.path && fs.existsSync(output.path)) {
+      const stat = fs.statSync(output.path);
+      const relativePath = path.relative(outDir, output.path);
+      
+      // Estimate gzip size (roughly 30% of original for JS)
+      const gzipSize = Math.round(stat.size * 0.3);
+      
+      files[relativePath] = {
+        size: stat.size,
+        gzipSize
+      };
+      
+      totalSize += stat.size;
+      totalGzipSize += gzipSize;
+    }
+  }
+
+  // Analyze server outputs
+  for (const output of serverResult.outputs || []) {
+    if (output.path && fs.existsSync(output.path)) {
+      const stat = fs.statSync(output.path);
+      const relativePath = path.relative(outDir, output.path);
+      
+      files[relativePath] = {
+        size: stat.size
+      };
+      
+      totalSize += stat.size;
+    }
+  }
+
+  return {
+    files,
+    totalSize,
+    totalGzipSize,
+    clientSize: clientResult.outputs?.reduce((sum, o) => {
+      if (o.path && fs.existsSync(o.path)) {
+        return sum + fs.statSync(o.path).size;
+      }
+      return sum;
+    }, 0) || 0,
+    serverSize: serverResult.outputs?.reduce((sum, o) => {
+      if (o.path && fs.existsSync(o.path)) {
+        return sum + fs.statSync(o.path).size;
+      }
+      return sum;
+    }, 0) || 0
   };
 }
 

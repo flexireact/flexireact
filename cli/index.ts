@@ -856,10 +856,13 @@ ${pc.cyan('   ╰─────────────────────
 // Build Command
 // ============================================================================
 
-async function runBuild(): Promise<void> {
+async function runBuild(options: { analyze?: boolean } = {}): Promise<void> {
   console.log(MINI_LOGO);
   log.blank();
   log.info('Building for production...');
+  if (options.analyze) {
+    log.info('Bundle analysis enabled');
+  }
   log.blank();
 
   const spinner = ora({ text: 'Compiling...', color: 'cyan' }).start();
@@ -876,21 +879,63 @@ async function runBuild(): Promise<void> {
     const rawConfig = await configModule.loadConfig(projectRoot);
     const config = configModule.resolvePaths(rawConfig, projectRoot);
 
-    await buildModule.build({
+    const result = await buildModule.build({
       projectRoot,
       config,
-      mode: 'production'
+      mode: 'production',
+      analyze: options.analyze
     });
 
     spinner.succeed('Build complete!');
     log.blank();
     log.success(`Output: ${pc.cyan('.flexi/')}`);
 
+    // Show bundle analysis if enabled
+    if (options.analyze && result?.analysis) {
+      log.blank();
+      log.info('📊 Bundle Analysis:');
+      log.blank();
+      
+      const analysis = result.analysis;
+      
+      // Sort by size
+      const sorted = Object.entries(analysis.files || {})
+        .sort((a: any, b: any) => b[1].size - a[1].size);
+      
+      console.log(pc.dim('  ─────────────────────────────────────────────────'));
+      console.log(`  ${pc.bold('File')}${' '.repeat(35)}${pc.bold('Size')}`);
+      console.log(pc.dim('  ─────────────────────────────────────────────────'));
+      
+      for (const [file, info] of sorted.slice(0, 15) as any) {
+        const name = file.length > 35 ? '...' + file.slice(-32) : file;
+        const size = formatBytes(info.size);
+        const gzip = info.gzipSize ? pc.dim(` (${formatBytes(info.gzipSize)} gzip)`) : '';
+        console.log(`  ${name.padEnd(38)} ${pc.cyan(size)}${gzip}`);
+      }
+      
+      console.log(pc.dim('  ─────────────────────────────────────────────────'));
+      console.log(`  ${pc.bold('Total:')}${' '.repeat(31)} ${pc.green(formatBytes(analysis.totalSize || 0))}`);
+      
+      if (analysis.totalGzipSize) {
+        console.log(`  ${pc.dim('Gzipped:')}${' '.repeat(29)} ${pc.dim(formatBytes(analysis.totalGzipSize))}`);
+      }
+      
+      log.blank();
+    }
+
   } catch (error: any) {
     spinner.fail('Build failed');
     log.error(error.message);
     process.exit(1);
   }
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
 // ============================================================================
@@ -1078,7 +1123,8 @@ async function main(): Promise<void> {
       break;
 
     case 'build':
-      await runBuild();
+      const analyzeFlag = args.includes('--analyze') || args.includes('-a');
+      await runBuild({ analyze: analyzeFlag });
       break;
 
     case 'start':

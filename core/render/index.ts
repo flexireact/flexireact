@@ -32,7 +32,23 @@ export async function renderPage(options) {
 
   try {
     // Build the component tree - start with the page component
-    let element = React.createElement(Component, props);
+    let element: any = React.createElement(Component, props);
+    
+    // Wrap with error boundary if error component exists
+    if (error) {
+      element = React.createElement(ErrorBoundaryWrapper as any, {
+        fallback: error,
+        children: element
+      });
+    }
+
+    // Wrap with Suspense if loading component exists (for streaming/async)
+    if (loading) {
+      element = React.createElement(React.Suspense as any, {
+        fallback: React.createElement(loading),
+        children: element
+      });
+    }
     
     // Wrap with layouts (innermost to outermost)
     // Each layout receives children as a prop

@@ -15,6 +15,7 @@ import { loadPlugins, pluginManager, PluginHooks } from '../plugins/index.js';
 import { getRegisteredIslands, generateAdvancedHydrationScript } from '../islands/index.js';
 import { createRequestContext, RequestContext, RouteContext } from '../context.js';
 import { logger } from '../logger.js';
+import { RedirectError, NotFoundError } from '../helpers.js';
 import React from 'react';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -157,7 +158,21 @@ export async function createServer(options: CreateServerOptions = {}) {
       res.writeHead(404, { 'Content-Type': 'text/html' });
       res.end(renderError(404, 'Page not found'));
 
-    } catch (error) {
+    } catch (error: any) {
+      // Handle redirect() calls
+      if (error instanceof RedirectError) {
+        res.writeHead(error.statusCode, { 'Location': error.url });
+        res.end();
+        return;
+      }
+
+      // Handle notFound() calls
+      if (error instanceof NotFoundError) {
+        res.writeHead(404, { 'Content-Type': 'text/html' });
+        res.end(renderError(404, error.message));
+        return;
+      }
+
       console.error('Server Error:', error);
 
       if (!res.headersSent) {
@@ -360,6 +375,37 @@ function createApiResponse(res) {
  */
 async function handlePageRoute(req, res, route, routes, config, loadModule, url) {
   try {
+    // Run route-specific middleware if exists
+    if (route.middleware) {
+      try {
+        const middlewareModule = await loadModule(route.middleware);
+        const middlewareFn = middlewareModule.default || middlewareModule.middleware;
+        
+        if (typeof middlewareFn === 'function') {
+          const result = await middlewareFn(req, res, { route, params: route.params });
+          
+          // If middleware returns a response, use it
+          if (result?.redirect) {
+            res.writeHead(result.statusCode || 307, { 'Location': result.redirect });
+            res.end();
+            return;
+          }
+          
+          if (result?.rewrite) {
+            // Rewrite to different path
+            req.url = result.rewrite;
+          }
+          
+          if (result === false || result?.stop) {
+            // Middleware stopped the request
+            return;
+          }
+        }
+      } catch (middlewareError: any) {
+        console.error('Route middleware error:', middlewareError.message);
+      }
+    }
+
     // Load page module
     const pageModule = await loadModule(route.filePath);
     const Component = pageModule.default;
