@@ -2,45 +2,62 @@
   <img src="./assets/flexireact.webp" alt="FlexiReact Logo" width="400" />
 </p>
 
-<h1 align="center">FlexiReact v2</h1>
+<h1 align="center">⚡ FlexiReact v3</h1>
 
 <p align="center">
-  <strong>The Modern React Framework</strong>
+  <strong>The Future of React Development</strong>
 </p>
 
 <p align="center">
-  A blazing-fast React framework with TypeScript, Tailwind CSS v4, SSR, SSG, Islands architecture, and file-based routing.<br/>
-  Inspired by Next.js, Remix, Astro, and TanStack Start — but simpler and lighter.
+  A blazing-fast React framework with TypeScript, Tailwind CSS, SSR, SSG, Islands, Edge Runtime, and 50+ UI components.<br/>
+  <b>Better than Next.js.</b> Simpler. Faster. More powerful.
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@flexireact/core"><img src="https://img.shields.io/npm/v/@flexireact/core.svg" alt="npm version" /></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+  <a href="https://www.npmjs.com/package/@flexireact/core"><img src="https://img.shields.io/npm/v/@flexireact/core.svg?color=00FF9C" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/@flexireact/core"><img src="https://img.shields.io/npm/dm/@flexireact/core.svg?color=00FF9C" alt="npm downloads" /></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-00FF9C.svg" alt="License: MIT" /></a>
   <a href="#"><img src="https://img.shields.io/badge/TypeScript-Native-blue.svg" alt="TypeScript Native" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Tailwind-v4-38B2AC.svg" alt="Tailwind CSS v4" /></a>
 </p>
 
-## 🆕 What's New in v2.2
+<p align="center">
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-cli-commands">CLI</a> •
+  <a href="#-flexi-ui">FlexiUI</a> •
+  <a href="#-devtools">DevTools</a>
+</p>
 
-### v2.2.0 (Latest)
-- **🌊 Streaming SSR** — Progressive HTML rendering with React 18 `renderToPipeableStream`
-- **⚡ Server Actions** — Call server functions directly from client components
-- **🔗 Link Prefetching** — Automatic prefetch on hover/viewport visibility
+---
 
-### v2.1.0
-- **🛠️ Server Helpers** — `redirect()`, `notFound()`, `json()`, `cookies`, `headers`
-- **🚧 Error/Loading Boundaries** — Per-segment `error.tsx` and `loading.tsx`
-- **🔐 Route Middleware** — `_middleware.ts` for per-route logic
-- **📊 Bundle Analyzer** — `flexi build --analyze`
-- **🔄 CI/CD** — GitHub Actions workflow
+## 🚀 Quick Start
 
-### v2.0.0
-- **TypeScript Native** — Core rewritten in TypeScript for better DX
-- **Tailwind CSS v4** — New `@import "tailwindcss"` and `@theme` syntax
-- **Routes Directory** — New `routes/` directory with route groups, dynamic segments
-- **Modern 404 Page** — Beautiful, interactive error pages
-- **Enhanced DevTools** — Precise error messages with color-coded render times
-- **Improved CLI** — TypeScript-based CLI with better templates
+```bash
+# Create a new project
+npx create-flexireact my-app
+
+# Or with a specific template
+npx create-flexireact my-app --template app-router
+
+# Start development
+cd my-app
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) 🎉
+
+---
+
+## 🆕 What's New in v3.0
+
+### v3.0.0 — The Future of React
+- **🌐 Universal Edge Runtime** — Deploy anywhere: Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge
+- **⚡ Smart Caching** — TTL, stale-while-revalidate, tag-based invalidation
+- **🎯 Partial Prerendering (PPR)** — Static shell + streaming dynamic content
+- **🛠️ CLI Scaffolding** — Generate pages, components, hooks, APIs with `flexi g`
+- **🔧 Advanced DevTools** — Routes, Components, Network, Performance monitoring
+- **🎨 FlexiUI Integration** — 50+ beautiful, accessible React components
+- **📱 Sexy Templates** — Modern, responsive landing pages out of the box
 
 ## ✨ Features
 
@@ -136,49 +153,161 @@
 
 ## 🆚 Why FlexiReact?
 
-| | FlexiReact | Next.js | Remix | Astro |
+| | FlexiReact v3 | Next.js 15 | Remix | Astro |
 |---|:---:|:---:|:---:|:---:|
 | **Zero Config** | ✅ | ⚠️ | ⚠️ | ✅ |
-| **TypeScript** | ✅ | ✅ | ✅ | ✅ |
+| **Edge Runtime** | ✅ | ✅ | ⚠️ | ⚠️ |
 | **Islands Architecture** | ✅ | ❌ | ❌ | ✅ |
-| **File Routing** | ✅ | ✅ | ✅ | ✅ |
-| **API Routes** | ✅ | ✅ | ✅ | ⚠️ |
-| **Server Components** | ✅ | ✅ | ❌ | ✅ |
-| **Bundle Size** | 🟢 Tiny | 🟡 Medium | 🟡 Medium | 🟢 Tiny |
+| **UI Components** | ✅ 50+ | ❌ | ❌ | ❌ |
+| **CLI Scaffolding** | ✅ | ❌ | ❌ | ❌ |
+| **DevTools** | ✅ | ⚠️ | ⚠️ | ⚠️ |
+| **PPR** | ✅ | ✅ | ❌ | ❌ |
+| **Bundle Size** | 🟢 ~90kb | � ~250kb | 🟡 ~150kb | 🟢 ~50kb |
 | **Build Speed** | 🟢 <1s | 🟡 ~5s | 🟡 ~3s | 🟢 <2s |
-| **Learning Curve** | 🟢 Easy | 🟡 Medium | 🟡 Medium | 🟢 Easy |
-| **Plugin System** | ✅ | ⚠️ | ❌ | ✅ |
-
-### 💡 Perfect For
-
-- **Startups** — Ship fast with zero configuration
-- **Enterprises** — Scale with TypeScript, security, and performance
-- **Developers** — Enjoy excellent DX with hot reload and error overlays
-- **Agencies** — Reuse templates and plugins across projects
 
 ---
 
-## 🚀 Quick Start
+## 🖥️ CLI Commands
 
 ```bash
-# Create a new project
-npx create-flexireact@latest my-app
-cd my-app
-npm install
+# Project
+flexi create <name>       # Create new project
+flexi dev                 # Start dev server (HMR)
+flexi build               # Build for production
+flexi build --analyze     # Build with bundle analysis
+flexi start               # Start production server
+flexi doctor              # Check project health
 
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm run start
+# Scaffolding (NEW in v3!)
+flexi g page dashboard    # Generate a page
+flexi g component Button  # Generate a component
+flexi g hook useAuth      # Generate a custom hook
+flexi g api users         # Generate an API route
+flexi g action submit     # Generate a server action
+flexi g context theme     # Generate a React context
+flexi g middleware auth   # Generate middleware
+flexi g loading           # Generate loading.tsx
+flexi g error             # Generate error.tsx
 ```
 
-Open http://localhost:3000
+---
 
-## 📁 Project Structure (v2)
+## 🎨 FlexiUI — 50+ Components
+
+FlexiReact includes [@flexireact/flexi-ui](https://www.npmjs.com/package/@flexireact/flexi-ui), a complete UI library:
+
+```bash
+npm install @flexireact/flexi-ui
+```
+
+```tsx
+import { Button, Card, Input, Modal, Toast } from '@flexireact/flexi-ui';
+```
+
+### Available Components
+
+| Category | Components |
+|----------|------------|
+| **Form** | Button, Input, Textarea, Checkbox, Switch, Select, Slider, Radio, Toggle, Rating, DatePicker, FileUpload |
+| **Layout** | Stack, Separator, AspectRatio, ScrollArea, Resizable |
+| **Navigation** | Tabs, Breadcrumb, Pagination, Menubar, Navbar, Sidebar, Stepper |
+| **Data** | Card, Badge, Avatar, Table, Accordion, Calendar, Timeline, Stat, Code, Carousel |
+| **Feedback** | Alert, Toast, Spinner, Skeleton, Progress, Empty |
+| **Overlay** | Modal, Dialog, Drawer, Sheet, Dropdown, Popover, HoverCard, ContextMenu, Command, Collapsible |
+
+---
+
+## 🔧 DevTools
+
+Built-in development tools (press `Ctrl+Shift+D`):
+
+```tsx
+import { DevToolsOverlay } from '@flexireact/core';
+
+// In your layout
+{process.env.NODE_ENV === 'development' && <DevToolsOverlay />}
+```
+
+Features:
+- 🗺️ **Routes** — Navigation history and params
+- 🧩 **Components** — Render counts, props, Islands detection
+- 🌐 **Network** — Fetch/XHR/Actions monitoring
+- 📊 **Performance** — Core Web Vitals (LCP, FID, CLS, TTFB)
+- 📝 **Console** — Centralized logs
+
+---
+
+## 🌐 Edge Runtime
+
+Deploy anywhere with universal edge support:
+
+```tsx
+import { createEdgeHandler, detectRuntime } from '@flexireact/core';
+
+// Automatic runtime detection
+const runtime = detectRuntime();
+// → 'node' | 'bun' | 'deno' | 'cloudflare' | 'vercel-edge' | 'netlify-edge'
+
+// Universal handler
+const handler = createEdgeHandler({
+  routes: [...],
+  middleware: [...],
+});
+
+export default handler;
+```
+
+---
+
+## ⚡ Smart Caching
+
+```tsx
+import { smartCache } from '@flexireact/core';
+
+const cache = smartCache({
+  backend: 'auto', // auto-detect: memory, KV, Redis
+  defaultTTL: 60,
+  staleWhileRevalidate: true,
+});
+
+// Cache with tags
+await cache.set('user:123', userData, { 
+  ttl: 300, 
+  tags: ['users'] 
+});
+
+// Invalidate by tag
+await cache.invalidateTag('users');
+```
+
+---
+
+## 🎯 Partial Prerendering (PPR)
+
+Static shell + streaming dynamic content:
+
+```tsx
+import { withPPR, DynamicBoundary } from '@flexireact/core';
+
+export default withPPR(function Page() {
+  return (
+    <div>
+      {/* Static - rendered at build time */}
+      <Header />
+      <Sidebar />
+      
+      {/* Dynamic - streamed at request time */}
+      <DynamicBoundary fallback={<Skeleton />}>
+        <UserDashboard />
+      </DynamicBoundary>
+    </div>
+  );
+});
+```
+
+---
+
+## 📁 Project Structure
 
 FlexiReact v2 introduces a new `routes/` directory with enhanced routing capabilities:
 
@@ -726,13 +855,35 @@ Islands provide partial hydration:
 - Node.js 18+
 - React 18+
 
+## 📦 Packages
+
+| Package | Version | Description |
+|---------|---------|-------------|
+| [@flexireact/core](https://www.npmjs.com/package/@flexireact/core) | ![npm](https://img.shields.io/npm/v/@flexireact/core?color=00FF9C) | Core framework |
+| [@flexireact/flexi-ui](https://www.npmjs.com/package/@flexireact/flexi-ui) | ![npm](https://img.shields.io/npm/v/@flexireact/flexi-ui?color=00FF9C) | UI components |
+| [create-flexireact](https://www.npmjs.com/package/create-flexireact) | ![npm](https://img.shields.io/npm/v/create-flexireact?color=00FF9C) | Project scaffolding |
+
 ## 🔗 Links
 
 - [GitHub Repository](https://github.com/flexireact/flexireact)
+- [FlexiUI Repository](https://github.com/flexireact/flexi-ui)
 - [npm Package](https://www.npmjs.com/package/@flexireact/core)
 - [Issues](https://github.com/flexireact/flexireact/issues)
+
+## 🙏 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) first.
 
 ## 📄 License
 
 MIT © [FlexiReact Team](https://github.com/flexireact)
 
+---
+
+<p align="center">
+  <b>Built with ❤️ by the FlexiReact Team</b>
+</p>
+
+<p align="center">
+  <a href="https://github.com/flexireact/flexireact">⭐ Star us on GitHub</a>
+</p>
