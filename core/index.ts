@@ -70,6 +70,54 @@ export {
   builtinPlugins 
 } from './plugins/index.js';
 
+// Edge Runtime
+export {
+  // Runtime
+  detectRuntime,
+  getRuntimeCapabilities,
+  edgeRuntimeInfo,
+  // Fetch
+  FlexiRequest,
+  FlexiResponse,
+  FlexiHeaders,
+  // Handler
+  createEdgeApp,
+  // Cache
+  smartCache,
+  initCache,
+  cacheFunction,
+  unstable_cache,
+  revalidateTag,
+  revalidatePath,
+  reactCache,
+  // PPR
+  dynamic,
+  staticComponent,
+  PPRBoundary,
+  PPRShell,
+  prerenderWithPPR,
+  streamPPR,
+  pprFetch,
+  PPRLoading,
+  experimental_ppr,
+  // Default exports
+  createApp
+} from './edge/index.js';
+export type {
+  RuntimeEnvironment,
+  RuntimeCapabilities,
+  EdgeContext,
+  EdgeHandler,
+  EdgeMiddleware,
+  EdgeAppConfig,
+  CacheEntry,
+  CacheOptions,
+  PPRConfig,
+  PPRRenderResult,
+  PPRPageConfig,
+  GenerateStaticParams
+} from './edge/index.js';
+
 // Font Optimization
 export {
   createFont,
@@ -153,7 +201,7 @@ export {
 export type { CookieOptions } from './helpers.js';
 
 // Version
-export const VERSION = '2.3.0';
+export const VERSION = '2.4.0';
 
 // Default export
 export default {
