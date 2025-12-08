@@ -112,7 +112,7 @@ async function createProject(projectName?: string): Promise<void> {
       name: 'projectName',
       message: 'Project name:',
       initial: 'my-flexi-app',
-      validate: (value) => value.length > 0 || 'Project name is required'
+      validate: (value: string) => value.length > 0 || 'Project name is required'
     });
     name = response.projectName;
     if (!name) process.exit(1);
@@ -830,21 +830,15 @@ ${pc.cyan('   │')}                                         ${pc.cyan('│')}
 ${pc.cyan('   ╰─────────────────────────────────────────╯')}
 `);
 
-  const loaderPath = path.join(__dirname, '..', 'core', 'loader.js');
-  const serverPath = path.join(__dirname, '..', 'core', 'server', 'index.js');
-  const loaderUrl = pathToFileURL(loaderPath).href;
+  const startDevPath = path.join(__dirname, '..', 'core', 'start-dev.ts');
 
   const child = spawn(
-    process.execPath,
-    [
-      '--import',
-      `data:text/javascript,import { register } from 'node:module'; register('${loaderUrl}', import.meta.url);`,
-      '-e',
-      `import('${pathToFileURL(serverPath).href}').then(m => m.createServer({ mode: 'development' }))`
-    ],
+    'npx',
+    ['tsx', startDevPath],
     {
       stdio: 'inherit',
       cwd: process.cwd(),
+      shell: true,
       env: { ...process.env, NODE_ENV: 'development', FORCE_COLOR: '1' }
     }
   );
@@ -909,21 +903,15 @@ async function runStart(): Promise<void> {
   log.info('Starting production server...');
   log.blank();
 
-  const loaderPath = path.join(__dirname, '..', 'core', 'loader.js');
-  const serverPath = path.join(__dirname, '..', 'core', 'server', 'index.js');
-  const loaderUrl = pathToFileURL(loaderPath).href;
+  const startProdPath = path.join(__dirname, '..', 'core', 'start-prod.ts');
 
   const child = spawn(
-    process.execPath,
-    [
-      '--import',
-      `data:text/javascript,import { register } from 'node:module'; register('${loaderUrl}', import.meta.url);`,
-      '-e',
-      `import('${pathToFileURL(serverPath).href}').then(m => m.createServer({ mode: 'production' }))`
-    ],
+    'npx',
+    ['tsx', startProdPath],
     {
       stdio: 'inherit',
       cwd: process.cwd(),
+      shell: true,
       env: { ...process.env, NODE_ENV: 'production' }
     }
   );

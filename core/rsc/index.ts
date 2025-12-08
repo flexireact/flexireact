@@ -94,16 +94,17 @@ function serializeNode(node) {
     const { type, props } = node;
 
     // Handle client component references
-    if (type.$$typeof === Symbol.for('react.client.reference')) {
+    const typeAny = type as any;
+    if (typeAny.$$typeof === Symbol.for('react.client.reference')) {
       return {
         $$type: 'client',
-        $$id: type.$$id,
+        $$id: typeAny.$$id,
         props: serializeProps(props)
       };
     }
 
     // Handle regular elements
-    const typeName = typeof type === 'string' ? type : type.displayName || type.name || 'Unknown';
+    const typeName = typeof type === 'string' ? type : (typeAny.displayName || typeAny.name || 'Unknown');
 
     return {
       $$type: 'element',
@@ -118,8 +119,8 @@ function serializeNode(node) {
 /**
  * Serializes props, handling special cases
  */
-function serializeProps(props) {
-  const serialized = {};
+function serializeProps(props: Record<string, any>) {
+  const serialized: Record<string, any> = {};
 
   for (const [key, value] of Object.entries(props)) {
     if (key === 'children') {

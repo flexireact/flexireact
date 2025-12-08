@@ -6,7 +6,10 @@
 import React from 'react';
 
 // Navigation state
-const navigationState = {
+const navigationState: {
+  listeners: Set<(url: string) => void>;
+  prefetched: Set<string>;
+} = {
   listeners: new Set(),
   prefetched: new Set()
 };
@@ -14,7 +17,12 @@ const navigationState = {
 /**
  * Navigates to a new URL
  */
-export function navigate(url, options = {}) {
+interface NavigateOptions {
+  replace?: boolean;
+  scroll?: boolean;
+}
+
+export function navigate(url: string, options: NavigateOptions = {}) {
   const { replace = false, scroll = true } = options;
 
   if (replace) {

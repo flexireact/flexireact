@@ -3,14 +3,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../utils/cn';
 
 const cardVariants = cva(
-  `rounded-2xl border bg-[var(--flexi-bg)] text-[var(--flexi-fg)]`,
+  `rounded-2xl border bg-card text-card-foreground transition-all duration-200`,
   {
     variants: {
       variant: {
-        default: 'border-[var(--flexi-border)]',
+        default: 'border-border',
         elevated: 'border-transparent shadow-lg',
         ghost: 'border-transparent bg-transparent',
-        glass: 'border-[var(--flexi-border)] bg-[var(--flexi-bg)]/80 backdrop-blur-xl',
+        glass: `border-border/50 bg-background/80 backdrop-blur-xl
+                before:absolute before:inset-0 before:rounded-2xl before:p-[1px]
+                before:bg-gradient-to-b before:from-[#00FF9C]/20 before:to-transparent before:-z-10`,
       },
       padding: {
         none: 'p-0',
@@ -19,7 +21,7 @@ const cardVariants = cva(
         lg: 'p-8',
       },
       hover: {
-        true: 'transition-all duration-200 hover:shadow-lg hover:border-[var(--flexi-primary)]/50',
+        true: 'hover:shadow-lg hover:border-[#00FF9C]/30 cursor-pointer',
       },
     },
     defaultVariants: {
@@ -37,7 +39,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, padding, hover, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn(cardVariants({ variant, padding, hover, className }))}
+      className={cn('relative', cardVariants({ variant, padding, hover, className }))}
       {...props}
     />
   )
@@ -53,14 +55,14 @@ CardHeader.displayName = 'CardHeader';
 
 const CardTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
-    <h3 ref={ref} className={cn('text-xl font-semibold leading-none tracking-tight', className)} {...props} />
+    <h3 ref={ref} className={cn('text-lg font-semibold leading-none tracking-tight text-foreground', className)} {...props} />
   )
 );
 CardTitle.displayName = 'CardTitle';
 
 const CardDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn('text-sm text-[var(--flexi-fg-muted)]', className)} {...props} />
+    <p ref={ref} className={cn('text-sm text-muted-foreground', className)} {...props} />
   )
 );
 CardDescription.displayName = 'CardDescription';

@@ -2,23 +2,32 @@
   <img src="./assets/flexireact.webp" alt="FlexiReact Logo" width="400" />
 </p>
 
-<h1 align="center">FlexiReact</h1>
+<h1 align="center">FlexiReact v2</h1>
 
 <p align="center">
   <strong>The Modern React Framework</strong>
 </p>
 
 <p align="center">
-  A blazing-fast React framework with TypeScript, Tailwind CSS, SSR, SSG, Islands architecture, and file-based routing.<br/>
+  A blazing-fast React framework with TypeScript, Tailwind CSS v4, SSR, SSG, Islands architecture, and file-based routing.<br/>
   Inspired by Next.js, Remix, Astro, and TanStack Start — but simpler and lighter.
 </p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@flexireact/core"><img src="https://img.shields.io/npm/v/@flexireact/core.svg" alt="npm version" /></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/TypeScript-Ready-blue.svg" alt="TypeScript Ready" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Tailwind-CSS-38B2AC.svg" alt="Tailwind CSS" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/TypeScript-Native-blue.svg" alt="TypeScript Native" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Tailwind-v4-38B2AC.svg" alt="Tailwind CSS v4" /></a>
 </p>
+
+## 🆕 What's New in v2
+
+- **TypeScript Native** — Core rewritten in TypeScript for better DX
+- **Tailwind CSS v4** — New `@import "tailwindcss"` and `@theme` syntax
+- **Routes Directory** — New `routes/` directory with route groups, dynamic segments
+- **Modern 404 Page** — Beautiful, interactive error pages
+- **Enhanced DevTools** — Precise error messages with color-coded render times
+- **Improved CLI** — TypeScript-based CLI with better templates
 
 ## ✨ Features
 
@@ -156,51 +165,73 @@ npm run start
 
 Open http://localhost:3000
 
-## 📁 Project Structure
+## 📁 Project Structure (v2)
+
+FlexiReact v2 introduces a new `routes/` directory with enhanced routing capabilities:
 
 ```
 myapp/
-├── app/                       # App directory
-│   ├── components/            # Reusable components
-│   │   ├── Button.tsx         # Button component
-│   │   ├── Card.tsx           # Card component
-│   │   ├── Navbar.tsx         # Navigation bar
-│   │   └── index.ts           # Component exports
+├── app/                        # App directory (layout, components, styles)
+│   ├── components/
+│   │   ├── ui/                 # UI components (Button, Card, etc.)
+│   │   └── layout/             # Layout components (Navbar, Footer)
 │   ├── styles/
-│   │   └── globals.css        # Global styles + Tailwind
-│   └── layout.tsx             # Root layout
-├── pages/                     # Routes (file-based)
-│   ├── index.tsx              # → /
-│   ├── about.tsx              # → /about
+│   │   └── globals.css         # Global styles + Tailwind v4
+│   ├── providers/              # React context providers
+│   └── layout.tsx              # Root layout
+├── routes/                     # FlexiReact v2 file-based routing
+│   ├── (public)/               # Route groups (don't affect URL)
+│   │   ├── home.tsx            # → /
+│   │   └── about.tsx           # → /about
 │   ├── blog/
-│   │   ├── index.tsx          # → /blog
-│   │   └── [slug].tsx         # → /blog/:slug
+│   │   ├── index.tsx           # → /blog
+│   │   └── [slug].tsx          # → /blog/:slug
 │   └── api/
-│       └── hello.ts           # → /api/hello
-├── public/                    # Static assets
-├── tailwind.config.js         # Tailwind configuration
-├── tsconfig.json              # TypeScript configuration
-├── flexireact.config.ts       # FlexiReact configuration
+│       └── hello.ts            # → /api/hello
+├── lib/                        # Utilities
+│   └── utils.ts
+├── public/                     # Static assets
+├── tsconfig.json               # TypeScript configuration
+├── flexireact.config.ts        # FlexiReact configuration
 └── package.json
 ```
 
-## 🛣️ Routing
+## 🛣️ Routing (v2)
 
-### Page Routes
+FlexiReact v2 supports three routing conventions (in priority order):
+
+### 1. Routes Directory (Recommended)
 
 | File | Route |
 |------|-------|
-| `pages/index.jsx` | `/` |
-| `pages/about.jsx` | `/about` |
-| `pages/blog/[slug].jsx` | `/blog/:slug` |
-| `pages/[...path].jsx` | Catch-all route |
+| `routes/(public)/home.tsx` | `/` |
+| `routes/(public)/about.tsx` | `/about` |
+| `routes/blog/index.tsx` | `/blog` |
+| `routes/blog/[slug].tsx` | `/blog/:slug` |
+| `routes/[...path].tsx` | Catch-all route |
+| `routes/api/hello.ts` | `/api/hello` |
+
+### 2. App Directory (Next.js style)
+
+| File | Route |
+|------|-------|
+| `app/page.tsx` | `/` |
+| `app/about/page.tsx` | `/about` |
+| `app/blog/[slug]/page.tsx` | `/blog/:slug` |
+
+### 3. Pages Directory (Legacy)
+
+| File | Route |
+|------|-------|
+| `pages/index.tsx` | `/` |
+| `pages/about.tsx` | `/about` |
 
 ### Dynamic Routes
 
-```jsx
-// pages/users/[id].jsx
-export default function User({ params }) {
-  return <h1>User: {params.id}</h1>;
+```tsx
+// routes/blog/[slug].tsx
+export default function BlogPost({ params }: { params: { slug: string } }) {
+  return <h1>Post: {params.slug}</h1>;
 }
 ```
 
@@ -209,42 +240,62 @@ export default function User({ params }) {
 Use parentheses to group routes without affecting the URL:
 
 ```
-pages/
-  (marketing)/
-    about.jsx      # → /about
-    contact.jsx    # → /contact
-  (app)/
-    dashboard.jsx  # → /dashboard
+routes/
+  (public)/
+    home.tsx       # → /
+    about.tsx      # → /about
+  (dashboard)/
+    settings.tsx   # → /settings
 ```
 
 ## 📐 Layouts
 
-Create persistent layouts in `layouts/`:
+Create layouts in `app/layout.tsx` or within route directories:
 
-```jsx
-// layouts/root.jsx
-export default function RootLayout({ children }) {
+```tsx
+// app/layout.tsx
+import { Navbar } from './components/layout/Navbar';
+import { Footer } from './components/layout/Footer';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <header>My App</header>
-      <main>{children}</main>
-      <footer>© 2024</footer>
-    </div>
+    <html lang="en" className="dark">
+      <head>
+        <link rel="stylesheet" href="/styles.css" />
+      </head>
+      <body className="bg-background text-foreground">
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
   );
 }
 ```
 
 ## ⏳ Loading & Error States
 
-```jsx
-// pages/loading.jsx
+```tsx
+// routes/loading.tsx
 export default function Loading() {
-  return <div>Loading...</div>;
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
 }
 
-// pages/error.jsx
-export default function Error({ error }) {
-  return <div>Error: {error.message}</div>;
+// routes/error.tsx
+export default function Error({ error, reset }: { error: Error; reset: () => void }) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-4xl font-bold text-red-500">Something went wrong</h1>
+      <p className="text-gray-400 mt-4">{error.message}</p>
+      <button onClick={reset} className="mt-8 px-6 py-3 bg-primary text-black rounded-lg">
+        Try again
+      </button>
+    </div>
+  );
 }
 ```
 
@@ -480,63 +531,6 @@ Islands provide partial hydration:
 - **Better performance** — less code to parse/execute
 - **Selective loading** — hydrate on visibility, interaction, etc.
 
-## 🎨 FlexiUI - Official UI Library
-
-FlexiReact comes with an official UI component library: **@flexireact/flexi-ui**
-
-```bash
-npm install @flexireact/flexi-ui
-```
-
-### Features
-- 🌙 **Dark-first design** with neon emerald accents
-- ♿ **Fully accessible** (ARIA-compliant, Radix UI primitives)
-- 🎯 **TypeScript native** with full type safety
-- 🌳 **Tree-shakeable** — import only what you need
-- ⚡ **SSR ready** — works with FlexiReact SSR
-
-### Quick Setup
-
-```js
-// tailwind.config.js
-const { flexiUIPlugin } = require('@flexireact/flexi-ui/tailwind');
-
-module.exports = {
-  darkMode: 'class',
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './node_modules/@flexireact/flexi-ui/dist/**/*.js',
-  ],
-  plugins: [flexiUIPlugin],
-};
-```
-
-### Usage
-
-```jsx
-import { Button, Card, Badge, Input } from '@flexireact/flexi-ui';
-
-export default function MyPage() {
-  return (
-    <Card>
-      <Badge variant="success">New</Badge>
-      <h2>Welcome!</h2>
-      <Input placeholder="Enter your email" />
-      <Button>Get Started</Button>
-    </Card>
-  );
-}
-```
-
-### Available Components
-- **Core**: Button, Input, Textarea, Checkbox, Switch, Select
-- **Display**: Card, Badge, Avatar, Tooltip
-- **Feedback**: Alert, Toast, Spinner, Skeleton, Progress
-- **Overlay**: Modal, Drawer, Dropdown
-- **Layout**: Separator, Tabs
-
-📖 [FlexiUI Documentation](https://github.com/flexireact/flexi-ui)
-
 ---
 
 ## 📋 Requirements
@@ -544,7 +538,13 @@ export default function MyPage() {
 - Node.js 18+
 - React 18+
 
+## 🔗 Links
+
+- [GitHub Repository](https://github.com/flexireact/flexireact)
+- [npm Package](https://www.npmjs.com/package/@flexireact/core)
+- [Issues](https://github.com/flexireact/flexireact/issues)
+
 ## 📄 License
 
-MIT
+MIT © [FlexiReact Team](https://github.com/flexireact)
 

@@ -65,13 +65,16 @@ export const PluginHooks = {
  * Plugin manager class
  */
 export class PluginManager {
+  plugins: any[];
+  hooks: Map<string, any[]>;
+
   constructor() {
     this.plugins = [];
     this.hooks = new Map();
     
     // Initialize hook arrays
     for (const hook of Object.values(PluginHooks)) {
-      this.hooks.set(hook, []);
+      this.hooks.set(hook as string, []);
     }
   }
 
@@ -248,7 +251,7 @@ export const builtinPlugins = {
   /**
    * Analytics plugin
    */
-  analytics(options = {}) {
+  analytics(options: { trackingId?: string } = {}) {
     const { trackingId } = options;
 
     return definePlugin({
@@ -275,7 +278,7 @@ export const builtinPlugins = {
   /**
    * PWA plugin
    */
-  pwa(options = {}) {
+  pwa(options: { manifest?: string; serviceWorker?: string } = {}) {
     const { manifest = '/manifest.json', serviceWorker = '/sw.js' } = options;
 
     return definePlugin({
@@ -299,7 +302,7 @@ export const builtinPlugins = {
   /**
    * SEO plugin
    */
-  seo(options = {}) {
+  seo(options: { defaultTitle?: string; titleTemplate?: string; defaultDescription?: string } = {}) {
     const { defaultTitle, titleTemplate = '%s', defaultDescription } = options;
 
     return definePlugin({
@@ -339,8 +342,8 @@ export const builtinPlugins = {
   /**
    * Security headers plugin
    */
-  securityHeaders(options = {}) {
-    const headers = {
+  securityHeaders(options: { headers?: Record<string, string> } = {}) {
+    const headers: Record<string, string> = {
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'DENY',
       'X-XSS-Protection': '1; mode=block',

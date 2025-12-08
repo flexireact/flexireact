@@ -3,12 +3,14 @@ import React from 'react';
 
 /**
  * Renders a React component to a full HTML page
- * @param {React.Component} Component - The React component to render
- * @param {Object} props - Props to pass to the component
- * @param {Object} options - Rendering options
- * @returns {string} Complete HTML string
  */
-export function render(Component, props = {}, options = {}) {
+interface RenderOptions {
+  title?: string;
+  scripts?: string[];
+  styles?: string[];
+}
+
+export function render(Component: React.ComponentType<any>, props: Record<string, any> = {}, options: RenderOptions = {}) {
   const {
     title = 'FlexiReact App',
     scripts = [],

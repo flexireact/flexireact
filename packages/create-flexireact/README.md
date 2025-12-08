@@ -1,6 +1,6 @@
 # create-flexireact
 
-Create FlexiReact apps with one command.
+Create FlexiReact v2 apps with one command.
 
 ## Usage
 
@@ -16,20 +16,29 @@ npm create flexireact@latest my-app
 
 ## Templates
 
-- **Default** - Basic FlexiReact app with TypeScript and Tailwind
-- **FlexiUI** - FlexiReact with FlexiUI component library
-- **Minimal** - Bare minimum FlexiReact setup
+| Template | Description |
+|----------|-------------|
+| **Default** | Full-featured with `routes/`, components, and Tailwind v4 |
+| **Minimal** | Bare minimum FlexiReact setup |
+| **App Router** | Next.js style `app/` directory routing |
 
-## What's included
+## What's New in v2
 
-- ⚡ **FlexiReact** - The Modern React Framework
-- 📘 **TypeScript** - Full type safety
-- 🎨 **Tailwind CSS** - Utility-first styling
-- 📁 **File-based routing** - Create a file, get a route
-- 🏝️ **Islands architecture** - Partial hydration
-- 🖥️ **SSR** - Server-side rendering
+- 🆕 **TypeScript Native** — CLI rewritten in TypeScript
+- 🎨 **Tailwind CSS v4** — New `@import "tailwindcss"` syntax
+- 📁 **Routes Directory** — New `routes/` with route groups
+- ⚡ **Modern Templates** — Beautiful, production-ready starters
 
-## After creation
+## What's Included
+
+- ⚡ **FlexiReact v2** — The Modern React Framework
+- 📘 **TypeScript** — Full type safety
+- 🎨 **Tailwind CSS v4** — Latest styling features
+- 📁 **File-based routing** — `routes/`, `app/`, or `pages/`
+- 🏝️ **Islands architecture** — Partial hydration
+- 🖥️ **SSR** — Server-side rendering
+
+## After Creation
 
 ```bash
 cd my-app
@@ -39,10 +48,10 @@ npm run dev
 
 Then open http://localhost:3000
 
-## Learn More
+## Links
 
-- [FlexiReact Documentation](https://github.com/flexireact/flexireact)
-- [FlexiUI Components](https://github.com/flexireact/flexi-ui)
+- [GitHub Repository](https://github.com/flexireact/flexireact)
+- [npm Package](https://www.npmjs.com/package/@flexireact/core)
 
 ## License
 

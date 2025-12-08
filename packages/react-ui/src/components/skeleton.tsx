@@ -24,7 +24,7 @@ function Skeleton({
   return (
     <div
       className={cn(
-        'animate-pulse bg-[var(--flexi-bg-muted)]',
+        'animate-pulse bg-secondary',
         variants[variant],
         className
       )}
@@ -41,7 +41,7 @@ function Skeleton({
 // Pre-built skeleton components
 function SkeletonCard({ className }: { className?: string }) {
   return (
-    <div className={cn('space-y-4 p-6 rounded-2xl border border-[var(--flexi-border)]', className)}>
+    <div className={cn('space-y-4 p-6 rounded-xl border border-border', className)}>
       <Skeleton height={200} />
       <Skeleton variant="text" width="60%" />
       <Skeleton variant="text" width="80%" />

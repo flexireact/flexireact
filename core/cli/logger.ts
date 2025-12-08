@@ -65,7 +65,13 @@ const box = {
   verticalLeft: '┤',
 };
 
-function createBox(content, options = {}) {
+interface BoxOptions {
+  padding?: number;
+  borderColor?: (s: string) => string;
+  width?: number;
+}
+
+function createBox(content: string, options: BoxOptions = {}) {
   const { 
     padding = 1, 
     borderColor = colors.primary,
@@ -180,7 +186,7 @@ function pluginLoader(plugins = []) {
 // HTTP Request Logger
 // ============================================================================
 
-function request(method, path, statusCode, duration, options = {}) {
+function request(method: string, path: string, statusCode: number, duration: number, options: { type?: string } = {}) {
   const { type = 'dynamic' } = options;
   
   // Method colors

@@ -39,7 +39,13 @@ const MIME_TYPES = {
 /**
  * Creates and starts the FlexiReact dev server
  */
-export function createServer(options = {}) {
+interface ServerOptions {
+  port?: number;
+  host?: string;
+  pagesDir?: string;
+}
+
+export function createServer(options: ServerOptions = {}) {
   const {
     port = PORT,
     host = HOST,
@@ -97,7 +103,7 @@ export function createServer(options = {}) {
     }
   });
 
-  server.listen(port, host, () => {
+  server.listen(port as number, host as string, () => {
     console.log('');
     console.log('  ⚡ FlexiReact Dev Server');
     console.log('  ─────────────────────────');

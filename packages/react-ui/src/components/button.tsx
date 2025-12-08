@@ -4,28 +4,29 @@ import { Slot } from '@radix-ui/react-slot';
 import { cn } from '../utils/cn';
 
 const buttonVariants = cva(
-  // Base styles
-  `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-medium
-   transition-all duration-200 ease-out
-   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--flexi-ring)] focus-visible:ring-offset-2
+  // Base styles - optimized with modern Tailwind
+  `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium
+   transition-all duration-200
+   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00FF9C]/50 focus-visible:ring-offset-2
    disabled:pointer-events-none disabled:opacity-50
    active:scale-[0.98]`,
   {
     variants: {
       variant: {
-        primary: `bg-[var(--flexi-primary)] text-[var(--flexi-primary-fg)] 
-                  hover:brightness-110 hover:shadow-glow`,
-        secondary: `bg-[var(--flexi-bg-subtle)] text-[var(--flexi-fg)] border border-[var(--flexi-border)]
-                    hover:bg-[var(--flexi-bg-muted)]`,
-        outline: `border-2 border-[var(--flexi-primary)] text-[var(--flexi-primary)] bg-transparent
-                  hover:bg-[var(--flexi-primary)] hover:text-[var(--flexi-primary-fg)]`,
-        ghost: `text-[var(--flexi-fg)] hover:bg-[var(--flexi-bg-subtle)]`,
+        primary: `bg-[#00FF9C] text-black 
+                  hover:bg-[#00FF9C]/90 hover:shadow-[0_0_20px_rgba(0,255,156,0.4)]`,
+        secondary: `bg-secondary text-secondary-foreground
+                    hover:bg-secondary/80`,
+        outline: `border border-border text-foreground bg-transparent
+                  hover:bg-secondary/50 hover:border-[#00FF9C]/50`,
+        ghost: `text-muted-foreground
+                hover:text-[#00FF9C] hover:bg-[#00FF9C]/10`,
         danger: `bg-red-500 text-white hover:bg-red-600`,
-        link: `text-[var(--flexi-primary)] underline-offset-4 hover:underline`,
+        link: `text-[#00FF9C] underline-offset-4 hover:underline`,
       },
       size: {
         sm: 'h-8 px-3 text-xs',
-        md: 'h-10 px-4 text-sm',
+        md: 'h-10 px-4 py-2.5 text-sm',
         lg: 'h-12 px-6 text-base',
         xl: 'h-14 px-8 text-lg',
         icon: 'h-10 w-10',

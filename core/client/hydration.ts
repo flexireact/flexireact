@@ -6,6 +6,16 @@
 import React from 'react';
 import { hydrateRoot, createRoot } from 'react-dom/client';
 
+// Extend Window interface for __FLEXI_DATA__
+declare global {
+  interface Window {
+    __FLEXI_DATA__?: {
+      islands?: any[];
+      props?: Record<string, any>;
+    };
+  }
+}
+
 /**
  * Hydrates a specific island component
  */

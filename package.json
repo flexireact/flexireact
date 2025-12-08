@@ -1,31 +1,34 @@
 {
   "name": "@flexireact/core",
-  "version": "1.0.2",
-  "description": "The Modern React Framework - SSR, SSG, Islands, TypeScript, Tailwind, File-based Routing",
-  "main": "core/index.js",
+  "version": "2.0.0",
+  "description": "The Modern React Framework v2 - SSR, SSG, Islands, App Router, TypeScript, Tailwind",
+  "main": "core/index.ts",
+  "types": "core/types.ts",
   "type": "module",
   "bin": {
-    "flexireact": "./cli/index.js",
-    "flexi": "./cli/index.js"
+    "flexireact": "./bin/flexireact.js",
+    "flexi": "./bin/flexireact.js"
   },
   "exports": {
-    ".": "./core/index.js",
-    "./client": "./core/client/index.js",
-    "./server": "./core/server/index.js",
-    "./render": "./core/render/index.js",
-    "./config": "./core/config.js"
+    ".": "./core/index.ts",
+    "./client": "./core/client/index.ts",
+    "./server": "./core/server/index.ts",
+    "./render": "./core/render/index.ts",
+    "./config": "./core/config.ts",
+    "./types": "./core/types.ts"
   },
   "files": [
+    "bin",
     "cli",
     "core",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "dev": "node cli/index.js dev",
-    "build": "node cli/index.js build",
-    "start": "node cli/index.js start",
-    "typecheck": "tsc --noEmit"
+    "dev": "npx tsx cli/index.ts dev",
+    "build": "npx tsx cli/index.ts build",
+    "start": "npx tsx cli/index.ts start",
+    "typecheck": "tsc --noEmit -p core/tsconfig.json"
   },
   "keywords": [
     "react",
@@ -62,8 +65,10 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
+    "@types/prompts": "^2.4.9",
     "@types/react": "^18.3.14",
     "@types/react-dom": "^18.3.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.7.2"
   },
   "engines": {

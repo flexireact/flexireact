@@ -15,7 +15,8 @@ export { buildRouteTree, matchRoute, findRouteLayouts, RouteType } from './route
 export { renderPage, renderError, renderLoading } from './render/index.js';
 
 // Server
-export { createServer } from './server/index.js';
+import { createServer } from './server/index.js';
+export { createServer };
 
 // Build
 export { build, buildDev, BuildMode } from './build/index.js';

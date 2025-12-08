@@ -5,3 +5,11 @@
 
 # Misc
 *.log
+*.md
+*.test.js
+.github/
+.vscode/
+coverage/
+node_modules/
+src/
+tsconfig.json

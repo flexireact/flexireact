@@ -12,7 +12,7 @@ const AccordionItem = forwardRef<
 >(({ className, ...props }, ref) => (
   <AccordionPrimitive.Item
     ref={ref}
-    className={cn('border-b border-[var(--flexi-border)]', className)}
+    className={cn('border-b border-border', className)}
     {...props}
   />
 ));
@@ -27,7 +27,7 @@ const AccordionTrigger = forwardRef<
       ref={ref}
       className={cn(
         `flex flex-1 items-center justify-between py-4 font-medium transition-all
-         hover:text-[var(--flexi-primary)]
+         hover:text-[#00FF9C]
          [&[data-state=open]>svg]:rotate-180`,
         className
       )}

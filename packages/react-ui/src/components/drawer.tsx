@@ -26,7 +26,7 @@ const DrawerOverlay = forwardRef<
 DrawerOverlay.displayName = 'DrawerOverlay';
 
 const drawerContentVariants = cva(
-  'fixed z-50 bg-[var(--flexi-bg)] shadow-2xl transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
+  'fixed z-50 bg-background/95 backdrop-blur-xl shadow-2xl transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
   {
     variants: {
       side: {
@@ -58,7 +58,7 @@ const DrawerContent = forwardRef<
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-lg p-2 text-[var(--flexi-fg-muted)] transition-colors hover:bg-[var(--flexi-bg-subtle)] hover:text-[var(--flexi-fg)]">
+      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-lg p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
@@ -83,7 +83,7 @@ const DrawerTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn('text-lg font-semibold text-[var(--flexi-fg)]', className)}
+    className={cn('text-lg font-semibold text-foreground', className)}
     {...props}
   />
 ));
@@ -95,7 +95,7 @@ const DrawerDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-sm text-[var(--flexi-fg-muted)]', className)}
+    className={cn('text-sm text-muted-foreground', className)}
     {...props}
   />
 ));

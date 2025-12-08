@@ -40,7 +40,12 @@ export function IslandBoundary({ children, fallback = null, name = 'island' }) {
 /**
  * Creates a lazy-loaded island
  */
-export function createClientIsland(loader, options = {}) {
+interface LazyIslandOptions {
+  fallback?: React.ReactNode;
+  name?: string;
+}
+
+export function createClientIsland(loader: () => Promise<any>, options: LazyIslandOptions = {}) {
   const { fallback = null, name = 'lazy-island' } = options;
 
   return function LazyIsland(props) {

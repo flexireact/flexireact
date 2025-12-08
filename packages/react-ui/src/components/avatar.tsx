@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../utils/cn';
 
 const avatarVariants = cva(
-  `relative inline-flex shrink-0 overflow-hidden rounded-full bg-[var(--flexi-bg-subtle)]`,
+  `relative inline-flex shrink-0 overflow-hidden rounded-full bg-secondary`,
   {
     variants: {
       size: {
@@ -15,7 +15,7 @@ const avatarVariants = cva(
         '2xl': 'h-20 w-20 text-2xl',
       },
       ring: {
-        true: 'ring-2 ring-[var(--flexi-primary)] ring-offset-2 ring-offset-[var(--flexi-bg)]',
+        true: 'ring-2 ring-[#00FF9C] ring-offset-2 ring-offset-background',
       },
     },
     defaultVariants: {
@@ -62,14 +62,14 @@ const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(
             {...props}
           />
         ) : (
-          <span className="flex h-full w-full items-center justify-center bg-[var(--flexi-primary)]/20 text-[var(--flexi-primary)] font-medium">
+          <span className="flex h-full w-full items-center justify-center bg-[#00FF9C]/20 text-[#00FF9C] font-medium">
             {fallback ? getInitials(fallback) : '?'}
           </span>
         )}
         {status && (
           <span
             className={cn(
-              'absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-[var(--flexi-bg)]',
+              'absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background',
               statusColors[status]
             )}
           />
@@ -97,7 +97,7 @@ function AvatarGroup({ children, max = 4, className }: AvatarGroupProps) {
     <div className={cn('flex -space-x-3', className)}>
       {visible}
       {remaining > 0 && (
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--flexi-bg-subtle)] text-sm font-medium text-[var(--flexi-fg)] ring-2 ring-[var(--flexi-bg)]">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-sm font-medium text-foreground ring-2 ring-background">
           +{remaining}
         </span>
       )}

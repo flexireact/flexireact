@@ -3,16 +3,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../utils/cn';
 
 const inputVariants = cva(
-  `flex w-full rounded-2xl border bg-[var(--flexi-bg)] px-4 py-2
-   text-sm text-[var(--flexi-fg)] placeholder:text-[var(--flexi-fg-muted)]
+  `flex w-full rounded-lg border bg-input px-4 py-2.5
+   text-sm text-foreground placeholder:text-muted-foreground
    transition-all duration-200
-   focus:outline-none focus:ring-2 focus:ring-[var(--flexi-ring)] focus:ring-offset-2
+   focus:outline-none focus:border-[#00FF9C] focus:ring-1 focus:ring-[#00FF9C]/30
    disabled:cursor-not-allowed disabled:opacity-50`,
   {
     variants: {
       variant: {
-        default: 'border-[var(--flexi-border)]',
-        filled: 'border-transparent bg-[var(--flexi-bg-subtle)]',
+        default: 'border-border',
+        filled: 'border-transparent bg-secondary',
         flushed: 'rounded-none border-x-0 border-t-0 border-b-2 px-0 focus:ring-0',
       },
       inputSize: {
@@ -21,7 +21,7 @@ const inputVariants = cva(
         lg: 'h-12 text-base',
       },
       error: {
-        true: 'border-red-500 focus:ring-red-500',
+        true: 'border-red-500 focus:border-red-500 focus:ring-red-500/30',
       },
     },
     defaultVariants: {
@@ -64,14 +64,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-medium text-[var(--flexi-fg)] mb-1.5"
+            className="block text-sm font-medium text-foreground mb-1.5"
           >
             {label}
           </label>
         )}
         <div className="relative">
           {leftElement && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--flexi-fg-muted)]">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
               {leftElement}
             </div>
           )}
@@ -86,7 +86,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightElement && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--flexi-fg-muted)]">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
               {rightElement}
             </div>
           )}
@@ -95,7 +95,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <p
             className={cn(
               'mt-1.5 text-xs',
-              error ? 'text-red-500' : 'text-[var(--flexi-fg-muted)]'
+              error ? 'text-red-500' : 'text-muted-foreground'
             )}
           >
             {helperText}

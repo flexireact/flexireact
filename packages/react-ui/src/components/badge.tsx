@@ -7,9 +7,9 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-[var(--flexi-primary)] text-[var(--flexi-primary-fg)]',
-        secondary: 'bg-[var(--flexi-bg-subtle)] text-[var(--flexi-fg)]',
-        outline: 'border border-[var(--flexi-border)] text-[var(--flexi-fg)]',
+        default: 'bg-[#00FF9C] text-black',
+        secondary: 'bg-secondary text-secondary-foreground',
+        outline: 'border border-border text-foreground',
         success: 'bg-green-500/20 text-green-500',
         warning: 'bg-yellow-500/20 text-yellow-500',
         error: 'bg-red-500/20 text-red-500',

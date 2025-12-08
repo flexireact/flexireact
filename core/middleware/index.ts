@@ -29,8 +29,22 @@ import { pathToFileURL } from 'url';
 /**
  * Middleware response helpers
  */
+interface MiddlewareResponseOptions {
+  type?: string;
+  status?: number;
+  headers?: Record<string, string>;
+  body?: any;
+  url?: string | null;
+}
+
 export class MiddlewareResponse {
-  constructor(options = {}) {
+  type: string;
+  status: number;
+  headers: Map<string, string>;
+  body: any;
+  url: string | null;
+
+  constructor(options: MiddlewareResponseOptions = {}) {
     this.type = options.type || 'next';
     this.status = options.status || 200;
     this.headers = new Map(Object.entries(options.headers || {}));
@@ -69,7 +83,7 @@ export class MiddlewareResponse {
   /**
    * Return a JSON response
    */
-  static json(data, options = {}) {
+  static json(data: any, options: { status?: number; headers?: Record<string, string> } = {}) {
     return new MiddlewareResponse({
       type: 'response',
       status: options.status || 200,
@@ -81,7 +95,7 @@ export class MiddlewareResponse {
   /**
    * Return an HTML response
    */
-  static html(content, options = {}) {
+  static html(content: string, options: { status?: number; headers?: Record<string, string> } = {}) {
     return new MiddlewareResponse({
       type: 'response',
       status: options.status || 200,
@@ -95,7 +109,16 @@ export class MiddlewareResponse {
  * Middleware request wrapper
  */
 export class MiddlewareRequest {
-  constructor(req) {
+  raw: any;
+  method: string;
+  url: string;
+  headers: Map<string, string>;
+  pathname: string;
+  searchParams: URLSearchParams;
+  query: Record<string, string>;
+  cookies: Map<string, string>;
+
+  constructor(req: any) {
     this.raw = req;
     this.method = req.method;
     this.url = req.url;
@@ -105,7 +128,7 @@ export class MiddlewareRequest {
     const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     this.pathname = parsedUrl.pathname;
     this.searchParams = parsedUrl.searchParams;
-    this.query = Object.fromEntries(parsedUrl.searchParams);
+    this.query = Object.fromEntries(parsedUrl.searchParams) as Record<string, string>;
     
     // Parse cookies
     this.cookies = this._parseCookies(req.headers.cookie || '');
@@ -274,7 +297,7 @@ export const middlewares = {
   /**
    * CORS middleware
    */
-  cors(options = {}) {
+  cors(options: { origin?: string; methods?: string; headers?: string; credentials?: boolean } = {}) {
     const {
       origin = '*',
       methods = 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -294,7 +317,7 @@ export const middlewares = {
 
       // Handle preflight
       if (request.method === 'OPTIONS') {
-        return MiddlewareResponse.json({}, { status: 204, headers: response.headers });
+        return MiddlewareResponse.json({}, { status: 204, headers: Object.fromEntries(response.headers) });
       }
 
       return response;
@@ -330,7 +353,7 @@ export const middlewares = {
   /**
    * Rate limiting middleware
    */
-  rateLimit(options = {}) {
+  rateLimit(options: { windowMs?: number; max?: number } = {}) {
     const { windowMs = 60000, max = 100 } = options;
     const requests = new Map();
 
@@ -369,7 +392,7 @@ export const middlewares = {
   /**
    * Logging middleware
    */
-  logger(options = {}) {
+  logger(options: { format?: string } = {}) {
     const { format = 'combined' } = options;
 
     return (request) => {

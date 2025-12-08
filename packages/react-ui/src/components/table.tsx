@@ -32,7 +32,7 @@ const TableFooter = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTable
   ({ className, ...props }, ref) => (
     <tfoot
       ref={ref}
-      className={cn('border-t bg-[var(--flexi-bg-subtle)] font-medium', className)}
+      className={cn('border-t bg-secondary font-medium', className)}
       {...props}
     />
   )
@@ -44,7 +44,7 @@ const TableRow = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElem
     <tr
       ref={ref}
       className={cn(
-        'border-b border-[var(--flexi-border)] transition-colors hover:bg-[var(--flexi-bg-subtle)] data-[state=selected]:bg-[var(--flexi-bg-muted)]',
+        'border-b border-border transition-colors hover:bg-secondary/50 data-[state=selected]:bg-secondary',
         className
       )}
       {...props}
@@ -58,7 +58,7 @@ const TableHead = forwardRef<HTMLTableCellElement, ThHTMLAttributes<HTMLTableCel
     <th
       ref={ref}
       className={cn(
-        'h-12 px-4 text-left align-middle font-medium text-[var(--flexi-fg-muted)] [&:has([role=checkbox])]:pr-0',
+        'h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0',
         className
       )}
       {...props}
@@ -82,7 +82,7 @@ const TableCaption = forwardRef<HTMLTableCaptionElement, HTMLAttributes<HTMLTabl
   ({ className, ...props }, ref) => (
     <caption
       ref={ref}
-      className={cn('mt-4 text-sm text-[var(--flexi-fg-muted)]', className)}
+      className={cn('mt-4 text-sm text-muted-foreground', className)}
       {...props}
     />
   )

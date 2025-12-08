@@ -122,7 +122,7 @@ export const logger = {
   },
 
   // HTTP request log - Compact single line like Next.js
-  request(method, path, status, time, extra = {}) {
+  request(method: string, path: string, status: number, time: number, extra: { type?: string } = {}) {
     const methodColor = getMethodColor(method);
     const statusColor = getStatusColor(status);
     const timeStr = formatTime(time);

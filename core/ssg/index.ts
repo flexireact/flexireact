@@ -19,19 +19,34 @@ import { ensureDir, cleanDir } from '../utils.js';
 /**
  * SSG Build Result
  */
+interface SSGPage {
+  path: string;
+  file: string;
+  size: number;
+}
+
+interface SSGError {
+  path: string;
+  error: string;
+}
+
 export class SSGResult {
+  pages: SSGPage[];
+  errors: SSGError[];
+  duration: number;
+
   constructor() {
     this.pages = [];
     this.errors = [];
     this.duration = 0;
   }
 
-  addPage(path, file, size) {
-    this.pages.push({ path, file, size });
+  addPage(pagePath: string, file: string, size: number) {
+    this.pages.push({ path: pagePath, file, size });
   }
 
-  addError(path, error) {
-    this.errors.push({ path, error: error.message });
+  addError(pagePath: string, error: Error) {
+    this.errors.push({ path: pagePath, error: error.message });
   }
 
   get success() {
@@ -237,8 +252,18 @@ function formatSize(bytes) {
  * Incremental Static Regeneration (ISR) support
  * Allows pages to be regenerated after a specified interval
  */
+interface ISRCacheEntry {
+  html: string;
+  generatedAt: number;
+  revalidateAfter: number | null;
+}
+
 export class ISRManager {
-  constructor(options = {}) {
+  cache: Map<string, ISRCacheEntry>;
+  revalidating: Set<string>;
+  defaultRevalidate: number;
+
+  constructor(options: { defaultRevalidate?: number } = {}) {
     this.cache = new Map();
     this.revalidating = new Set();
     this.defaultRevalidate = options.defaultRevalidate || 60; // seconds

@@ -6,6 +6,22 @@
 import { hydrateAllIslands, setupProgressiveHydration } from './hydration.js';
 import { navigate, prefetch } from './navigation.js';
 
+// Extend Window interface
+declare global {
+  interface Window {
+    FlexiReact: {
+      navigate: typeof navigate;
+      prefetch: typeof prefetch;
+      hydrateAllIslands: typeof hydrateAllIslands;
+      setupProgressiveHydration: typeof setupProgressiveHydration;
+    };
+    __FLEXI_DATA__?: {
+      islands?: any[];
+      props?: Record<string, any>;
+    };
+  }
+}
+
 // Expose to global scope
 window.FlexiReact = {
   navigate,

@@ -14,8 +14,8 @@ const spinnerVariants = cva(
         xl: 'h-12 w-12',
       },
       variant: {
-        default: 'text-[var(--flexi-primary)]',
-        muted: 'text-[var(--flexi-fg-muted)]',
+        default: 'text-[#00FF9C]',
+        muted: 'text-muted-foreground',
         white: 'text-white',
       },
     },
@@ -65,7 +65,7 @@ function DotsLoader({ className }: { className?: string }) {
       {[0, 1, 2].map((i) => (
         <div
           key={i}
-          className="h-2 w-2 rounded-full bg-[var(--flexi-primary)] animate-bounce"
+          className="h-2 w-2 rounded-full bg-[#00FF9C] animate-bounce"
           style={{ animationDelay: `${i * 0.1}s` }}
         />
       ))}
@@ -77,8 +77,8 @@ function DotsLoader({ className }: { className?: string }) {
 function PulseLoader({ className }: { className?: string }) {
   return (
     <div className={cn('relative h-10 w-10', className)}>
-      <div className="absolute inset-0 rounded-full bg-[var(--flexi-primary)] opacity-75 animate-ping" />
-      <div className="relative rounded-full h-10 w-10 bg-[var(--flexi-primary)]" />
+      <div className="absolute inset-0 rounded-full bg-[#00FF9C] opacity-75 animate-ping" />
+      <div className="relative rounded-full h-10 w-10 bg-[#00FF9C]" />
     </div>
   );
 }

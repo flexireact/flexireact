@@ -63,8 +63,13 @@ export function getRegisteredIslands() {
 /**
  * Creates an island component wrapper
  */
-export function createIsland(Component, options = {}) {
-  const { name = Component.name || 'Island', clientPath } = options;
+interface IslandOptions {
+  name?: string;
+  clientPath?: string;
+}
+
+export function createIsland(Component: React.ComponentType<any>, options: IslandOptions = {}) {
+  const { name = (Component as any).name || 'Island', clientPath } = options;
 
   function IslandWrapper(props) {
     return Island({
@@ -148,9 +153,16 @@ export const LoadStrategy = {
 /**
  * Creates a lazy island that hydrates based on strategy
  */
-export function createLazyIsland(Component, options = {}) {
+interface LazyIslandOptions {
+  name?: string;
+  clientPath?: string;
+  strategy?: string;
+  media?: string | null;
+}
+
+export function createLazyIsland(Component: React.ComponentType<any>, options: LazyIslandOptions = {}) {
   const {
-    name = Component.name || 'LazyIsland',
+    name = (Component as any).name || 'LazyIsland',
     clientPath,
     strategy = LoadStrategy.VISIBLE,
     media = null

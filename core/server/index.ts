@@ -44,7 +44,14 @@ const MIME_TYPES = {
 /**
  * Creates the FlexiReact server
  */
-export async function createServer(options = {}) {
+interface CreateServerOptions {
+  projectRoot?: string;
+  mode?: 'development' | 'production';
+  port?: number;
+  host?: string;
+}
+
+export async function createServer(options: CreateServerOptions = {}) {
   const serverStartTime = Date.now();
   const projectRoot = options.projectRoot || process.cwd();
   const isDev = options.mode === 'development';
@@ -128,7 +135,19 @@ export async function createServer(options = {}) {
         return await handleApiRoute(req, res, apiRoute, loadModule);
       }
 
-      // Match page routes
+      // Match FlexiReact v2 routes (routes/ directory - priority)
+      const flexiRoute = matchRoute(effectivePath, routes.flexiRoutes || []);
+      if (flexiRoute) {
+        return await handlePageRoute(req, res, flexiRoute, routes, config, loadModule, url);
+      }
+
+      // Match app routes (app/ directory - Next.js style)
+      const appRoute = matchRoute(effectivePath, routes.appRoutes || []);
+      if (appRoute) {
+        return await handlePageRoute(req, res, appRoute, routes, config, loadModule, url);
+      }
+
+      // Match page routes (pages/ directory - legacy fallback)
       const pageRoute = matchRoute(effectivePath, routes.pages);
       if (pageRoute) {
         return await handlePageRoute(req, res, pageRoute, routes, config, loadModule, url);
@@ -166,7 +185,7 @@ export async function createServer(options = {}) {
 
   return new Promise((resolve, reject) => {
     // Handle port in use error
-    server.on('error', (err) => {
+    server.on('error', (err: NodeJS.ErrnoException) => {
       if (err.code === 'EADDRINUSE') {
         logger.portInUse(port);
         process.exit(1);
@@ -457,7 +476,7 @@ async function handlePageRoute(req, res, route, routes, config, loadModule, url)
       favicon: config.favicon || null,
       needsHydration: isClientComponent,
       componentPath: route.filePath,
-      route: route.path || pathname,
+      route: route.path || url.pathname,
       isSSG: !!pageModule.getStaticProps
     });
 

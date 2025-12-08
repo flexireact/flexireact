@@ -29,10 +29,10 @@ const Switch = forwardRef<
         id={switchId}
         className={cn(
           `peer inline-flex shrink-0 cursor-pointer items-center rounded-full
-           border-2 border-transparent bg-[var(--flexi-bg-muted)] transition-colors
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--flexi-ring)] focus-visible:ring-offset-2
+           border-2 border-transparent bg-secondary transition-colors
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00FF9C]/50 focus-visible:ring-offset-2
            disabled:cursor-not-allowed disabled:opacity-50
-           data-[state=checked]:bg-[var(--flexi-primary)]`,
+           data-[state=checked]:bg-[#00FF9C]`,
           sizes[size].root,
           className
         )}
@@ -48,7 +48,7 @@ const Switch = forwardRef<
       {label && (
         <label
           htmlFor={switchId}
-          className="text-sm text-[var(--flexi-fg)] cursor-pointer select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+          className="text-sm text-foreground cursor-pointer select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
         >
           {label}
         </label>

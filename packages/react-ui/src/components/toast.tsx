@@ -6,12 +6,12 @@ import { cn } from '../utils/cn';
 
 // Toast variants
 const toastVariants = cva(
-  `relative flex items-center gap-3 w-full max-w-sm p-4 rounded-2xl border shadow-lg
+  `relative flex items-center gap-3 w-full max-w-sm p-4 rounded-xl border shadow-lg backdrop-blur-xl
    animate-in slide-in-from-right-full duration-300`,
   {
     variants: {
       variant: {
-        default: 'bg-[var(--flexi-bg)] border-[var(--flexi-border)] text-[var(--flexi-fg)]',
+        default: 'bg-background/95 border-border text-foreground',
         success: 'bg-green-500/10 border-green-500/30 text-green-500',
         error: 'bg-red-500/10 border-red-500/30 text-red-500',
         warning: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-500',
