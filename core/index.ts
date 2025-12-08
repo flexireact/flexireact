@@ -209,7 +209,7 @@ export {
 } from './devtools/index.js';
 
 // Version
-export const VERSION = '2.5.0';
+export const VERSION = '3.0.0';
 
 // Default export
 export default {

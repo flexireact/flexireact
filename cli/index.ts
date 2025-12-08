@@ -16,7 +16,7 @@ import { runGenerate, listGenerators } from './generators.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const VERSION = '2.5.0';
+const VERSION = '3.0.0';
 
 // ============================================================================
 // ASCII Logo & Branding
