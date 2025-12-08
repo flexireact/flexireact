@@ -19,7 +19,7 @@ export function minimalTemplate(projectName: string): TemplateFiles {
       dependencies: {
         react: '^18.2.0',
         'react-dom': '^18.2.0',
-        '@flexireact/core': '^2.0.0',
+        '@flexireact/core': '^3.0.0',
       },
       devDependencies: {
         '@types/react': '^18.2.0',

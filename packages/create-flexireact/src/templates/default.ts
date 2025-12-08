@@ -30,7 +30,7 @@ export function defaultTemplate(projectName: string): TemplateFiles {
       dependencies: {
         react: '^18.2.0',
         'react-dom': '^18.2.0',
-        '@flexireact/core': '^2.0.0',
+        '@flexireact/core': '^3.0.0',
         clsx: '^2.1.0',
         'tailwind-merge': '^2.2.0',
       },
