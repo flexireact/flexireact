@@ -20,8 +20,21 @@
   <a href="#"><img src="https://img.shields.io/badge/Tailwind-v4-38B2AC.svg" alt="Tailwind CSS v4" /></a>
 </p>
 
-## 🆕 What's New in v2
+## 🆕 What's New in v2.2
 
+### v2.2.0 (Latest)
+- **🌊 Streaming SSR** — Progressive HTML rendering with React 18 `renderToPipeableStream`
+- **⚡ Server Actions** — Call server functions directly from client components
+- **🔗 Link Prefetching** — Automatic prefetch on hover/viewport visibility
+
+### v2.1.0
+- **🛠️ Server Helpers** — `redirect()`, `notFound()`, `json()`, `cookies`, `headers`
+- **🚧 Error/Loading Boundaries** — Per-segment `error.tsx` and `loading.tsx`
+- **🔐 Route Middleware** — `_middleware.ts` for per-route logic
+- **📊 Bundle Analyzer** — `flexi build --analyze`
+- **🔄 CI/CD** — GitHub Actions workflow
+
+### v2.0.0
 - **TypeScript Native** — Core rewritten in TypeScript for better DX
 - **Tailwind CSS v4** — New `@import "tailwindcss"` and `@theme` syntax
 - **Routes Directory** — New `routes/` directory with route groups, dynamic segments
@@ -401,26 +414,148 @@ export function post(req, res) {
 }
 ```
 
+## ⚡ Server Actions (v2.2+)
+
+Call server functions directly from client components:
+
+```tsx
+// actions.ts
+'use server';
+import { serverAction, redirect, cookies } from '@flexireact/core';
+
+export const createUser = serverAction(async (formData: FormData) => {
+  const name = formData.get('name') as string;
+  const user = await db.users.create({ name });
+  
+  // Set a cookie
+  cookies.set('userId', user.id);
+  
+  // Redirect after action
+  redirect('/users');
+});
+
+// Form.tsx
+'use client';
+import { createUser } from './actions';
+
+export function CreateUserForm() {
+  return (
+    <form action={createUser}>
+      <input name="name" placeholder="Name" required />
+      <button type="submit">Create User</button>
+    </form>
+  );
+}
+```
+
+## 🔗 Link with Prefetching (v2.1+)
+
+Enhanced Link component with automatic prefetching:
+
+```tsx
+import { Link } from '@flexireact/core/client';
+
+// Prefetch on hover (default)
+<Link href="/about">About</Link>
+
+// Prefetch when visible in viewport
+<Link href="/products" prefetch="viewport">Products</Link>
+
+// Replace history instead of push
+<Link href="/login" replace>Login</Link>
+
+// Programmatic navigation
+import { useRouter } from '@flexireact/core/client';
+
+function MyComponent() {
+  const router = useRouter();
+  
+  return (
+    <button onClick={() => router.push('/dashboard')}>
+      Go to Dashboard
+    </button>
+  );
+}
+```
+
+## 🛠️ Server Helpers (v2.1+)
+
+Utility functions for server-side operations:
+
+```tsx
+import { redirect, notFound, json, cookies, headers } from '@flexireact/core';
+
+// Redirect
+redirect('/dashboard');
+redirect('/login', 'permanent'); // 308 redirect
+
+// Not Found
+notFound(); // Throws 404
+
+// JSON Response (in API routes)
+return json({ data: 'hello' }, { status: 200 });
+
+// Cookies
+const token = cookies.get(request, 'token');
+const setCookie = cookies.set('session', 'abc123', { 
+  httpOnly: true, 
+  maxAge: 86400 
+});
+
+// Headers
+const auth = headers.bearerToken(request);
+const corsHeaders = headers.cors({ origin: '*' });
+const securityHeaders = headers.security();
+```
+
 ## 🛡️ Middleware
 
-Create `middleware.js` in your project root:
+### Global Middleware
 
-```js
+Create `middleware.ts` in your project root:
+
+```ts
+import { redirect, cookies } from '@flexireact/core';
+
 export default function middleware(request) {
   // Protect routes
   if (request.pathname.startsWith('/admin')) {
-    if (!request.cookie('token')) {
-      return MiddlewareResponse.redirect('/login');
+    const token = cookies.get(request, 'token');
+    if (!token) {
+      redirect('/login');
     }
   }
-  
-  // Continue
-  return MiddlewareResponse.next();
 }
 
 export const config = {
   matcher: ['/admin/:path*', '/api/:path*']
 };
+```
+
+### Route Middleware (v2.1+)
+
+Create `_middleware.ts` in any route directory:
+
+```
+routes/
+  admin/
+    _middleware.ts   # Runs for all /admin/* routes
+    dashboard.tsx
+    settings.tsx
+```
+
+```ts
+// routes/admin/_middleware.ts
+export default async function middleware(req, res, { route, params }) {
+  const user = await getUser(req);
+  
+  if (!user?.isAdmin) {
+    return { redirect: '/login' };
+  }
+  
+  // Continue to route
+  return { user };
+}
 ```
 
 ## 🔧 Configuration
@@ -496,14 +631,67 @@ export default {
 ## 🖥️ CLI Commands
 
 ```bash
-flexi create <name>   # Create new project
-flexi dev             # Start dev server
-flexi build           # Build for production
-flexi start           # Start production server
-flexi doctor          # Check project health
-flexi --version       # Show version
-flexi help            # Show help
+flexi create <name>      # Create new project
+flexi dev                # Start dev server
+flexi build              # Build for production
+flexi build --analyze    # Build with bundle analysis
+flexi start              # Start production server
+flexi doctor             # Check project health
+flexi --version          # Show version
+flexi help               # Show help
 ```
+
+### Bundle Analysis (v2.1+)
+
+```bash
+flexi build --analyze
+```
+
+Output:
+```
+📊 Bundle Analysis:
+
+  ─────────────────────────────────────────────────
+  File                                   Size
+  ─────────────────────────────────────────────────
+  client/main.js                         45.2 KB (13.56 KB gzip)
+  client/vendor.js                       120.5 KB (38.2 KB gzip)
+  server/pages.js                        12.3 KB
+  ─────────────────────────────────────────────────
+  Total:                                 178 KB
+  Gzipped:                               51.76 KB
+```
+
+## 🌊 Streaming SSR (v2.2+)
+
+Progressive HTML rendering with React 18:
+
+```tsx
+import { renderPageStream, streamToResponse } from '@flexireact/core';
+
+// In your server handler
+const { stream, shellReady } = await renderPageStream({
+  Component: MyPage,
+  props: { data },
+  loading: LoadingSpinner,
+  error: ErrorBoundary,
+  title: 'My Page',
+  styles: ['/styles.css']
+});
+
+// Wait for shell (initial HTML) to be ready
+await shellReady;
+
+// Stream to response
+res.setHeader('Content-Type', 'text/html');
+streamToResponse(res, stream);
+```
+
+Benefits:
+- **Faster Time to First Byte (TTFB)** — Send HTML as it's ready
+- **Progressive Loading** — Users see content immediately
+- **Suspense Support** — Loading states stream in as data resolves
+- **Better UX** — No blank screen while waiting for data
 
 ## 📚 Concepts Explained
 
