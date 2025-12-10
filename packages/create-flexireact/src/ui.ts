@@ -29,7 +29,7 @@ ${c.primary}║${c.reset}   ${c.primary}██╔══╝  ${c.reset}${c.cyan}�
 ${c.primary}║${c.reset}   ${c.primary}██║     ${c.reset}${c.cyan}███████╗${c.reset}${c.primary}███████╗${c.reset}${c.cyan}██╔╝ ██╗${c.reset}${c.primary}██║${c.reset}                      ${c.primary}║${c.reset}
 ${c.primary}║${c.reset}   ${c.primary}╚═╝     ${c.reset}${c.cyan}╚══════╝${c.reset}${c.primary}╚══════╝${c.reset}${c.cyan}╚═╝  ╚═╝${c.reset}${c.primary}╚═╝${c.reset}  ${c.dim}React Framework${c.reset}   ${c.primary}║${c.reset}
 ${c.primary}║${c.reset}                                                               ${c.primary}║${c.reset}
-${c.primary}║${c.reset}   ${c.dim}v2.0.0${c.reset}  ${c.primary}⚡${c.reset} ${c.white}The Modern React Framework${c.reset}                    ${c.primary}║${c.reset}
+${c.primary}║${c.reset}   ${c.dim}v3.0${c.reset}  ${c.primary}⚡${c.reset} ${c.white}The Modern React Framework${c.reset}                      ${c.primary}║${c.reset}
 ${c.primary}║${c.reset}                                                               ${c.primary}║${c.reset}
 ${c.primary}╚═══════════════════════════════════════════════════════════════╝${c.reset}
 `;

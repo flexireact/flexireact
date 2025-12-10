@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * create-flexireact CLI v2.0.0
+ * create-flexireact CLI v3.0.2
  * Create FlexiReact applications with ease
  */
 

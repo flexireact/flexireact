@@ -341,7 +341,7 @@ body {
 `,
 
     // ========================================================================
-    // Routes Directory - FlexiReact v2 Routing
+    // Routes Directory - FlexiReact v3 Routing
     // ========================================================================
 
     'routes/(public)/home.tsx': `import React from 'react';
