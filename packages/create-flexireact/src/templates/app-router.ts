@@ -251,7 +251,8 @@ export default function HomePage() {
           </div>
           <p className="text-sm text-gray-500">Built with ❤️ by FlexiReact Team</p>
           <div className="flex items-center gap-6">
-            <a href="https://github.com/flexireact" className="text-gray-400 hover:text-white transition-colors">GitHub</a>
+            <a href="https://github.com/flexireact/flexireact" className="text-gray-400 hover:text-white transition-colors">GitHub</a>
+            <a href="https://discord.gg/rFSZxFtpAA" className="text-gray-400 hover:text-white transition-colors">Discord 💬</a>
             <a href="https://npmjs.com/package/@flexireact/core" className="text-gray-400 hover:text-white transition-colors">npm</a>
           </div>
         </div>

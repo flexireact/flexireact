@@ -247,6 +247,11 @@ export function Footer() {
     <footer className="border-t border-border py-8 mt-auto">
       <div className="container mx-auto px-4 text-center text-sm text-muted max-w-6xl">
         <p>Built with FlexiReact v3 • {new Date().getFullYear()}</p>
+        <p className="mt-2">
+          <a href="https://discord.gg/rFSZxFtpAA" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+            Join our Discord Community 💬
+          </a>
+        </p>
       </div>
     </footer>
   );

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  A blazing-fast React framework with TypeScript, Tailwind CSS, SSR, SSG, Islands, Edge Runtime, and 50+ UI components.<br/>
+  The Modern React Framework - Better than Next.js with TypeScript, Tailwind CSS, SSR, SSG, Islands, Edge Runtime, and 50+ UI components.<br/>
   <b>Better than Next.js.</b> Simpler. Faster. More powerful.
 </p>
 
@@ -321,7 +321,7 @@ myapp/
 │   │   └── globals.css         # Global styles + Tailwind v4
 │   ├── providers/              # React context providers
 │   └── layout.tsx              # Root layout
-├── routes/                     # FlexiReact v2 file-based routing
+├── routes/                     # FlexiReact v3 file-based routing
 │   ├── (public)/               # Route groups (don't affect URL)
 │   │   ├── home.tsx            # → /
 │   │   └── about.tsx           # → /about
@@ -868,6 +868,7 @@ Islands provide partial hydration:
 - [GitHub Repository](https://github.com/flexireact/flexireact)
 - [FlexiUI Repository](https://github.com/flexireact/flexi-ui)
 - [npm Package](https://www.npmjs.com/package/@flexireact/core)
+- [Discord Community](https://discord.gg/rFSZxFtpAA) 💬
 - [Issues](https://github.com/flexireact/flexireact/issues)
 
 ## 🙏 Contributing
