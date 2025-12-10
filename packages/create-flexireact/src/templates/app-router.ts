@@ -93,20 +93,50 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     'app/page.tsx': `import React from 'react';
 
-const features = [
-  { icon: '⚡', title: 'Lightning Fast', desc: 'Powered by esbuild for instant builds and HMR' },
-  { icon: '🎨', title: 'FlexiUI', desc: '50+ beautiful, accessible components' },
-  { icon: '📘', title: 'TypeScript', desc: 'Full type safety out of the box' },
-  { icon: '🏝️', title: 'Islands', desc: 'Partial hydration for max performance' },
-  { icon: '🌐', title: 'Edge Ready', desc: 'Deploy anywhere: Node, Bun, Deno, CF' },
+const coreFeatures = [
+  { icon: '⚡', title: '2ms Cold Start', desc: 'Edge runtime with instant response times' },
+  { icon: '🧩', title: '50+ UI Components', desc: 'FlexiUI ready to use out of the box' },
+  { icon: '🛡️', title: 'Middleware Auth', desc: 'FlexiGuard powered authentication' },
+  { icon: '🔥', title: 'Zero-config Dev', desc: 'Start coding immediately, no setup' },
+  { icon: '💽', title: 'File-based API', desc: 'Intuitive API routes structure' },
+  { icon: '🏝️', title: 'Islands Architecture', desc: 'Partial hydration for max performance' },
+  { icon: '📘', title: 'TypeScript First', desc: 'Full type safety out of the box' },
+  { icon: '🎨', title: 'Tailwind v4', desc: 'Latest CSS framework integrated' },
   { icon: '🚀', title: 'SSR + PPR', desc: 'Streaming SSR & Partial Prerendering' },
 ];
 
-const stats = [
-  { label: 'Components', value: '50+' },
-  { label: 'Bundle Size', value: '~90kb' },
-  { label: 'Build Time', value: '<1s' },
-  { label: 'Lighthouse', value: '100' },
+const timeline = [
+  { step: '1', title: 'File Routing', desc: 'Create pages in app/ directory' },
+  { step: '2', title: 'Layouts', desc: 'Shared UI across routes' },
+  { step: '3', title: 'Islands', desc: 'Interactive components' },
+  { step: '4', title: 'SSR/SSG', desc: 'Server or static rendering' },
+  { step: '5', title: 'Deploy', desc: 'Ship to Edge in seconds' },
+];
+
+const benchmarks = [
+  { name: 'FlexiReact', time: 2, color: '#00FF9C' },
+  { name: 'Astro', time: 5, color: '#FF5D01' },
+  { name: 'Next.js', time: 8, color: '#000000' },
+];
+
+const ecosystem = [
+  { icon: '⚛️', name: 'FlexiUI', desc: '50+ components', link: 'https://www.npmjs.com/package/@flexireact/flexi-ui' },
+  { icon: '🔐', name: 'FlexiGuard', desc: 'Auth & RBAC', link: 'https://www.npmjs.com/package/flexiguard' },
+  { icon: '🧰', name: 'FlexiCLI', desc: 'Commands & scaffolding', link: 'https://www.npmjs.com/package/create-flexireact' },
+  { icon: '🌐', name: 'FlexiEdge', desc: 'Deploy-ready runtime', link: 'https://github.com/flexireact/flexireact' },
+];
+
+const whyFlexiReact = [
+  { icon: '🚀', title: 'Ultra-fast dev experience', desc: 'Sub-second builds with esbuild' },
+  { icon: '🏝️', title: 'Islands with zero config', desc: 'Automatic partial hydration' },
+  { icon: '🧩', title: 'UI components included', desc: 'FlexiUI with 50+ components' },
+  { icon: '🔐', title: 'Authentication included', desc: 'FlexiGuard for auth & RBAC' },
+];
+
+const backedBy = [
+  { name: 'Velcarius', logo: 'V' },
+  { name: 'Rayze Sol Energy', logo: 'R' },
+  { name: 'FramLink', logo: 'F' },
 ];
 
 export default function HomePage() {
@@ -336,6 +366,42 @@ export default function NotFound() {
 
 body {
   font-family: var(--font-sans);
+}
+
+/* Fade-in and slide-up animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-delay-100 {
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+.animate-delay-200 {
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+.animate-delay-300 {
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+.animate-delay-400 {
+  animation-delay: 0.4s;
+  opacity: 0;
 }
 `,
 
