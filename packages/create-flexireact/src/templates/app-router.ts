@@ -15,7 +15,7 @@ export function appRouterTemplate(projectName: string): TemplateFiles {
         dev: 'npm run css && flexireact dev',
         build: 'npm run css && flexireact build',
         start: 'flexireact start',
-        css: 'npx @tailwindcss/cli -i ./app/globals.css -o ./public/styles.css --minify',
+        css: 'tailwindcss -i ./app/globals.css -o ./public/styles.css --minify',
       },
       dependencies: {
         react: '^18.2.0',
@@ -324,7 +324,7 @@ export default function NotFound() {
 }
 `,
 
-    'app/globals.css': `@import "tailwindcss" source("..");
+    'app/globals.css': `@import "tailwindcss";
 
 @theme {
   --color-background: #0a0a0a;

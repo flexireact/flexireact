@@ -1,9 +1,9 @@
 /**
- * Default Template - Full-featured FlexiReact v2 setup
+ * Default Template - Full-featured FlexiReact v3 setup
  * 
  * Structure:
  * - app/          : Layout, components, styles, providers
- * - routes/       : FlexiReact v2 file-based routing
+ * - routes/       : FlexiReact v3 file-based routing
  * - lib/          : Utilities
  * - public/       : Static assets
  */
@@ -25,7 +25,7 @@ export function defaultTemplate(projectName: string): TemplateFiles {
         dev: 'npm run css && flexireact dev',
         build: 'npm run css && flexireact build',
         start: 'flexireact start',
-        css: 'npx @tailwindcss/cli -i ./app/styles/globals.css -o ./public/styles.css --minify',
+        css: 'tailwindcss -i ./app/styles/globals.css -o ./public/styles.css --minify',
       },
       dependencies: {
         react: '^18.2.0',
@@ -227,7 +227,7 @@ export function Navbar() {
           <a href="/about" className="text-sm text-muted hover:text-foreground transition-colors">About</a>
           <a href="/blog" className="text-sm text-muted hover:text-foreground transition-colors">Blog</a>
           <a 
-            href="https://github.com/nicksdev/flexireact" 
+            href="https://github.com/flexireact/flexireact" 
             target="_blank"
             className="text-sm text-muted hover:text-foreground transition-colors"
           >
@@ -246,7 +246,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border py-8 mt-auto">
       <div className="container mx-auto px-4 text-center text-sm text-muted max-w-6xl">
-        <p>Built with FlexiReact v2 • {new Date().getFullYear()}</p>
+        <p>Built with FlexiReact v3 • {new Date().getFullYear()}</p>
       </div>
     </footer>
   );
@@ -305,9 +305,9 @@ export function useTheme() {
 `,
 
     // Styles
-    'app/styles/globals.css': `@import "tailwindcss" source("../..");
+    'app/styles/globals.css': `@import "tailwindcss";
 
-/* FlexiReact v2 Theme */
+/* FlexiReact v3 Theme */
 @theme {
   /* Colors */
   --color-background: #0a0a0a;
@@ -343,8 +343,8 @@ body {
 import { Button } from '@/app/components/ui';
 
 export const metadata = {
-  title: 'FlexiReact v2 - The Modern React Framework',
-  description: 'Build fast, modern web apps with FlexiReact v2',
+  title: 'FlexiReact v3 - The Modern React Framework',
+  description: 'Build fast, modern web apps with FlexiReact v3',
 };
 
 export default function HomePage() {
@@ -359,12 +359,12 @@ export default function HomePage() {
         {/* Heading */}
         <h1 className="text-5xl md:text-6xl font-bold mb-6">
           Welcome to{' '}
-          <span className="text-primary">FlexiReact v2</span>
+          <span className="text-primary">FlexiReact v3</span>
         </h1>
         
         {/* Description */}
         <p className="text-xl text-muted mb-8 max-w-2xl mx-auto">
-          The modern React framework with SSR, Islands, App Router, and more.
+          The modern React framework with SSR, Islands, Edge Runtime, and 50+ UI components.
           Build blazing fast web applications with ease.
         </p>
         
@@ -498,7 +498,7 @@ export default function BlogPost({ params }: BlogPostProps) {
       
       <div className="prose prose-invert">
         <p>
-          This page demonstrates dynamic routing in FlexiReact v2. 
+          This page demonstrates dynamic routing in FlexiReact v3. 
           The [slug].tsx file creates a dynamic route that matches any path under /blog/.
         </p>
       </div>
