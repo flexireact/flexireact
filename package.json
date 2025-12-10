@@ -1,6 +1,6 @@
 {
   "name": "@flexireact/core",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "The Modern React Framework v3 - SSR, SSG, Islands, Edge Runtime, 50+ UI Components, TypeScript, Tailwind v4",
   "main": "core/index.ts",
   "types": "core/types.ts",
