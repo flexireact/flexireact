@@ -139,6 +139,13 @@ const backedBy = [
   { name: 'FramLink', logo: 'F' },
 ];
 
+const stats = [
+  { label: 'Components', value: '50+' },
+  { label: 'Bundle Size', value: '~90kb' },
+  { label: 'Build Time', value: '<1s' },
+  { label: 'Lighthouse', value: '100' },
+];
+
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
