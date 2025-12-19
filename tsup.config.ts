@@ -15,7 +15,5 @@ export default defineConfig({
   platform: 'node',
   splitting: false,
   shims: true,
-  banner: {
-    js: '#!/usr/bin/env node',
-  },
+  shims: true,
 });

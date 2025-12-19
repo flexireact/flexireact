@@ -1,26 +1,24 @@
 {
   "name": "@flexireact/core",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "The Modern React Framework v3 - SSR, SSG, Islands, Edge Runtime, 50+ UI Components, TypeScript, Tailwind v4",
-  "main": "core/index.ts",
-  "types": "core/types.ts",
+  "main": "dist/core/index.js",
+  "types": "dist/core/index.d.ts",
   "type": "module",
   "bin": {
-    "flexireact": "./bin/flexireact.js",
-    "flexi": "./bin/flexireact.js"
+    "flexireact": "./dist/cli/index.js",
+    "flexi": "./dist/cli/index.js"
   },
   "exports": {
-    ".": "./core/index.ts",
-    "./client": "./core/client/index.ts",
-    "./server": "./core/server/index.ts",
-    "./render": "./core/render/index.ts",
-    "./config": "./core/config.ts",
-    "./types": "./core/types.ts"
+    ".": "./dist/core/index.js",
+    "./client": "./dist/core/client/index.js",
+    "./server": "./dist/core/server/index.js",
+    "./render": "./dist/core/render/index.js",
+    "./config": "./dist/core/config.js",
+    "./types": "./dist/core/types.js"
   },
   "files": [
-    "bin",
-    "cli",
-    "core",
+    "dist",
     "README.md",
     "LICENSE"
   ],
@@ -28,6 +26,7 @@
     "dev": "npx tsx cli/index.ts dev",
     "build": "npx tsx cli/index.ts build",
     "start": "npx tsx cli/index.ts start",
+    "build:package": "tsup",
     "typecheck": "tsc --noEmit -p core/tsconfig.json"
   },
   "keywords": [
@@ -68,6 +67,7 @@
     "@types/prompts": "^2.4.9",
     "@types/react": "^18.3.14",
     "@types/react-dom": "^18.3.2",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5.7.2"
   },
