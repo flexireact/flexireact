@@ -44,7 +44,7 @@ const log = {
   success: (msg: string) => console.log(`${pc.green('✓')} ${msg}`),
   warn: (msg: string) => console.log(`${pc.yellow('⚠')} ${pc.yellow(msg)}`),
   error: (msg: string) => console.log(`${pc.red('✗')} ${pc.red(msg)}`),
-  step: (num: number, total: number, msg: string) => 
+  step: (num: number, total: number, msg: string) =>
     console.log(`${pc.dim(`[${num}/${total}]`)} ${msg}`),
   blank: () => console.log(''),
   divider: () => console.log(pc.dim('─'.repeat(60))),
@@ -75,17 +75,17 @@ function copyDirectory(src: string, dest: string): void {
 
 async function runCommand(cmd: string, cwd: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const child = spawn(cmd, { 
-      shell: true, 
-      cwd, 
-      stdio: 'pipe' 
+    const child = spawn(cmd, {
+      shell: true,
+      cwd,
+      stdio: 'pipe'
     });
-    
+
     child.on('close', (code) => {
       if (code === 0) resolve();
       else reject(new Error(`Command failed with code ${code}`));
     });
-    
+
     child.on('error', reject);
   });
 }
@@ -170,7 +170,7 @@ async function createProject(projectName?: string): Promise<void> {
   log.step(currentStep, totalSteps, 'Setting up project structure...');
   const templateName = options.template;
   const templatePath = path.resolve(__dirname, '..', 'templates', templateName);
-  
+
   if (fs.existsSync(templatePath)) {
     copyDirectory(templatePath, projectPath);
     log.success('Project structure created');
@@ -195,7 +195,7 @@ async function createProject(projectName?: string): Promise<void> {
   currentStep++;
   log.step(currentStep, totalSteps, 'Installing dependencies...');
   const spinner = ora({ text: 'Installing packages...', color: 'cyan' }).start();
-  
+
   try {
     await runCommand('npm install', projectPath);
     spinner.succeed('Dependencies installed');
@@ -208,7 +208,7 @@ async function createProject(projectName?: string): Promise<void> {
   currentStep++;
   log.step(currentStep, totalSteps, 'Linking FlexiReact...');
   const linkSpinner = ora({ text: 'Linking framework...', color: 'cyan' }).start();
-  
+
   try {
     const frameworkRoot = path.resolve(__dirname, '..');
     await runCommand(`npm link "${frameworkRoot}"`, projectPath);
@@ -229,17 +229,17 @@ async function createProject(projectName?: string): Promise<void> {
   log.blank();
   log.divider();
   log.blank();
-  
+
   console.log(`  ${pc.green('✨')} ${pc.bold('Success!')} Your FlexiReact app is ready.`);
   log.blank();
-  
+
   console.log(`  ${pc.dim('$')} ${pc.cyan(`cd ${name}`)}`);
   console.log(`  ${pc.dim('$')} ${pc.cyan('npm run dev')}`);
   log.blank();
-  
+
   console.log(`  ${pc.dim('Then open')} ${pc.cyan('http://localhost:3000')} ${pc.dim('in your browser.')}`);
   log.blank();
-  
+
   console.log(`  ${pc.dim('Documentation:')} ${pc.cyan('https://github.com/flexireact/flexireact')}`);
   log.blank();
 }
@@ -255,7 +255,7 @@ async function createDefaultTemplate(projectPath: string, name: string, useTypeS
     'pages/api',
     'public',
   ];
-  
+
   for (const dir of dirs) {
     fs.mkdirSync(path.join(projectPath, dir), { recursive: true });
   }
@@ -434,7 +434,7 @@ export default {
 
   // Create components
   await createComponents(projectPath, ext);
-  
+
   // Create pages
   await createPages(projectPath, ext);
 }
@@ -831,11 +831,18 @@ ${pc.cyan('   │')}                                         ${pc.cyan('│')}
 ${pc.cyan('   ╰─────────────────────────────────────────╯')}
 `);
 
-  const startDevPath = path.join(__dirname, '..', 'core', 'start-dev.ts');
+  // Determine if we are running from dist or source
+  const isBuilt = __dirname.includes('dist');
+  const ext = isBuilt ? 'js' : 'ts';
+  const startDevDir = isBuilt ? path.join(__dirname, '..', 'core') : path.join(__dirname, '..', 'core');
+  const startDevPath = path.join(startDevDir, `start-dev.${ext}`);
+
+  // Find tsx binary
+  const tsxBin = 'tsx'; // rely on dependency in node_modules
 
   const child = spawn(
     'npx',
-    ['tsx', startDevPath],
+    [tsxBin, startDevPath],
     {
       stdio: 'inherit',
       cwd: process.cwd(),
@@ -869,13 +876,17 @@ async function runBuild(options: { analyze?: boolean } = {}): Promise<void> {
   const spinner = ora({ text: 'Compiling...', color: 'cyan' }).start();
 
   try {
-    // Dynamic import of build module
-    const buildPath = path.join(__dirname, '..', 'core', 'build', 'index.js');
-    const configPath = path.join(__dirname, '..', 'core', 'config.js');
-    
+    // Determine if we are running from dist or source
+    const isBuilt = __dirname.includes('dist');
+    const ext = isBuilt ? 'js' : 'ts';
+    const coreDir = isBuilt ? path.join(__dirname, '..', 'core') : path.join(__dirname, '..', 'core');
+
+    const buildPath = path.join(coreDir, 'build', `index.${ext}`);
+    const configPath = path.join(coreDir, `config.${ext}`);
+
     const buildModule = await import(pathToFileURL(buildPath).href);
     const configModule = await import(pathToFileURL(configPath).href);
-    
+
     const projectRoot = process.cwd();
     const rawConfig = await configModule.loadConfig(projectRoot);
     const config = configModule.resolvePaths(rawConfig, projectRoot);
@@ -896,31 +907,31 @@ async function runBuild(options: { analyze?: boolean } = {}): Promise<void> {
       log.blank();
       log.info('📊 Bundle Analysis:');
       log.blank();
-      
+
       const analysis = result.analysis;
-      
+
       // Sort by size
       const sorted = Object.entries(analysis.files || {})
         .sort((a: any, b: any) => b[1].size - a[1].size);
-      
+
       console.log(pc.dim('  ─────────────────────────────────────────────────'));
       console.log(`  ${pc.bold('File')}${' '.repeat(35)}${pc.bold('Size')}`);
       console.log(pc.dim('  ─────────────────────────────────────────────────'));
-      
+
       for (const [file, info] of sorted.slice(0, 15) as any) {
         const name = file.length > 35 ? '...' + file.slice(-32) : file;
         const size = formatBytes(info.size);
         const gzip = info.gzipSize ? pc.dim(` (${formatBytes(info.gzipSize)} gzip)`) : '';
         console.log(`  ${name.padEnd(38)} ${pc.cyan(size)}${gzip}`);
       }
-      
+
       console.log(pc.dim('  ─────────────────────────────────────────────────'));
       console.log(`  ${pc.bold('Total:')}${' '.repeat(31)} ${pc.green(formatBytes(analysis.totalSize || 0))}`);
-      
+
       if (analysis.totalGzipSize) {
         console.log(`  ${pc.dim('Gzipped:')}${' '.repeat(29)} ${pc.dim(formatBytes(analysis.totalGzipSize))}`);
       }
-      
+
       log.blank();
     }
 
@@ -949,7 +960,10 @@ async function runStart(): Promise<void> {
   log.info('Starting production server...');
   log.blank();
 
-  const startProdPath = path.join(__dirname, '..', 'core', 'start-prod.ts');
+  // Determine if we are running from dist or source
+  const isBuilt = __dirname.includes('dist');
+  const ext = isBuilt ? 'js' : 'ts';
+  const startProdPath = path.join(__dirname, '..', 'core', `start-prod.${ext}`);
 
   const child = spawn(
     'npx',
@@ -1042,7 +1056,7 @@ async function runDoctor(): Promise<void> {
   for (const check of checks) {
     let icon: string;
     let color: (s: string) => string;
-    
+
     switch (check.status) {
       case 'pass':
         icon = '✓';
@@ -1062,12 +1076,12 @@ async function runDoctor(): Promise<void> {
         icon = '○';
         color = pc.cyan;
     }
-    
+
     console.log(`  ${color(icon)} ${check.name}: ${pc.dim(check.message)}`);
   }
 
   log.blank();
-  
+
   if (hasErrors) {
     log.error('Some checks failed. Please fix the issues above.');
   } else if (hasWarnings) {
@@ -1075,7 +1089,7 @@ async function runDoctor(): Promise<void> {
   } else {
     log.success('All checks passed! Your project is ready.');
   }
-  
+
   log.blank();
 }
 
@@ -1085,11 +1099,11 @@ async function runDoctor(): Promise<void> {
 
 function showHelp(): void {
   console.log(LOGO);
-  
+
   console.log(`  ${pc.bold('Usage:')}`);
   console.log(`    ${pc.cyan('flexi')} ${pc.dim('<command>')} ${pc.dim('[options]')}`);
   log.blank();
-  
+
   console.log(`  ${pc.bold('Commands:')}`);
   console.log(`    ${pc.cyan('create')} ${pc.dim('<name>')}       Create a new FlexiReact project`);
   console.log(`    ${pc.cyan('dev')}                  Start development server`);
@@ -1099,12 +1113,12 @@ function showHelp(): void {
   console.log(`    ${pc.cyan('doctor')}               Check project health`);
   console.log(`    ${pc.cyan('help')}                 Show this help message`);
   log.blank();
-  
+
   console.log(`  ${pc.bold('Generate Types:')}`);
   console.log(`    ${pc.dim('page, layout, component, hook, api, action, middleware, context')}`);
   console.log(`    ${pc.dim('loading, error, not-found')}`);
   log.blank();
-  
+
   console.log(`  ${pc.bold('Examples:')}`);
   console.log(`    ${pc.dim('$')} flexi create my-app`);
   console.log(`    ${pc.dim('$')} flexi dev`);

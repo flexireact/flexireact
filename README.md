@@ -14,8 +14,8 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@flexireact/core"><img src="https://img.shields.io/npm/v/@flexireact/core.svg?color=00FF9C" alt="npm version" /></a>
-  <a href="https://www.npmjs.com/package/@flexireact/core"><img src="https://img.shields.io/npm/dm/@flexireact/core.svg?color=00FF9C" alt="npm downloads" /></a>
+  <a href="https://www.npmjs.com/package/flexireact"><img src="https://img.shields.io/npm/v/flexireact.svg?color=00FF9C" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/flexireact"><img src="https://img.shields.io/npm/dm/flexireact.svg?color=00FF9C" alt="npm downloads" /></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-00FF9C.svg" alt="License: MIT" /></a>
   <a href="#"><img src="https://img.shields.io/badge/TypeScript-Native-blue.svg" alt="TypeScript Native" /></a>
 </p>
@@ -222,7 +222,7 @@ import { Button, Card, Input, Modal, Toast } from '@flexireact/flexi-ui';
 Built-in development tools (press `Ctrl+Shift+D`):
 
 ```tsx
-import { DevToolsOverlay } from '@flexireact/core';
+import { DevToolsOverlay } from 'flexireact';
 
 // In your layout
 {process.env.NODE_ENV === 'development' && <DevToolsOverlay />}
@@ -242,7 +242,7 @@ Features:
 Deploy anywhere with universal edge support:
 
 ```tsx
-import { createEdgeHandler, detectRuntime } from '@flexireact/core';
+import { createEdgeHandler, detectRuntime } from 'flexireact';
 
 // Automatic runtime detection
 const runtime = detectRuntime();
@@ -262,7 +262,7 @@ export default handler;
 ## ⚡ Smart Caching
 
 ```tsx
-import { smartCache } from '@flexireact/core';
+import { smartCache } from 'flexireact';
 
 const cache = smartCache({
   backend: 'auto', // auto-detect: memory, KV, Redis
@@ -287,7 +287,7 @@ await cache.invalidateTag('users');
 Static shell + streaming dynamic content:
 
 ```tsx
-import { withPPR, DynamicBoundary } from '@flexireact/core';
+import { withPPR, DynamicBoundary } from 'flexireact';
 
 export default withPPR(function Page() {
   return (
@@ -550,7 +550,7 @@ Call server functions directly from client components:
 ```tsx
 // actions.ts
 'use server';
-import { serverAction, redirect, cookies } from '@flexireact/core';
+import { serverAction, redirect, cookies } from 'flexireact';
 
 export const createUser = serverAction(async (formData: FormData) => {
   const name = formData.get('name') as string;
@@ -582,7 +582,7 @@ export function CreateUserForm() {
 Enhanced Link component with automatic prefetching:
 
 ```tsx
-import { Link } from '@flexireact/core/client';
+import { Link } from 'flexireact/client';
 
 // Prefetch on hover (default)
 <Link href="/about">About</Link>
@@ -594,7 +594,7 @@ import { Link } from '@flexireact/core/client';
 <Link href="/login" replace>Login</Link>
 
 // Programmatic navigation
-import { useRouter } from '@flexireact/core/client';
+import { useRouter } from 'flexireact/client';
 
 function MyComponent() {
   const router = useRouter();
@@ -612,7 +612,7 @@ function MyComponent() {
 Utility functions for server-side operations:
 
 ```tsx
-import { redirect, notFound, json, cookies, headers } from '@flexireact/core';
+import { redirect, notFound, json, cookies, headers } from 'flexireact';
 
 // Redirect
 redirect('/dashboard');
@@ -644,7 +644,7 @@ const securityHeaders = headers.security();
 Create `middleware.ts` in your project root:
 
 ```ts
-import { redirect, cookies } from '@flexireact/core';
+import { redirect, cookies } from 'flexireact';
 
 export default function middleware(request) {
   // Protect routes
@@ -796,7 +796,7 @@ Output:
 Progressive HTML rendering with React 18:
 
 ```tsx
-import { renderPageStream, streamToResponse } from '@flexireact/core';
+import { renderPageStream, streamToResponse } from 'flexireact';
 
 // In your server handler
 const { stream, shellReady } = await renderPageStream({
@@ -859,7 +859,7 @@ Islands provide partial hydration:
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [@flexireact/core](https://www.npmjs.com/package/@flexireact/core) | ![npm](https://img.shields.io/npm/v/@flexireact/core?color=00FF9C) | Core framework |
+| [flexireact](https://www.npmjs.com/package/flexireact) | ![npm](https://img.shields.io/npm/v/flexireact?color=00FF9C) | Core framework |
 | [@flexireact/flexi-ui](https://www.npmjs.com/package/@flexireact/flexi-ui) | ![npm](https://img.shields.io/npm/v/@flexireact/flexi-ui?color=00FF9C) | UI components |
 | [create-flexireact](https://www.npmjs.com/package/create-flexireact) | ![npm](https://img.shields.io/npm/v/create-flexireact?color=00FF9C) | Project scaffolding |
 
@@ -867,7 +867,7 @@ Islands provide partial hydration:
 
 - [GitHub Repository](https://github.com/flexireact/flexireact)
 - [FlexiUI Repository](https://github.com/flexireact/flexi-ui)
-- [npm Package](https://www.npmjs.com/package/@flexireact/core)
+- [npm Package](https://www.npmjs.com/package/flexireact)
 - [Discord Community](https://discord.gg/rFSZxFtpAA) 💬
 - [Issues](https://github.com/flexireact/flexireact/issues)
 

@@ -1,6 +1,6 @@
 {
-  "name": "@flexireact/core",
-  "version": "3.0.3",
+  "name": "flexireact",
+  "version": "3.0.4",
   "description": "The Modern React Framework v3 - SSR, SSG, Islands, Edge Runtime, 50+ UI Components, TypeScript, Tailwind v4",
   "main": "dist/core/index.js",
   "types": "dist/core/index.d.ts",
@@ -56,7 +56,8 @@
     "esbuild": "^0.25.0",
     "ora": "^8.1.1",
     "picocolors": "^1.1.1",
-    "prompts": "^2.4.2"
+    "prompts": "^2.4.2",
+    "tsx": "^4.21.0"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -68,7 +69,6 @@
     "@types/react": "^18.3.14",
     "@types/react-dom": "^18.3.2",
     "tsup": "^8.5.1",
-    "tsx": "^4.21.0",
     "typescript": "^5.7.2"
   },
   "engines": {
