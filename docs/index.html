@@ -53,11 +53,65 @@
         <a href="https://discord.gg/rFSZxFtpAA" target="_blank" class="text-sm text-primary hover:text-white transition">Discord 💬</a>
         <a href="https://github.com/flexireact/flexireact" target="_blank" class="text-sm text-gray-400 hover:text-white transition">GitHub</a>
       </nav>
-      <a href="https://github.com/flexireact/flexireact" target="_blank" class="px-4 py-2 bg-primary text-black text-sm font-semibold rounded-lg hover:bg-primary/90 transition">
-        ⭐ Star
-      </a>
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/flexireact/flexireact" target="_blank" class="hidden md:inline-block px-4 py-2 bg-primary text-black text-sm font-semibold rounded-lg hover:bg-primary/90 transition">
+          ⭐ Star
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-400 hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
     </div>
   </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden fixed inset-0 z-[100] bg-background/95 backdrop-blur-xl transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="flex flex-col h-full">
+      <div class="px-4 h-16 flex items-center justify-between border-b border-gray-800">
+        <span class="font-bold text-lg">Menu</span>
+        <button id="close-menu-btn" class="p-2 text-gray-400 hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto p-6">
+        <nav class="space-y-6">
+          <div class="space-y-3 border-b border-gray-800 pb-6">
+            <a href="index.html" class="block text-lg font-medium text-white">Home</a>
+            <a href="routing.html" class="block text-lg font-medium text-gray-400">Routing</a>
+            <a href="layouts.html" class="block text-lg font-medium text-gray-400">Layouts</a>
+            <a href="data-fetching.html" class="block text-lg font-medium text-gray-400">Data Fetching</a>
+            <a href="server-actions.html" class="block text-lg font-medium text-gray-400">Server Actions</a>
+          </div>
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Getting Started</h3>
+              <ul class="space-y-2">
+                <li><a href="index.html#introduction" class="block text-sm text-gray-400 hover:text-white">Introduction</a></li>
+                <li><a href="index.html#installation" class="block text-sm text-gray-400 hover:text-white">Installation</a></li>
+                <li><a href="index.html#project-structure" class="block text-sm text-gray-400 hover:text-white">Project Structure</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Core Concepts</h3>
+              <ul class="space-y-2">
+                <li><a href="routing.html" class="block text-sm text-gray-400 hover:text-white">Routing</a></li>
+                <li><a href="layouts.html" class="block text-sm text-gray-400 hover:text-white">Layouts</a></li>
+                <li><a href="data-fetching.html" class="block text-sm text-gray-400 hover:text-white">Data Fetching</a></li>
+                <li><a href="server-actions.html" class="block text-sm text-gray-400 hover:text-white">Server Actions</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Community</h3>
+              <ul class="space-y-2">
+                <li><a href="https://discord.gg/rFSZxFtpAA" target="_blank" class="block text-sm text-gray-400 hover:text-white">Discord</a></li>
+                <li><a href="https://github.com/flexireact/flexireact" target="_blank" class="block text-sm text-gray-400 hover:text-white">GitHub</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
 
   <div class="flex pt-16">
     <!-- Sidebar -->
@@ -423,6 +477,39 @@ export default handler;</code></pre>
       btn.textContent = 'Copied!';
       setTimeout(() => btn.textContent = 'Copy', 2000);
     }
+
+    // Mobile Menu
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    function toggleMenu() {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        // Small delay to allow display:block to apply before opacity transition
+        setTimeout(() => {
+          mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+        }, 10);
+        document.body.style.overflow = 'hidden';
+      } else {
+        mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+          mobileMenu.classList.add('hidden');
+        }, 300);
+        document.body.style.overflow = '';
+      }
+    }
+
+    mobileMenuBtn.addEventListener('click', toggleMenu);
+    closeMenuBtn.addEventListener('click', toggleMenu);
+
+    // Close menu when clicking links
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        toggleMenu();
+      });
+    });
   </script>
 </body>
 </html>

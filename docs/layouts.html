@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Layouts - FlexiReact v3 Documentation</title>
   <meta name="description" content="Learn about layouts and nested layouts in FlexiReact v3">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text x='50' y='68' font-family='system-ui' font-size='50' font-weight='900' fill='%2300FF9C' text-anchor='middle'>F</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text x='50' y='68' font-family='system-ui' font-size='50' font-weight='900' fill='%2300FF9C' text-anchor='middle'>F</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -23,12 +25,28 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    .gradient-text { background: linear-gradient(135deg, #00FF9C 0%, #00D68F 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    pre { background: #111 !important; }
-    code { font-family: 'Fira Code', monospace; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #00FF9C 0%, #00D68F 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    pre {
+      background: #111 !important;
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+    }
   </style>
 </head>
+
 <body class="bg-background text-white min-h-screen">
   <!-- Header -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-gray-800">
@@ -45,10 +63,73 @@
         <a href="routing.html" class="text-sm text-gray-400 hover:text-white transition">Routing</a>
         <a href="layouts.html" class="text-sm text-primary">Layouts</a>
         <a href="data-fetching.html" class="text-sm text-gray-400 hover:text-white transition">Data Fetching</a>
-        <a href="https://github.com/flexireact/flexireact" target="_blank" class="text-sm text-gray-400 hover:text-white transition">GitHub</a>
+        <a href="https://github.com/flexireact/flexireact" target="_blank"
+          class="text-sm text-gray-400 hover:text-white transition">GitHub</a>
       </nav>
+      <div class="flex items-center gap-4">
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-400 hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
     </div>
   </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu"
+    class="hidden fixed inset-0 z-[100] bg-background/95 backdrop-blur-xl transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="flex flex-col h-full">
+      <div class="px-4 h-16 flex items-center justify-between border-b border-gray-800">
+        <span class="font-bold text-lg">Menu</span>
+        <button id="close-menu-btn" class="p-2 text-gray-400 hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto p-6">
+        <nav class="space-y-6">
+          <div class="space-y-3 border-b border-gray-800 pb-6">
+            <a href="index.html" class="block text-lg font-medium text-gray-400">Home</a>
+            <a href="routing.html" class="block text-lg font-medium text-gray-400">Routing</a>
+            <a href="layouts.html" class="block text-lg font-medium text-white">Layouts</a>
+            <a href="data-fetching.html" class="block text-lg font-medium text-gray-400">Data Fetching</a>
+            <a href="server-actions.html" class="block text-lg font-medium text-gray-400">Server Actions</a>
+          </div>
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Getting Started</h3>
+              <ul class="space-y-2">
+                <li><a href="index.html#introduction"
+                    class="block text-sm text-gray-400 hover:text-white">Introduction</a></li>
+                <li><a href="index.html#installation"
+                    class="block text-sm text-gray-400 hover:text-white">Installation</a></li>
+                <li><a href="index.html#project-structure" class="block text-sm text-gray-400 hover:text-white">Project
+                    Structure</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Core Concepts</h3>
+              <ul class="space-y-2">
+                <li><a href="routing.html" class="block text-sm text-gray-400 hover:text-white">Routing</a></li>
+                <li><a href="layouts.html" class="block text-sm text-gray-400 hover:text-white">Layouts</a></li>
+                <li><a href="data-fetching.html" class="block text-sm text-gray-400 hover:text-white">Data Fetching</a>
+                </li>
+                <li><a href="server-actions.html" class="block text-sm text-gray-400 hover:text-white">Server
+                    Actions</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
 
   <div class="pt-16">
     <main class="max-w-4xl mx-auto px-4 py-16">
@@ -68,7 +149,7 @@
         <p class="text-gray-400 mb-6">
           The root layout is required and wraps all pages in your application.
         </p>
-        
+
         <div class="rounded-xl bg-[#111] border border-gray-800 overflow-hidden mb-6">
           <div class="px-4 py-3 bg-[#0d0d0d] border-b border-gray-800">
             <span class="text-sm font-semibold">app/layout.tsx</span>
@@ -102,7 +183,8 @@ export default function RootLayout({
             <span class="text-yellow-400 text-xl">⚠️</span>
             <div>
               <h4 class="font-semibold text-yellow-400 mb-1">Important</h4>
-              <p class="text-sm text-gray-400">The root layout must include <code class="text-primary">&lt;html&gt;</code> and <code class="text-primary">&lt;body&gt;</code> tags.</p>
+              <p class="text-sm text-gray-400">The root layout must include <code
+                  class="text-primary">&lt;html&gt;</code> and <code class="text-primary">&lt;body&gt;</code> tags.</p>
             </div>
           </div>
         </div>
@@ -114,7 +196,7 @@ export default function RootLayout({
         <p class="text-gray-400 mb-6">
           Create layouts for specific route segments that inherit from parent layouts.
         </p>
-        
+
         <div class="rounded-xl bg-[#111] border border-gray-800 overflow-hidden mb-6">
           <div class="px-4 py-3 bg-[#0d0d0d] border-b border-gray-800">
             <span class="text-sm font-semibold">app/dashboard/layout.tsx</span>
@@ -157,7 +239,9 @@ export default function DashboardLayout({
             <span class="text-blue-400 text-xl">ℹ️</span>
             <div>
               <h4 class="font-semibold text-blue-400 mb-1">Layout Nesting</h4>
-              <p class="text-sm text-gray-400">Layouts nest automatically. The <code class="text-primary">/dashboard/settings</code> page will be wrapped by both the root layout and dashboard layout.</p>
+              <p class="text-sm text-gray-400">Layouts nest automatically. The <code
+                  class="text-primary">/dashboard/settings</code> page will be wrapped by both the root layout and
+                dashboard layout.</p>
             </div>
           </div>
         </div>
@@ -169,7 +253,7 @@ export default function DashboardLayout({
         <p class="text-gray-400 mb-6">
           Templates are similar to layouts but create a new instance on each navigation.
         </p>
-        
+
         <div class="rounded-xl bg-[#111] border border-gray-800 overflow-hidden mb-6">
           <div class="px-4 py-3 bg-[#0d0d0d] border-b border-gray-800">
             <span class="text-sm font-semibold">app/template.tsx</span>
@@ -215,7 +299,7 @@ export default function Template({
         <p class="text-gray-400 mb-6">
           Define metadata for SEO in layouts and pages.
         </p>
-        
+
         <div class="rounded-xl bg-[#111] border border-gray-800 overflow-hidden mb-6">
           <div class="px-4 py-3 bg-[#0d0d0d] border-b border-gray-800">
             <span class="text-sm font-semibold">Static Metadata</span>
@@ -256,7 +340,7 @@ export default function Template({
         <p class="text-gray-400 mb-6">
           Create instant loading states with <code class="text-primary">loading.tsx</code>.
         </p>
-        
+
         <div class="rounded-xl bg-[#111] border border-gray-800 overflow-hidden mb-6">
           <div class="px-4 py-3 bg-[#0d0d0d] border-b border-gray-800">
             <span class="text-sm font-semibold">app/dashboard/loading.tsx</span>
@@ -275,7 +359,8 @@ export default function Template({
             <span class="text-blue-400 text-xl">ℹ️</span>
             <div>
               <h4 class="font-semibold text-blue-400 mb-1">Automatic Suspense</h4>
-              <p class="text-sm text-gray-400">FlexiReact automatically wraps your page in a Suspense boundary with the loading UI as fallback.</p>
+              <p class="text-sm text-gray-400">FlexiReact automatically wraps your page in a Suspense boundary with the
+                loading UI as fallback.</p>
             </div>
           </div>
         </div>
@@ -287,7 +372,7 @@ export default function Template({
         <p class="text-gray-400 mb-6">
           Handle errors gracefully with <code class="text-primary">error.tsx</code>.
         </p>
-        
+
         <div class="rounded-xl bg-[#111] border border-gray-800 overflow-hidden mb-6">
           <div class="px-4 py-3 bg-[#0d0d0d] border-b border-gray-800">
             <span class="text-sm font-semibold">app/dashboard/error.tsx</span>
@@ -322,7 +407,7 @@ export default function Error({
         <p class="text-gray-400 mb-6">
           Create custom 404 pages with <code class="text-primary">not-found.tsx</code>.
         </p>
-        
+
         <div class="rounded-xl bg-[#111] border border-gray-800 overflow-hidden mb-6">
           <div class="px-4 py-3 bg-[#0d0d0d] border-b border-gray-800">
             <span class="text-sm font-semibold">app/not-found.tsx</span>
@@ -348,11 +433,13 @@ export default function NotFound() {
       <section class="mb-16">
         <h2 class="text-3xl font-bold mb-6">Next Steps</h2>
         <div class="grid md:grid-cols-2 gap-4">
-          <a href="data-fetching.html" class="group p-6 rounded-xl bg-gradient-to-b from-white/5 to-transparent border border-white/5 hover:border-primary/30 transition-all">
+          <a href="data-fetching.html"
+            class="group p-6 rounded-xl bg-gradient-to-b from-white/5 to-transparent border border-white/5 hover:border-primary/30 transition-all">
             <h3 class="font-semibold text-lg mb-2 group-hover:text-primary transition">Data Fetching →</h3>
             <p class="text-gray-400 text-sm">Learn how to fetch data in FlexiReact</p>
           </a>
-          <a href="server-actions.html" class="group p-6 rounded-xl bg-gradient-to-b from-white/5 to-transparent border border-white/5 hover:border-primary/30 transition-all">
+          <a href="server-actions.html"
+            class="group p-6 rounded-xl bg-gradient-to-b from-white/5 to-transparent border border-white/5 hover:border-primary/30 transition-all">
             <h3 class="font-semibold text-lg mb-2 group-hover:text-primary transition">Server Actions →</h3>
             <p class="text-gray-400 text-sm">Mutate data with server actions</p>
           </a>
@@ -377,5 +464,39 @@ export default function NotFound() {
       </div>
     </footer>
   </div>
+  </div>
+  <script>
+    // Mobile Menu
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    function toggleMenu() {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        setTimeout(() => {
+          mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+        }, 10);
+        document.body.style.overflow = 'hidden';
+      } else {
+        mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+          mobileMenu.classList.add('hidden');
+        }, 300);
+        document.body.style.overflow = '';
+      }
+    }
+
+    mobileMenuBtn.addEventListener('click', toggleMenu);
+    closeMenuBtn.addEventListener('click', toggleMenu);
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        toggleMenu();
+      });
+    });
+  </script>
 </body>
+
 </html>

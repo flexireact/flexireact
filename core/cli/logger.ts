@@ -72,28 +72,28 @@ interface BoxOptions {
 }
 
 function createBox(content: string, options: BoxOptions = {}) {
-  const { 
-    padding = 1, 
+  const {
+    padding = 1,
     borderColor = colors.primary,
-    width = 50 
+    width = 50
   } = options;
-  
+
   const lines = content.split('\n');
   const maxLen = Math.max(...lines.map(l => stripAnsi(l).length), width - 4);
   const innerWidth = maxLen + (padding * 2);
-  
+
   const top = borderColor(box.topLeft + box.horizontal.repeat(innerWidth) + box.topRight);
   const bottom = borderColor(box.bottomLeft + box.horizontal.repeat(innerWidth) + box.bottomRight);
   const empty = borderColor(box.vertical) + ' '.repeat(innerWidth) + borderColor(box.vertical);
-  
+
   const contentLines = lines.map(line => {
     const stripped = stripAnsi(line);
     const pad = innerWidth - stripped.length - padding;
     return borderColor(box.vertical) + ' '.repeat(padding) + line + ' '.repeat(Math.max(0, pad)) + borderColor(box.vertical);
   });
-  
+
   const paddingLines = padding > 0 ? [empty] : [];
-  
+
   return [top, ...paddingLines, ...contentLines, ...paddingLines, bottom].join('\n');
 }
 
@@ -119,7 +119,7 @@ ${pc.cyan('   ╰─────────────────────
 
   // Compact banner
   compact: `
-  ${pc.green('⚡')} ${pc.bold('FlexiReact')} ${pc.dim('v2.1.0')}
+  ${pc.green('⚡')} ${pc.bold('FlexiReact')} ${pc.dim('v3.0.3')}
 `,
 
   // Build banner
@@ -146,7 +146,7 @@ function serverPanel(config) {
 
   const modeColor = mode === 'development' ? colors.warning : colors.success;
   const url = `http://${host}:${port}`;
-  
+
   console.log('');
   console.log(pc.dim('   ─────────────────────────────────────────'));
   console.log(`   ${icons.arrow} ${pc.dim('Mode:')}    ${modeColor(mode)}`);
@@ -168,7 +168,7 @@ function pluginLoader(plugins = []) {
   console.log('');
   console.log(`${icons.package} ${pc.bold('Loading plugins...')}`);
   console.log('');
-  
+
   if (plugins.length === 0) {
     console.log(`   ${pc.dim('No plugins configured')}`);
   } else {
@@ -176,7 +176,7 @@ function pluginLoader(plugins = []) {
       console.log(`   ${icons.check} ${pc.white(plugin.name)} ${pc.dim(`v${plugin.version || '1.0.0'}`)}`);
     });
   }
-  
+
   console.log('');
   console.log(`   ${pc.dim('Total plugins:')} ${pc.white(plugins.length)}`);
   console.log('');
@@ -188,7 +188,7 @@ function pluginLoader(plugins = []) {
 
 function request(method: string, path: string, statusCode: number, duration: number, options: { type?: string } = {}) {
   const { type = 'dynamic' } = options;
-  
+
   // Method colors
   const methodColors = {
     GET: pc.green,
@@ -197,7 +197,7 @@ function request(method: string, path: string, statusCode: number, duration: num
     DELETE: pc.red,
     PATCH: pc.magenta,
   };
-  
+
   // Type badges
   const typeBadges = {
     ssr: `${pc.yellow('[SSR]')}`,
@@ -208,19 +208,19 @@ function request(method: string, path: string, statusCode: number, duration: num
     asset: `${pc.dim('[AST]')}`,
     dynamic: `${pc.yellow('[SSR]')}`,
   };
-  
+
   // Status colors
   const statusColor = statusCode >= 500 ? pc.red :
-                      statusCode >= 400 ? pc.yellow :
-                      statusCode >= 300 ? pc.cyan :
-                      pc.green;
-  
+    statusCode >= 400 ? pc.yellow :
+      statusCode >= 300 ? pc.cyan :
+        pc.green;
+
   const methodColor = methodColors[method] || pc.white;
   const badge = typeBadges[type] || typeBadges.dynamic;
   const durationStr = duration < 100 ? pc.green(`${duration}ms`) :
-                      duration < 500 ? pc.yellow(`${duration}ms`) :
-                      pc.red(`${duration}ms`);
-  
+    duration < 500 ? pc.yellow(`${duration}ms`) :
+      pc.red(`${duration}ms`);
+
   console.log(`   ${methodColor(method.padEnd(6))} ${pc.white(path)}`);
   console.log(`   ${pc.dim('└─')} ${badge} ${statusColor(statusCode)} ${pc.dim('(')}${durationStr}${pc.dim(')')}`);
 }
@@ -236,13 +236,13 @@ function error(title, message, stack = null, suggestions = []) {
   console.log(pc.red('   ├─────────────────────────────────────────────────────────┤'));
   console.log(pc.red('   │') + ` ${pc.white(title.substring(0, 55).padEnd(55))} ` + pc.red('│'));
   console.log(pc.red('   │') + ' '.repeat(57) + pc.red('│'));
-  
+
   // Message lines
   const msgLines = message.split('\n').slice(0, 3);
   msgLines.forEach(line => {
     console.log(pc.red('   │') + ` ${pc.dim(line.substring(0, 55).padEnd(55))} ` + pc.red('│'));
   });
-  
+
   if (suggestions.length > 0) {
     console.log(pc.red('   │') + ' '.repeat(57) + pc.red('│'));
     console.log(pc.red('   │') + ` ${pc.cyan('Suggestions:')}                                          ` + pc.red('│'));
@@ -250,7 +250,7 @@ function error(title, message, stack = null, suggestions = []) {
       console.log(pc.red('   │') + ` ${pc.dim('→')} ${pc.white(s.substring(0, 52).padEnd(52))} ` + pc.red('│'));
     });
   }
-  
+
   console.log(pc.red('   ╰─────────────────────────────────────────────────────────╯'));
   console.log('');
 }
@@ -286,7 +286,7 @@ function buildStep(step, total, message) {
 
 function buildComplete(stats) {
   const { duration, pages, size } = stats;
-  
+
   console.log('');
   console.log(pc.green('   ╭─────────────────────────────────────────╮'));
   console.log(pc.green('   │') + ` ${pc.green(pc.bold('✓ Build completed successfully!'))}        ` + pc.green('│'));
@@ -322,29 +322,29 @@ export const logger = {
   // Banners
   banner: () => console.log(banners.main),
   bannerCompact: () => console.log(banners.compact),
-  
+
   // Panels
   serverPanel,
   pluginLoader,
-  
+
   // Logging
   request,
   error,
   warning,
   info,
   success,
-  
+
   // Build
   buildStart,
   buildStep,
   buildComplete,
-  
+
   // Utilities
   divider,
   blank,
   clear,
   createBox,
-  
+
   // Colors & Icons
   colors,
   icons,
