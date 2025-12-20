@@ -19,5 +19,4 @@ export default defineConfig({
   platform: 'node',
   splitting: false,
   shims: true,
-  shims: true,
 });

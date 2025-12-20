@@ -136,5 +136,5 @@ Pour utiliser les nouveaux templates:
 ---
 
 **Version**: 3.0.1  
-**Date**: Décembre 2024  
+**Date**: Décembre 2025 
 **Status**: ✅ Production Ready
