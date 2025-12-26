@@ -1,35 +1,41 @@
 /**
  * FlexiReact Server Actions
  * 
- * Server Actions allow you to define server-side functions that can be called
- * directly from client components. They are automatically serialized and executed
- * on the server.
+ * React 19 native actions with FlexiReact enhancements.
  * 
  * Usage:
  * ```tsx
  * // In a server file (actions.ts)
  * 'use server';
  * 
- * export async function createUser(formData: FormData) {
+ * export async function createUser(prevState: any, formData: FormData) {
  *   const name = formData.get('name');
  *   // Save to database...
  *   return { success: true, id: 123 };
  * }
  * 
- * // In a client component
+ * // In a client component - React 19 style
  * 'use client';
+ * import { useActionState } from '@flexireact/core';
  * import { createUser } from './actions';
  * 
  * function Form() {
+ *   const [state, formAction, isPending] = useActionState(createUser, null);
  *   return (
- *     <form action={createUser}>
+ *     <form action={formAction}>
  *       <input name="name" />
- *       <button type="submit">Create</button>
+ *       <button type="submit" disabled={isPending}>Create</button>
  *     </form>
  *   );
  * }
  * ```
  */
+
+// ============================================================================
+// React 19 Hooks (re-exported for convenience)
+// ============================================================================
+export { useActionState, useOptimistic } from 'react';
+export { useFormStatus } from 'react-dom';
 
 import { cookies, headers, redirect, notFound, RedirectError, NotFoundError } from '../helpers.js';
 
@@ -67,26 +73,26 @@ export function serverAction<T extends ServerActionFunction>(
   actionId?: string
 ): T {
   const id = actionId || `action_${fn.name}_${generateActionId()}`;
-  
+
   // Register the action
   globalThis.__FLEXI_ACTIONS__[id] = fn;
-  
+
   // Create a proxy that will be serialized for the client
   const proxy = (async (...args: any[]) => {
     // If we're on the server, execute directly
     if (typeof window === 'undefined') {
       return await executeAction(id, args);
     }
-    
+
     // If we're on the client, make a fetch request
     return await callServerAction(id, args);
   }) as T;
-  
+
   // Mark as server action
   (proxy as any).$$typeof = Symbol.for('react.server.action');
   (proxy as any).$$id = id;
   (proxy as any).$$bound = null;
-  
+
   return proxy;
 }
 
@@ -113,14 +119,14 @@ export async function executeAction(
   context?: Partial<ActionContext>
 ): Promise<ActionResult> {
   const action = globalThis.__FLEXI_ACTIONS__[actionId];
-  
+
   if (!action) {
     return {
       success: false,
       error: `Server action not found: ${actionId}`
     };
   }
-  
+
   // Set up action context
   const actionContext: ActionContext = {
     request: context?.request || new Request('http://localhost'),
@@ -129,12 +135,12 @@ export async function executeAction(
     redirect,
     notFound
   };
-  
+
   globalThis.__FLEXI_ACTION_CONTEXT__ = actionContext;
-  
+
   try {
     const result = await action(...args);
-    
+
     return {
       success: true,
       data: result
@@ -147,7 +153,7 @@ export async function executeAction(
         redirect: error.url
       };
     }
-    
+
     // Handle not found
     if (error instanceof NotFoundError) {
       return {
@@ -155,7 +161,7 @@ export async function executeAction(
         error: 'Not found'
       };
     }
-    
+
     return {
       success: false,
       error: error.message || 'Action failed'
@@ -185,19 +191,19 @@ export async function callServerAction(
       }),
       credentials: 'same-origin'
     });
-    
+
     if (!response.ok) {
       throw new Error(`Action failed: ${response.statusText}`);
     }
-    
+
     const result = await response.json();
-    
+
     // Handle redirect
     if (result.redirect) {
       window.location.href = result.redirect;
       return result;
     }
-    
+
     return result;
   } catch (error: any) {
     return {
@@ -229,22 +235,22 @@ function serializeArgs(args: any[]): any[] {
       });
       return { $$type: 'FormData', data: obj };
     }
-    
+
     // Handle File
     if (typeof File !== 'undefined' && arg instanceof File) {
       return { $$type: 'File', name: arg.name, type: arg.type, size: arg.size };
     }
-    
+
     // Handle Date
     if (arg instanceof Date) {
       return { $$type: 'Date', value: arg.toISOString() };
     }
-    
+
     // Handle regular objects
     if (typeof arg === 'object' && arg !== null) {
       return JSON.parse(JSON.stringify(arg));
     }
-    
+
     return arg;
   });
 }
@@ -267,13 +273,13 @@ export function deserializeArgs(args: any[]): any[] {
         }
         return formData;
       }
-      
+
       // Handle Date
       if (arg.$$type === 'Date') {
         return new Date(arg.value);
       }
     }
-    
+
     return arg;
   });
 }
@@ -313,17 +319,50 @@ export function formAction<T>(
 }
 
 /**
- * useFormState hook for progressive enhancement
- * Works with server actions and provides loading/error states
+ * Enhanced action state hook with FlexiReact context integration
+ * Wraps React 19's useActionState with additional features
+ * 
+ * @example
+ * ```tsx
+ * const [state, dispatch, isPending] = useFlexiAction(submitForm, { errors: [] });
+ * ```
+ */
+import { useActionState as useActionStateReact } from 'react';
+
+export function useFlexiAction<State, Payload>(
+  action: (state: Awaited<State>, payload: Payload) => State | Promise<State>,
+  initialState: Awaited<State>,
+  permalink?: string
+): [state: Awaited<State>, dispatch: (payload: Payload) => void, isPending: boolean] {
+  return useActionStateReact(action, initialState, permalink);
+}
+
+/**
+ * @deprecated Since v3.1 - Use `useActionState` from React 19 instead.
+ * This function will be removed in v4.0.
+ * 
+ * Migration:
+ * ```tsx
+ * // Before (React 18)
+ * const formState = createFormState(submitAction, null);
+ * 
+ * // After (React 19)
+ * const [state, formAction, isPending] = useActionState(submitAction, null);
+ * ```
  */
 export function createFormState<T>(
   action: (formData: FormData) => Promise<ActionResult<T>>,
   initialState: T | null = null
 ) {
+  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+    console.warn(
+      '[FlexiReact] createFormState is deprecated. Use useActionState from React 19 instead.\n' +
+      'See migration guide: https://flexireact.dev/docs/react-19-migration'
+    );
+  }
   return {
     action,
     initialState,
-    // This will be enhanced on the client
     pending: false,
     error: null as string | null,
     data: initialState
@@ -341,12 +380,12 @@ export function bindArgs<T extends ServerActionFunction>(
   const boundAction = (async (...args: any[]) => {
     return await (action as any)(...boundArgs, ...args);
   }) as T;
-  
+
   // Copy action metadata
   (boundAction as any).$$typeof = (action as any).$$typeof;
   (boundAction as any).$$id = (action as any).$$id;
   (boundAction as any).$$bound = boundArgs;
-  
+
   return boundAction;
 }
 
@@ -359,6 +398,7 @@ export default {
   deserializeArgs,
   useActionContext,
   formAction,
-  createFormState,
+  createFormState, // deprecated
+  useFlexiAction,
   bindArgs
 };

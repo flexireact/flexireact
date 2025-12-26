@@ -18,10 +18,11 @@ declare global {
 
 /**
  * Hydrates a specific island component
+ * React 19: Uses built-in hydration error recovery
  */
 export function hydrateIsland(islandId, Component, props) {
   const element = document.querySelector(`[data-island="${islandId}"]`);
-  
+
   if (!element) {
     console.warn(`Island element not found: ${islandId}`);
     return;
@@ -31,26 +32,23 @@ export function hydrateIsland(islandId, Component, props) {
     return; // Already hydrated
   }
 
-  try {
-    hydrateRoot(element, React.createElement(Component, props));
-    element.setAttribute('data-hydrated', 'true');
-    
-    // Dispatch custom event
-    element.dispatchEvent(new CustomEvent('flexi:hydrated', {
-      bubbles: true,
-      detail: { islandId, props }
-    }));
-  } catch (error) {
-    console.error(`Failed to hydrate island ${islandId}:`, error);
-    
-    // Fallback: try full render instead of hydration
-    try {
-      createRoot(element).render(React.createElement(Component, props));
-      element.setAttribute('data-hydrated', 'true');
-    } catch (fallbackError) {
-      console.error(`Fallback render also failed for ${islandId}:`, fallbackError);
+  // React 19: Built-in hydration error recovery
+  hydrateRoot(element, React.createElement(Component, props), {
+    onRecoverableError: (error, errorInfo) => {
+      console.warn(`[FlexiReact] Hydration mismatch in ${islandId}:`, error);
+      if (process.env.NODE_ENV === 'development') {
+        console.debug('Component stack:', errorInfo.componentStack);
+      }
     }
-  }
+  });
+
+  element.setAttribute('data-hydrated', 'true');
+
+  // Dispatch custom event
+  element.dispatchEvent(new CustomEvent('flexi:hydrated', {
+    bubbles: true,
+    detail: { islandId, props }
+  }));
 }
 
 /**
@@ -58,7 +56,7 @@ export function hydrateIsland(islandId, Component, props) {
  */
 export function hydrateApp(App, props = {}) {
   const root = document.getElementById('root');
-  
+
   if (!root) {
     console.error('Root element not found');
     return;
@@ -81,18 +79,18 @@ export function hydrateApp(App, props = {}) {
  */
 export async function hydrateAllIslands(islandModules) {
   const islands = document.querySelectorAll('[data-island]');
-  
+
   for (const element of islands) {
     if (element.hasAttribute('data-hydrated')) continue;
-    
+
     const islandId = element.getAttribute('data-island');
     const islandName = element.getAttribute('data-island-name');
     const propsJson = element.getAttribute('data-island-props');
-    
+
     try {
       const props = propsJson ? JSON.parse(propsJson) : {};
       const module = islandModules[islandName];
-      
+
       if (module) {
         hydrateIsland(islandId, module.default || module, props);
       }
@@ -110,18 +108,18 @@ export function setupProgressiveHydration(islandModules) {
     (entries) => {
       entries.forEach(async (entry) => {
         if (!entry.isIntersecting) return;
-        
+
         const element = entry.target;
         if (element.hasAttribute('data-hydrated')) return;
-        
+
         const islandName = element.getAttribute('data-island-name');
         const islandId = element.getAttribute('data-island');
         const propsJson = element.getAttribute('data-island-props');
-        
+
         try {
           const props = propsJson ? JSON.parse(propsJson) : {};
           const module = await islandModules[islandName]();
-          
+
           hydrateIsland(islandId, module.default || module, props);
           observer.unobserve(element);
         } catch (error) {

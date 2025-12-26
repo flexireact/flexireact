@@ -156,7 +156,7 @@ export default function HomePage() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00FF9C] opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00FF9C]"></span>
           </span>
-          <span className="text-gray-400">Introducing FlexiReact v3.0</span>
+          <span className="text-gray-400">Introducing FlexiReact v4.0</span>
         </div>
 
         {/* Heading */}

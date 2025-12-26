@@ -5,7 +5,7 @@
  * Supports multiple routing conventions:
  * - pages/     : Traditional file-based routing (index.tsx, about.tsx)
  * - app/       : Next.js style App Router (page.tsx, layout.tsx)
- * - routes/    : FlexiReact v2 routes directory (home.tsx → /, [slug].tsx → /:slug)
+ * - routes/    : FlexiReact v4 routes directory (home.tsx → /, [slug].tsx → /:slug)
  */
 
 import fs from 'fs';
@@ -29,7 +29,7 @@ export const RouteType = {
  */
 export function buildRouteTree(pagesDir, layoutsDir, appDir = null, routesDir = null) {
   const projectRoot = path.dirname(pagesDir);
-  
+
   const routes: {
     pages: any[];
     api: any[];
@@ -44,10 +44,10 @@ export function buildRouteTree(pagesDir, layoutsDir, appDir = null, routesDir = 
     layouts: new Map(),
     tree: {},
     appRoutes: [],    // Next.js style app router routes
-    flexiRoutes: []   // FlexiReact v2 routes/ directory
+    flexiRoutes: []   // FlexiReact v4 routes/ directory
   };
 
-  // 1. Scan routes/ directory (FlexiReact v2 - priority)
+  // 1. Scan routes/ directory (FlexiReact v4 - priority)
   const routesDirPath = routesDir || path.join(projectRoot, 'routes');
   if (fs.existsSync(routesDirPath)) {
     scanRoutesDirectory(routesDirPath, routesDirPath, routes);
@@ -63,7 +63,7 @@ export function buildRouteTree(pagesDir, layoutsDir, appDir = null, routesDir = 
   if (fs.existsSync(pagesDir)) {
     scanDirectory(pagesDir, pagesDir, routes);
   }
-  
+
   // 4. Scan layouts/ directory
   if (fs.existsSync(layoutsDir)) {
     scanLayouts(layoutsDir, routes.layouts);
@@ -85,7 +85,7 @@ export function buildRouteTree(pagesDir, layoutsDir, appDir = null, routesDir = 
 }
 
 /**
- * Scans routes/ directory for FlexiReact v2 style routing
+ * Scans routes/ directory for FlexiReact v4 style routing
  * 
  * Convention:
  * - home.tsx → /
@@ -98,33 +98,33 @@ export function buildRouteTree(pagesDir, layoutsDir, appDir = null, routesDir = 
  */
 function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], parentLayout = null, parentMiddleware = null) {
   const entries = fs.readdirSync(currentDir, { withFileTypes: true });
-  
+
   // Find special files in current directory
   let layoutFile = null;
   let loadingFile = null;
   let errorFile = null;
   let middlewareFile = null;
-  
+
   for (const entry of entries) {
     if (entry.isFile()) {
       const name = entry.name.replace(/\.(jsx|js|tsx|ts)$/, '');
       const fullPath = path.join(currentDir, entry.name);
       const ext = path.extname(entry.name);
-      
+
       // Special files
       if (name === 'layout') layoutFile = fullPath;
       if (name === 'loading') loadingFile = fullPath;
       if (name === 'error') errorFile = fullPath;
       if (name === '_middleware' || name === 'middleware') middlewareFile = fullPath;
-      
+
       // Skip special files and non-route files
       if (['layout', 'loading', 'error', 'not-found', '_middleware', 'middleware'].includes(name)) continue;
       if (!['.tsx', '.jsx', '.ts', '.js'].includes(ext)) continue;
-      
+
       // API routes (in api/ folder or .ts/.js files in api/)
       const relativePath = path.relative(baseDir, currentDir);
       const isApiRoute = relativePath.startsWith('api') || relativePath.startsWith('api/');
-      
+
       if (isApiRoute && ['.ts', '.js'].includes(ext)) {
         const apiPath = '/' + [...parentSegments, name === 'index' ? '' : name].filter(Boolean).join('/');
         routes.api.push({
@@ -136,11 +136,11 @@ function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], p
         });
         continue;
       }
-      
+
       // Page routes
       if (['.tsx', '.jsx'].includes(ext)) {
         let routePath;
-        
+
         // home.tsx → /
         if (name === 'home' && parentSegments.length === 0) {
           routePath = '/';
@@ -163,7 +163,7 @@ function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], p
         else {
           routePath = '/' + [...parentSegments, name].join('/');
         }
-        
+
         routes.flexiRoutes.push({
           type: RouteType.PAGE,
           path: routePath.replace(/\/+/g, '/'),
@@ -182,19 +182,19 @@ function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], p
       }
     }
   }
-  
+
   // Recursively scan subdirectories
   for (const entry of entries) {
     if (entry.isDirectory()) {
       const fullPath = path.join(currentDir, entry.name);
       const dirName = entry.name;
-      
+
       // Skip special directories
       if (dirName.startsWith('_') || dirName.startsWith('.')) continue;
-      
+
       // Handle route groups (parentheses) - don't add to URL
       const isGroup = dirName.startsWith('(') && dirName.endsWith(')');
-      
+
       // Handle dynamic segments [param]
       let segmentName = dirName;
       if (dirName.startsWith('[') && dirName.endsWith(']')) {
@@ -205,11 +205,11 @@ function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], p
           segmentName = ':' + paramName;
         }
       }
-      
+
       const newSegments = isGroup ? parentSegments : [...parentSegments, segmentName];
       const newLayout = layoutFile || parentLayout;
       const newMiddleware = middlewareFile || parentMiddleware;
-      
+
       scanRoutesDirectory(baseDir, fullPath, routes, newSegments, newLayout, newMiddleware);
     }
   }
@@ -221,7 +221,7 @@ function scanRoutesDirectory(baseDir, currentDir, routes, parentSegments = [], p
  */
 function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], parentLayout = null, parentMiddleware = null) {
   const entries = fs.readdirSync(currentDir, { withFileTypes: true });
-  
+
   // Find special files in current directory
   const specialFiles: Record<string, string | null> = {
     page: null,
@@ -237,7 +237,7 @@ function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], pare
     if (entry.isFile()) {
       const name = entry.name.replace(/\.(jsx|js|tsx|ts)$/, '');
       const fullPath = path.join(currentDir, entry.name);
-      
+
       if (name === 'page') specialFiles.page = fullPath;
       if (name === 'layout') specialFiles.layout = fullPath;
       if (name === 'loading') specialFiles.loading = fullPath;
@@ -251,7 +251,7 @@ function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], pare
   // If there's a page.tsx, create a route
   if (specialFiles.page) {
     const routePath = '/' + parentSegments.join('/') || '/';
-    
+
     routes.appRoutes.push({
       type: RouteType.PAGE,
       path: routePath.replace(/\/+/g, '/'),
@@ -275,10 +275,10 @@ function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], pare
   for (const entry of entries) {
     if (entry.isDirectory()) {
       const fullPath = path.join(currentDir, entry.name);
-      
+
       // Handle route groups (parentheses) - don't add to URL
       const isGroup = entry.name.startsWith('(') && entry.name.endsWith(')');
-      
+
       // Handle dynamic segments [param]
       let segmentName = entry.name;
       if (entry.name.startsWith('[') && entry.name.endsWith(']')) {
@@ -293,11 +293,11 @@ function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], pare
           segmentName = '*' + entry.name.slice(5, -2);
         }
       }
-      
+
       const newSegments = isGroup ? parentSegments : [...parentSegments, segmentName];
       const newLayout = specialFiles.layout || parentLayout;
       const newMiddleware = specialFiles.middleware || parentMiddleware;
-      
+
       scanAppDirectory(baseDir, fullPath, routes, newSegments, newLayout, newMiddleware);
     }
   }
@@ -308,7 +308,7 @@ function scanAppDirectory(baseDir, currentDir, routes, parentSegments = [], pare
  */
 function scanDirectory(baseDir, currentDir, routes, parentSegments = []) {
   const entries = fs.readdirSync(currentDir, { withFileTypes: true });
-  
+
   // First, find special files in current directory
   const specialFiles = {
     layout: null,
@@ -321,7 +321,7 @@ function scanDirectory(baseDir, currentDir, routes, parentSegments = []) {
     if (entry.isFile()) {
       const name = entry.name.replace(/\.(jsx|js|tsx|ts)$/, '');
       const fullPath = path.join(currentDir, entry.name);
-      
+
       if (name === 'layout') specialFiles.layout = fullPath;
       if (name === 'loading') specialFiles.loading = fullPath;
       if (name === 'error') specialFiles.error = fullPath;
@@ -337,20 +337,20 @@ function scanDirectory(baseDir, currentDir, routes, parentSegments = []) {
       // Handle route groups (parentheses)
       const isGroup = entry.name.startsWith('(') && entry.name.endsWith(')');
       const newSegments = isGroup ? parentSegments : [...parentSegments, entry.name];
-      
+
       scanDirectory(baseDir, fullPath, routes, newSegments);
     } else if (entry.isFile()) {
       const ext = path.extname(entry.name);
       const baseName = path.basename(entry.name, ext);
-      
+
       // Skip special files (already processed)
       if (['layout', 'loading', 'error', 'not-found', '404'].includes(baseName)) {
         continue;
       }
-      
+
       if (['.jsx', '.js', '.tsx', '.ts'].includes(ext)) {
         const isApi = relativePath.startsWith('api' + path.sep) || relativePath.startsWith('api/');
-        
+
         if (isApi && ['.js', '.ts'].includes(ext)) {
           routes.api.push(createRoute(fullPath, baseDir, specialFiles, RouteType.API));
         } else if (!isApi && ['.jsx', '.tsx'].includes(ext)) {
@@ -367,7 +367,7 @@ function scanDirectory(baseDir, currentDir, routes, parentSegments = []) {
 function createRoute(filePath, baseDir, specialFiles, type) {
   const relativePath = path.relative(baseDir, filePath);
   const routePath = filePathToRoute(relativePath);
-  
+
   return {
     type,
     path: routePath,
@@ -389,7 +389,7 @@ function createRoute(filePath, baseDir, specialFiles, type) {
  */
 function scanLayouts(layoutsDir, layoutsMap) {
   const entries = fs.readdirSync(layoutsDir, { withFileTypes: true });
-  
+
   for (const entry of entries) {
     if (entry.isFile() && /\.(jsx|tsx)$/.test(entry.name)) {
       const name = entry.name.replace(/\.(jsx|tsx)$/, '');
@@ -403,30 +403,30 @@ function scanLayouts(layoutsDir, layoutsMap) {
  */
 function filePathToRoute(filePath) {
   let route = filePath.replace(/\\/g, '/');
-  
+
   // Remove extension
   route = route.replace(/\.(jsx|js|tsx|ts)$/, '');
-  
+
   // Convert [param] to :param
   route = route.replace(/\[\.\.\.([^\]]+)\]/g, '*$1'); // Catch-all [...slug]
   route = route.replace(/\[([^\]]+)\]/g, ':$1');
-  
+
   // Handle index files
   if (route.endsWith('/index')) {
     route = route.slice(0, -6) || '/';
   } else if (route === 'index') {
     route = '/';
   }
-  
+
   // Handle route groups - remove (groupName) from path
   route = route.replace(/\/?\([^)]+\)\/?/g, '/');
-  
+
   // Ensure leading slash and clean up
   if (!route.startsWith('/')) {
     route = '/' + route;
   }
   route = route.replace(/\/+/g, '/');
-  
+
   return route;
 }
 
@@ -438,7 +438,7 @@ function createRoutePattern(routePath) {
     .replace(/\*[^/]*/g, '(.*)') // Catch-all
     .replace(/:[^/]+/g, '([^/]+)') // Dynamic segments
     .replace(/\//g, '\\/');
-  
+
   return new RegExp(`^${pattern}$`);
 }
 
@@ -447,20 +447,20 @@ function createRoutePattern(routePath) {
  */
 function buildTree(routes) {
   const tree = { children: {}, routes: [] };
-  
+
   for (const route of routes) {
     let current = tree;
-    
+
     for (const segment of route.segments) {
       if (!current.children[segment]) {
         current.children[segment] = { children: {}, routes: [] };
       }
       current = current.children[segment];
     }
-    
+
     current.routes.push(route);
   }
-  
+
   return tree;
 }
 
@@ -469,16 +469,16 @@ function buildTree(routes) {
  */
 export function matchRoute(urlPath, routes) {
   const normalizedPath = urlPath === '' ? '/' : urlPath.split('?')[0];
-  
+
   for (const route of routes) {
     const match = normalizedPath.match(route.pattern);
-    
+
     if (match) {
       const params = extractParams(route.path, match);
       return { ...route, params };
     }
   }
-  
+
   return null;
 }
 
@@ -488,19 +488,19 @@ export function matchRoute(urlPath, routes) {
 function extractParams(routePath, match) {
   const params = {};
   const paramNames = [];
-  
+
   // Extract param names from route path
   const paramRegex = /:([^/]+)|\*([^/]*)/g;
   let paramMatch;
-  
+
   while ((paramMatch = paramRegex.exec(routePath)) !== null) {
     paramNames.push(paramMatch[1] || paramMatch[2] || 'splat');
   }
-  
+
   paramNames.forEach((name, index) => {
     params[name] = match[index + 1];
   });
-  
+
   return params;
 }
 
@@ -509,13 +509,13 @@ function extractParams(routePath, match) {
  */
 export function findRouteLayouts(route, layoutsMap) {
   const layouts = [];
-  
+
   // Check for segment-based layouts
   let currentPath = '';
   for (const segment of route.segments) {
     currentPath += '/' + segment;
     const layoutName = segment;
-    
+
     if (layoutsMap.has(layoutName)) {
       layouts.push({
         name: layoutName,
@@ -523,7 +523,7 @@ export function findRouteLayouts(route, layoutsMap) {
       });
     }
   }
-  
+
   // Check for route-specific layout
   if (route.layout) {
     layouts.push({
@@ -531,7 +531,7 @@ export function findRouteLayouts(route, layoutsMap) {
       filePath: route.layout
     });
   }
-  
+
   // Check for root layout
   if (layoutsMap.has('root')) {
     layouts.unshift({
@@ -539,7 +539,7 @@ export function findRouteLayouts(route, layoutsMap) {
       filePath: layoutsMap.get('root')
     });
   }
-  
+
   return layouts;
 }
 

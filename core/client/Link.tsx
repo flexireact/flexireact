@@ -24,6 +24,11 @@ export interface LinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorEle
   onNavigationStart?: () => void;
   /** Callback when navigation ends */
   onNavigationEnd?: () => void;
+  /** 
+   * Ref to the anchor element (React 19: ref as regular prop)
+   * No forwardRef wrapper needed in React 19
+   */
+  ref?: React.Ref<HTMLAnchorElement>;
   /** Children */
   children: React.ReactNode;
 }
@@ -34,22 +39,22 @@ const prefetchCache = new Set<string>();
 // Prefetch a URL
 async function prefetchUrl(url: string): Promise<void> {
   if (prefetchCache.has(url)) return;
-  
+
   try {
     // Mark as prefetched immediately to prevent duplicate requests
     prefetchCache.add(url);
-    
+
     // Use link preload for better browser optimization
     const link = document.createElement('link');
     link.rel = 'prefetch';
     link.href = url;
     link.as = 'document';
     document.head.appendChild(link);
-    
+
     // Also fetch the page to warm the cache
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
-    
+
     await fetch(url, {
       method: 'GET',
       credentials: 'same-origin',
@@ -59,7 +64,7 @@ async function prefetchUrl(url: string): Promise<void> {
         'Accept': 'text/html'
       }
     });
-    
+
     clearTimeout(timeoutId);
   } catch (error) {
     // Remove from cache on error so it can be retried
@@ -71,7 +76,7 @@ async function prefetchUrl(url: string): Promise<void> {
 function isInternalUrl(url: string): boolean {
   if (url.startsWith('/')) return true;
   if (url.startsWith('#')) return true;
-  
+
   try {
     const parsed = new URL(url, window.location.origin);
     return parsed.origin === window.location.origin;
@@ -83,16 +88,16 @@ function isInternalUrl(url: string): boolean {
 // Navigate to a URL
 function navigate(url: string, options: { replace?: boolean; scroll?: boolean } = {}): void {
   const { replace = false, scroll = true } = options;
-  
+
   if (replace) {
     window.history.replaceState({}, '', url);
   } else {
     window.history.pushState({}, '', url);
   }
-  
+
   // Dispatch popstate event to trigger any listeners
   window.dispatchEvent(new PopStateEvent('popstate', { state: {} }));
-  
+
   // Scroll to top if requested
   if (scroll) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -172,7 +177,7 @@ export function Link({
   const handleMouseEnter = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
       onMouseEnter?.(e);
-      
+
       if ((prefetch === 'hover' || prefetch === true) && isInternalUrl(href)) {
         prefetchUrl(href);
       }
@@ -184,7 +189,7 @@ export function Link({
   const handleFocus = useCallback(
     (e: React.FocusEvent<HTMLAnchorElement>) => {
       onFocus?.(e);
-      
+
       if ((prefetch === 'hover' || prefetch === true) && isInternalUrl(href)) {
         prefetchUrl(href);
       }
@@ -196,26 +201,26 @@ export function Link({
   const handleClick = useCallback(
     async (e: React.MouseEvent<HTMLAnchorElement>) => {
       onClick?.(e);
-      
+
       // Don't handle if default was prevented
       if (e.defaultPrevented) return;
-      
+
       // Don't handle if modifier keys are pressed (open in new tab, etc.)
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-      
+
       // Don't handle external URLs
       if (!isInternalUrl(href)) return;
-      
+
       // Don't handle if target is set
       if (props.target && props.target !== '_self') return;
-      
+
       // Prevent default navigation
       e.preventDefault();
-      
+
       // Start navigation
       setIsNavigating(true);
       onNavigationStart?.();
-      
+
       try {
         // Fetch the new page
         const response = await fetch(href, {
@@ -226,28 +231,28 @@ export function Link({
             'Accept': 'text/html'
           }
         });
-        
+
         if (response.ok) {
           const html = await response.text();
-          
+
           // Parse and update the page
           const parser = new DOMParser();
           const doc = parser.parseFromString(html, 'text/html');
-          
+
           // Update title
           const newTitle = doc.querySelector('title')?.textContent;
           if (newTitle) {
             document.title = newTitle;
           }
-          
+
           // Update body content (or specific container)
           const newContent = doc.querySelector('#root') || doc.body;
           const currentContent = document.querySelector('#root') || document.body;
-          
+
           if (newContent && currentContent) {
             currentContent.innerHTML = newContent.innerHTML;
           }
-          
+
           // Update URL
           navigate(href, { replace, scroll });
         } else {
@@ -316,26 +321,26 @@ export function useRouter() {
       // Trigger page reload for now (full SPA navigation requires more work)
       window.location.href = url;
     },
-    
+
     replace(url: string, options?: { scroll?: boolean }) {
       navigate(url, { replace: true, scroll: options?.scroll ?? true });
       window.location.href = url;
     },
-    
+
     back() {
       window.history.back();
     },
-    
+
     forward() {
       window.history.forward();
     },
-    
+
     prefetch(url: string) {
       if (isInternalUrl(url)) {
         prefetchUrl(url);
       }
     },
-    
+
     refresh() {
       window.location.reload();
     }

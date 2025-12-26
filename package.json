@@ -1,7 +1,7 @@
 {
   "name": "@flexireact/core",
-  "version": "3.0.5",
-  "description": "The Modern React Framework v3 - SSR, SSG, Islands, Edge Runtime, 50+ UI Components, TypeScript, Tailwind v4",
+  "version": "4.0.0",
+  "description": "The Modern React Framework v4 - React 19, SSR, SSG, Islands, Edge Runtime, 50+ UI Components, TypeScript, Tailwind v4",
   "main": "dist/core/index.js",
   "types": "dist/core/index.d.ts",
   "type": "module",
@@ -53,21 +53,23 @@
   },
   "homepage": "https://github.com/flexireact/flexireact#readme",
   "dependencies": {
-    "esbuild": "^0.25.0",
+    "esbuild": "0.25.0",
     "ora": "^8.1.1",
     "picocolors": "^1.1.1",
     "prompts": "^2.4.2",
     "tsx": "^4.21.0"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
     "@types/prompts": "^2.4.9",
-    "@types/react": "^18.3.14",
-    "@types/react-dom": "^18.3.2",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "tsup": "^8.5.1",
     "typescript": "^5.7.2"
   },

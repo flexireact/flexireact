@@ -2,7 +2,7 @@
   <img src="./assets/flexireact.webp" alt="FlexiReact Logo" width="400" />
 </p>
 
-<h1 align="center">⚡ FlexiReact v3</h1>
+<h1 align="center">⚡ FlexiReact v4</h1>
 
 <p align="center">
   <strong>The Future of React Development</strong>
@@ -48,16 +48,14 @@ Open [http://localhost:3000](http://localhost:3000) 🎉
 
 ---
 
-## 🆕 What's New in v3.0
+## 🆕 What's New in v4
 
-### v3.0.0 — The Future of React
-- **🌐 Universal Edge Runtime** — Deploy anywhere: Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge
-- **⚡ Smart Caching** — TTL, stale-while-revalidate, tag-based invalidation
-- **🎯 Partial Prerendering (PPR)** — Static shell + streaming dynamic content
-- **🛠️ CLI Scaffolding** — Generate pages, components, hooks, APIs with `flexi g`
-- **🔧 Advanced DevTools** — Routes, Components, Network, Performance monitoring
-- **🎨 FlexiUI Integration** — 50+ beautiful, accessible React components
-- **📱 Sexy Templates** — Modern, responsive landing pages out of the box
+### v4.0.0 — React 19 Native Edition
+- **⚛️ React 19 Native** — Full support for React 19 (Actions, `useActionState`, `useOptimistic`, `useFormStatus`, `use()`)
+- **🚀 Enhanced Actions** — Simplified server action handling with native React 19 primitives
+- **🔄 Improved Hydration** — Leveraging React 19 `onRecoverableError` for better error resilience
+- **📦 New Hooks API** — Centralized `core/hooks` module for React 19 + FlexiReact utilities
+- **⚡ Version 4.0** — Major release with stability improvements and updated CLI templates
 
 ## ✨ Features
 
@@ -92,8 +90,9 @@ Open [http://localhost:3000](http://localhost:3000) 🎉
 | 🚀 **Prefetch** | Automatic link prefetching for instant navigation |
 | 🔍 **TanStack Query** | Built-in support for useQuery, useMutation, and caching |
 | 🐻 **Zustand / Jotai** | Lightweight state management integration |
-| ⚡ **Optimistic Updates** | Instant UI feedback with automatic rollback |
-| ⏳ **Suspense Ready** | React Suspense for loading states and streaming |
+| ⚡ **Optimistic Updates** | Instant UI feedback with `useOptimistic` (React 19) |
+| ⏳ **Suspense Ready** | React Suspense and `use()` hook for async data |
+| 🏗️ **Actions State** | Native `useActionState` and `useFormStatus` support |
 
 ### 🛡️ Middleware & Security
 

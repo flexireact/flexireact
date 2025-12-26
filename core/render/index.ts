@@ -33,7 +33,7 @@ export async function renderPage(options) {
   try {
     // Build the component tree - start with the page component
     let element: any = React.createElement(Component, props);
-    
+
     // Wrap with error boundary if error component exists
     if (error) {
       element = React.createElement(ErrorBoundaryWrapper as any, {
@@ -49,7 +49,7 @@ export async function renderPage(options) {
         children: element
       });
     }
-    
+
     // Wrap with layouts (innermost to outermost)
     // Each layout receives children as a prop
     for (const layout of [...layouts].reverse()) {
@@ -63,13 +63,13 @@ export async function renderPage(options) {
 
     // Render to string
     const content = renderToString(element);
-    
+
     // Calculate render time
     const renderTime = Date.now() - renderStart;
-    
+
     // Generate island hydration scripts
     const islandScripts = generateIslandScripts(islands);
-    
+
     // Build full HTML document
     return buildHtmlDocument({
       content,
@@ -164,10 +164,10 @@ export async function renderPageStream(options: {
         React.createElement('meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }),
         React.createElement('title', null, title),
         favicon && React.createElement('link', { rel: 'icon', href: favicon }),
-        ...Object.entries(meta).map(([name, content]) => 
+        ...Object.entries(meta).map(([name, content]) =>
           React.createElement('meta', { key: name, name, content })
         ),
-        ...styles.map((style, i) => 
+        ...styles.map((style, i) =>
           typeof style === 'string'
             ? React.createElement('link', { key: i, rel: 'stylesheet', href: style })
             : React.createElement('style', { key: i, dangerouslySetInnerHTML: { __html: style.content } })
@@ -175,7 +175,7 @@ export async function renderPageStream(options: {
       ),
       React.createElement('body', null,
         React.createElement('div', { id: 'root' }, children),
-        ...scripts.map((script, i) => 
+        ...scripts.map((script, i) =>
           typeof script === 'string'
             ? React.createElement('script', { key: i, src: script })
             : script.src
@@ -215,7 +215,7 @@ export async function renderPageStream(options: {
   // Create a passthrough stream
   const { PassThrough } = await import('stream');
   const passThrough = new PassThrough();
-  
+
   // Pipe the render stream to our passthrough
   pipe(passThrough);
 
@@ -286,9 +286,9 @@ class ErrorBoundaryWrapper extends React.Component<ErrorBoundaryProps, ErrorBoun
  */
 function generateIslandScripts(islands) {
   if (!islands.length) return [];
-  
+
   const scripts = [];
-  
+
   for (const island of islands) {
     scripts.push({
       type: 'module',
@@ -299,12 +299,12 @@ function generateIslandScripts(islands) {
       `
     });
   }
-  
+
   return scripts;
 }
 
 /**
- * Generates the Dev Toolbar HTML (FlexiReact v2 - Premium DevTools)
+ * Generates the Dev Toolbar HTML (FlexiReact v4 - Premium DevTools)
  */
 interface DevToolbarOptions {
   renderTime?: number;
@@ -317,9 +317,9 @@ interface DevToolbarOptions {
 }
 
 function generateDevToolbar(options: DevToolbarOptions = {}) {
-  const { 
-    renderTime = 0, 
-    pageType = 'SSR', 
+  const {
+    renderTime = 0,
+    pageType = 'SSR',
     route = '/',
     hasError = false,
     isHydrated = false,
@@ -331,7 +331,7 @@ function generateDevToolbar(options: DevToolbarOptions = {}) {
   const timeLabel = renderTime < 50 ? 'Fast' : renderTime < 200 ? 'OK' : 'Slow';
 
   return `
-<!-- FlexiReact v2 Dev Toolbar -->
+<!-- FlexiReact v4 Dev Toolbar -->
 <div id="flexi-dev-toolbar" class="flexi-dev-collapsed">
   <style>
     #flexi-dev-toolbar {
@@ -692,7 +692,7 @@ function generateDevToolbar(options: DevToolbarOptions = {}) {
 </div>
 
 <script>
-  // FlexiReact v2 DevTools
+  // FlexiReact v4 DevTools
   window.__FLEXI_DEV__ = {
     version: '2.0.0',
     renderTime: ${renderTime},
@@ -729,7 +729,7 @@ function generateDevToolbar(options: DevToolbarOptions = {}) {
   
   // Console branding
   console.log(
-    '%c ⚡ FlexiReact v2 %c ${pageType} %c ${renderTime}ms ',
+    '%c ⚡ FlexiReact v4 %c ${pageType} %c ${renderTime}ms ',
     'background: #00FF9C; color: #000; font-weight: bold; padding: 2px 6px; border-radius: 4px 0 0 4px;',
     'background: #1e1e1e; color: #fafafa; padding: 2px 6px;',
     'background: ${timeColor}20; color: ${timeColor}; padding: 2px 6px; border-radius: 0 4px 4px 0;'
@@ -793,15 +793,15 @@ function buildHtmlDocument(options) {
   // Generate Dev Toolbar for development mode
   const isDev = process.env.NODE_ENV !== 'production';
   const pageType = isSSG ? 'SSG' : isClientComponent ? 'CSR' : 'SSR';
-  const devToolbar = isDev ? generateDevToolbar({ 
-    renderTime, 
-    pageType, 
+  const devToolbar = isDev ? generateDevToolbar({
+    renderTime,
+    pageType,
     route,
     isHydrated: isClientComponent
   }) : '';
 
   // Determine favicon link
-  const faviconLink = favicon 
+  const faviconLink = favicon
     ? `<link rel="icon" href="${escapeHtml(favicon)}">`
     : `<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,${faviconSvg}">`;
 
@@ -843,15 +843,15 @@ function buildHtmlDocument(options) {
 }
 
 /**
- * Renders an error page with beautiful styling (FlexiReact v2)
+ * Renders an error page with beautiful styling (FlexiReact v4)
  */
 export function renderError(statusCode, message, stack = null) {
   const showStack = process.env.NODE_ENV !== 'production' && stack;
   const isDev = process.env.NODE_ENV !== 'production';
-  
+
   // Parse error for better display
   const errorDetails = parseErrorStack(stack);
-  
+
   // Different messages for different status codes
   const errorMessages = {
     404: { title: 'Page Not Found', icon: 'search', color: '#00FF9C', desc: 'The page you\'re looking for doesn\'t exist or has been moved.' },
@@ -859,11 +859,11 @@ export function renderError(statusCode, message, stack = null) {
     403: { title: 'Forbidden', icon: 'lock', color: '#f59e0b', desc: 'You don\'t have permission to access this resource.' },
     401: { title: 'Unauthorized', icon: 'key', color: '#8b5cf6', desc: 'Please log in to access this page.' },
   };
-  
+
   const errorInfo = errorMessages[statusCode] || { title: 'Error', icon: 'alert', color: '#ef4444', desc: message };
-  
+
   // Generate error frames HTML for dev mode
-  const errorFramesHtml = showStack && errorDetails?.frames?.length > 0 
+  const errorFramesHtml = showStack && errorDetails?.frames?.length > 0
     ? errorDetails.frames.slice(0, 5).map((frame, i) => `
         <div class="error-frame ${i === 0 ? 'error-frame-first' : ''}">
           <div class="error-frame-fn">${escapeHtml(frame.fn)}</div>
@@ -1166,7 +1166,7 @@ export function renderError(statusCode, message, stack = null) {
     ${isDev ? `
     <div class="dev-badge">
       <div class="dev-badge-dot"></div>
-      FlexiReact v2
+      FlexiReact v4
     </div>
     ` : ''}
 </body>
@@ -1178,18 +1178,18 @@ export function renderError(statusCode, message, stack = null) {
  */
 function parseErrorStack(stack) {
   if (!stack) return null;
-  
+
   const lines = stack.split('\n');
   const parsed = {
     message: lines[0] || '',
     frames: []
   };
-  
+
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim();
     const match = line.match(/at\s+(.+?)\s+\((.+?):(\d+):(\d+)\)/) ||
-                  line.match(/at\s+(.+?):(\d+):(\d+)/);
-    
+      line.match(/at\s+(.+?):(\d+):(\d+)/);
+
     if (match) {
       parsed.frames.push({
         fn: match[1] || 'anonymous',
@@ -1199,7 +1199,7 @@ function parseErrorStack(stack) {
       });
     }
   }
-  
+
   return parsed;
 }
 
@@ -1232,7 +1232,7 @@ export function renderLoading(LoadingComponent) {
       </style>
     </div>`;
   }
-  
+
   return renderToString(React.createElement(LoadingComponent));
 }
 

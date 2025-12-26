@@ -19,7 +19,7 @@ npm-debug.log*
 
 # Test apps
 test-*/
-
+my-app/
 # Environment
 .env
 .env.local
@@ -28,3 +28,9 @@ test-*/
 # Cache
 *.tsbuildinfo
 .cache/
+
+# React 19 Test
+react19-test/
+
+# Documentation
+flexireact_overview.md

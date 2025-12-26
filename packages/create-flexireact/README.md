@@ -1,6 +1,6 @@
 # create-flexireact
 
-Create FlexiReact v2 apps with one command.
+Create FlexiReact v4 apps with one command.
 
 ## Usage
 
@@ -22,16 +22,17 @@ npm create flexireact@latest my-app
 | **Minimal** | Bare minimum FlexiReact setup |
 | **App Router** | Next.js style `app/` directory routing |
 
-## What's New in v2
+## What's New in v3.1
 
+- ⚛️ **React 19 Stable** — Full support for Actions and useActionState
 - 🆕 **TypeScript Native** — CLI rewritten in TypeScript
 - 🎨 **Tailwind CSS v4** — New `@import "tailwindcss"` syntax
 - 📁 **Routes Directory** — New `routes/` with route groups
-- ⚡ **Modern Templates** — Beautiful, production-ready starters
+- ⚡ **Modern Templates** — Beautiful, production-ready starters with React 19 defaults
 
 ## What's Included
 
-- ⚡ **FlexiReact v2** — The Modern React Framework
+- ⚡ **FlexiReact v4** — The Modern React Framework with React 19
 - 📘 **TypeScript** — Full type safety
 - 🎨 **Tailwind CSS v4** — Latest styling features
 - 📁 **File-based routing** — `routes/`, `app/`, or `pages/`

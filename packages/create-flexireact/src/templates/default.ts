@@ -1,9 +1,9 @@
 /**
- * Default Template - Full-featured FlexiReact v3 setup
+ * Default Template - Full-featured FlexiReact v4 setup
  * 
  * Structure:
  * - app/          : Layout, components, styles, providers
- * - routes/       : FlexiReact v3 file-based routing
+ * - routes/       : FlexiReact v4 file-based routing
  * - lib/          : Utilities
  * - public/       : Static assets
  */
@@ -15,7 +15,7 @@ export function defaultTemplate(projectName: string): TemplateFiles {
     // ========================================================================
     // Config Files
     // ========================================================================
-    
+
     'package.json': JSON.stringify({
       name: projectName,
       version: '1.0.0',
@@ -246,7 +246,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border py-8 mt-auto">
       <div className="container mx-auto px-4 text-center text-sm text-muted max-w-6xl">
-        <p>Built with FlexiReact v3 • {new Date().getFullYear()}</p>
+        <p>Built with FlexiReact v4 • {new Date().getFullYear()}</p>
         <p className="mt-2">
           <a href="https://discord.gg/rFSZxFtpAA" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
             Join our Discord Community 💬
@@ -312,7 +312,7 @@ export function useTheme() {
     // Styles
     'app/styles/globals.css': `@import "tailwindcss";
 
-/* FlexiReact v3 Theme */
+/* FlexiReact v4 Theme */
 @theme {
   /* Colors */
   --color-background: #0a0a0a;
@@ -377,15 +377,15 @@ body {
 `,
 
     // ========================================================================
-    // Routes Directory - FlexiReact v3 Routing
+    // Routes Directory - FlexiReact v4 Routing
     // ========================================================================
 
     'routes/(public)/home.tsx': `import React from 'react';
 import { Button } from '@/app/components/ui';
 
 export const metadata = {
-  title: 'FlexiReact v3 - The Modern React Framework',
-  description: 'Build fast, modern web apps with FlexiReact v3',
+  title: 'FlexiReact v4 - The Modern React Framework',
+  description: 'Build fast, modern web apps with FlexiReact v4',
 };
 
 export default function HomePage() {
@@ -398,7 +398,7 @@ export default function HomePage() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
           </span>
-          <span className="text-muted">Introducing FlexiReact v3.0</span>
+          <span className="text-muted">Introducing FlexiReact v4.0</span>
         </div>
 
         {/* Heading */}
@@ -565,7 +565,7 @@ export default function BlogPost({ params }: BlogPostProps) {
       
       <div className="prose prose-invert">
         <p>
-          This page demonstrates dynamic routing in FlexiReact v3. 
+          This page demonstrates dynamic routing in FlexiReact v4. 
           The [slug].tsx file creates a dynamic route that matches any path under /blog/.
         </p>
       </div>

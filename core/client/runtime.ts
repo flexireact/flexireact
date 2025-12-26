@@ -49,4 +49,4 @@ window.addEventListener('flexi:pageload', () => {
   }
 });
 
-console.log('⚡ FlexiReact v2 client runtime loaded');
+console.log('⚡ FlexiReact v4 client runtime loaded');

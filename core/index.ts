@@ -1,5 +1,5 @@
 /**
- * FlexiReact v2 - Main Entry Point
+ * FlexiReact v4 - Main Entry Point
  * A modern React framework with RSC, SSG, Islands, and more
  */
 
@@ -28,46 +28,46 @@ export { build, buildDev, BuildMode } from './build/index.js';
 export { generateStaticSite, SSGResult, ISRManager } from './ssg/index.js';
 
 // RSC
-export { 
-  processServerComponent, 
-  createClientReference, 
+export {
+  processServerComponent,
+  createClientReference,
   serializeRSCPayload,
   createServerAction,
   handleServerAction,
   ServerBoundary,
   ClientBoundary,
-  RSC_CONTENT_TYPE 
+  RSC_CONTENT_TYPE
 } from './rsc/index.js';
 
 // Islands
-export { 
-  Island, 
-  createIsland, 
+export {
+  Island,
+  createIsland,
   createLazyIsland,
   getRegisteredIslands,
   generateHydrationScript,
   generateAdvancedHydrationScript,
-  LoadStrategy 
+  LoadStrategy
 } from './islands/index.js';
 
 // Middleware
-export { 
-  MiddlewareRequest, 
-  MiddlewareResponse, 
-  loadMiddleware, 
+export {
+  MiddlewareRequest,
+  MiddlewareResponse,
+  loadMiddleware,
   runMiddleware,
   composeMiddleware,
-  middlewares 
+  middlewares
 } from './middleware/index.js';
 
 // Plugins
-export { 
-  PluginManager, 
-  PluginHooks, 
-  pluginManager, 
-  loadPlugins, 
+export {
+  PluginManager,
+  PluginHooks,
+  pluginManager,
+  loadPlugins,
   definePlugin,
-  builtinPlugins 
+  builtinPlugins
 } from './plugins/index.js';
 
 // Edge Runtime
@@ -138,12 +138,12 @@ export {
   generateJsonLd,
   jsonLd
 } from './metadata/index.js';
-export type { 
-  Metadata, 
-  OpenGraph, 
-  Twitter, 
-  Icons, 
-  Robots, 
+export type {
+  Metadata,
+  OpenGraph,
+  Twitter,
+  Icons,
+  Robots,
   Viewport,
   Author
 } from './metadata/index.js';
@@ -161,6 +161,13 @@ export {
 } from './image/index.js';
 export type { ImageProps, ImageConfig, ImageLoader } from './image/index.js';
 
+// React 19 Hooks (re-exported for convenience)
+export { useActionState, useOptimistic } from 'react';
+export { useFormStatus } from 'react-dom';
+
+// FlexiReact Hooks
+export { useAsyncData, useOptimisticMutation, preloadResource } from './hooks/index.js';
+
 // Server Actions
 export {
   serverAction,
@@ -169,7 +176,8 @@ export {
   executeAction,
   callServerAction,
   formAction,
-  createFormState,
+  createFormState, // deprecated - use useActionState
+  useFlexiAction,
   bindArgs,
   useActionContext
 } from './actions/index.js';
@@ -209,7 +217,7 @@ export {
 } from './devtools/index.js';
 
 // Version
-export const VERSION = '3.0.0';
+export const VERSION = '4.0.0';
 
 // Default export
 export default {

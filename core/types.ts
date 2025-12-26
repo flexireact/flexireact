@@ -106,6 +106,44 @@ export type ApiHandler = (
 ) => void | Promise<void>;
 
 // ============================================================================
+// React 19 Action Types
+// ============================================================================
+
+/**
+ * State that can be sync or async (for useActionState)
+ */
+export type ActionState<T> = T | Promise<T>;
+
+/**
+ * Form action data passed to server actions
+ */
+export interface ActionFormData {
+  formData: FormData;
+  reset: () => void;
+}
+
+/**
+ * Server Action function signature (React 19 style)
+ * @template State - The state type managed by the action
+ * @template Payload - The payload type (usually FormData)
+ */
+export type ServerAction<State, Payload = FormData> = (
+  prevState: Awaited<State>,
+  payload: Payload
+) => State | Promise<State>;
+
+/**
+ * Action result with typed data and error handling
+ */
+export interface TypedActionResult<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  errors?: Record<string, string[]>;
+  redirect?: string;
+}
+
+// ============================================================================
 // Component Types
 // ============================================================================
 
@@ -124,9 +162,9 @@ export interface ErrorProps {
   reset: () => void;
 }
 
-export interface LoadingProps {}
+export interface LoadingProps { }
 
-export interface NotFoundProps {}
+export interface NotFoundProps { }
 
 export type PageComponent = ComponentType<PageProps>;
 export type LayoutComponent = ComponentType<LayoutProps>;

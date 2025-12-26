@@ -16,7 +16,7 @@ import { runGenerate, listGenerators } from './generators.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const VERSION = '3.0.0';
+const VERSION = '4.0.0';
 
 // ============================================================================
 // ASCII Logo & Branding
@@ -273,8 +273,8 @@ async function createDefaultTemplate(projectPath: string, name: string, useTypeS
       doctor: 'flexi doctor'
     },
     dependencies: {
-      react: '^18.3.1',
-      'react-dom': '^18.3.1',
+      react: '^19.0.0',
+      'react-dom': '^19.0.0',
       'class-variance-authority': '^0.7.0',
       clsx: '^2.1.1',
       'tailwind-merge': '^2.5.5',
@@ -286,8 +286,8 @@ async function createDefaultTemplate(projectPath: string, name: string, useTypeS
       autoprefixer: '^10.4.20',
       ...(useTypeScript ? {
         typescript: '^5.7.2',
-        '@types/react': '^18.3.14',
-        '@types/react-dom': '^18.3.2',
+        '@types/react': '^19.0.0',
+        '@types/react-dom': '^19.0.0',
         '@types/node': '^22.10.1'
       } : {})
     }
@@ -669,7 +669,7 @@ const styles = {
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   },
   nav: {
-    position: 'fixed' as const,
+    position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
@@ -701,10 +701,10 @@ const styles = {
   navLink: { color: '#94a3b8', textDecoration: 'none', fontSize: 14 },
   hero: {
     display: 'flex',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: 'center' as const,
+    textAlign: 'center',
     padding: '140px 24px 80px',
   },
   badge: {
@@ -733,7 +733,7 @@ const styles = {
     lineHeight: 1.6,
     marginBottom: 32,
   },
-  buttons: { display: 'flex', gap: 16, flexWrap: 'wrap' as const, justifyContent: 'center' },
+  buttons: { display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' },
   primaryBtn: {
     background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
     color: '#fff',
@@ -760,7 +760,7 @@ const styles = {
   featuresTitle: {
     fontSize: 32,
     fontWeight: 700,
-    textAlign: 'center' as const,
+    textAlign: 'center',
     marginBottom: 48,
   },
   grid: {
@@ -778,7 +778,7 @@ const styles = {
   cardTitle: { fontSize: 18, fontWeight: 600, marginBottom: 8 },
   cardDesc: { fontSize: 14, color: '#94a3b8', lineHeight: 1.5 },
   footer: {
-    textAlign: 'center' as const,
+    textAlign: 'center',
     padding: 32,
     color: '#64748b',
     borderTop: '1px solid rgba(255,255,255,0.1)',
@@ -797,7 +797,7 @@ export function get(req${ext === 'tsx' ? ': any' : ''}, res${ext === 'tsx' ? ': 
   res.json({
     message: 'Hello from FlexiReact API! 🚀',
     timestamp: new Date().toISOString(),
-    framework: 'FlexiReact v2.1'
+    framework: 'FlexiReact v4'
   });
 }
 
@@ -847,7 +847,12 @@ ${pc.cyan('   ╰─────────────────────
       stdio: 'inherit',
       cwd: process.cwd(),
       shell: true,
-      env: { ...process.env, NODE_ENV: 'development', FORCE_COLOR: '1' }
+      env: {
+        ...process.env,
+        NODE_ENV: 'development',
+        FORCE_COLOR: '1',
+        NODE_PATH: path.join(process.cwd(), 'node_modules')
+      }
     }
   );
 
