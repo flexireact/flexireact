@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Server Actions - FlexiReact v3 Documentation</title>
-  <meta name="description" content="Learn about Server Actions in FlexiReact v3">
+  <title>Server Actions - FlexiReact v4 Documentation</title>
+  <meta name="description" content="Learn about Server Actions in FlexiReact v4">
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text x='50' y='68' font-family='system-ui' font-size='50' font-weight='900' fill='%2300FF9C' text-anchor='middle'>F</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -56,7 +56,7 @@
           <span class="text-black font-bold">F</span>
         </div>
         <span class="font-bold text-lg">FlexiReact</span>
-        <span class="px-2 py-0.5 text-xs bg-primary/20 text-primary rounded-full">v3.0</span>
+        <span class="px-2 py-0.5 text-xs bg-primary/20 text-primary rounded-full">v4.0</span>
       </a>
       <nav class="hidden md:flex items-center gap-6">
         <a href="index.html" class="text-sm text-gray-400 hover:text-white transition">Home</a>
@@ -262,7 +262,7 @@ export default function NewPost() {
       <section class="mb-16">
         <h2 class="text-3xl font-bold mb-6">Client Components</h2>
         <p class="text-gray-400 mb-6">
-          Use Server Actions in Client Components with <code class="text-primary">useFormState</code> and <code
+          Use Server Actions in Client Components with <code class="text-primary">useActionState</code> and <code
             class="text-primary">useFormStatus</code>.
         </p>
 
@@ -272,7 +272,8 @@ export default function NewPost() {
           </div>
           <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
 import { createPost } from '@/app/actions';
 
 function SubmitButton() {
@@ -286,7 +287,7 @@ function SubmitButton() {
 }
 
 export function CreatePostForm() {
-  const [state, formAction] = useFormState(createPost, null);
+  const [state, formAction, isPending] = useActionState(createPost, null);
   
   return (
     &lt;form action={formAction}&gt;

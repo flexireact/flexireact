@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Routing - FlexiReact v3 Documentation</title>
-  <meta name="description" content="Learn about file-based routing in FlexiReact v3">
+  <title>Routing - FlexiReact v4 Documentation</title>
+  <meta name="description" content="Learn about file-based routing in FlexiReact v4">
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text x='50' y='68' font-family='system-ui' font-size='50' font-weight='900' fill='%2300FF9C' text-anchor='middle'>F</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -56,7 +56,7 @@
           <span class="text-black font-bold">F</span>
         </div>
         <span class="font-bold text-lg">FlexiReact</span>
-        <span class="px-2 py-0.5 text-xs bg-primary/20 text-primary rounded-full">v3.0</span>
+        <span class="px-2 py-0.5 text-xs bg-primary/20 text-primary rounded-full">v4.0</span>
       </a>
       <nav class="hidden md:flex items-center gap-6">
         <a href="index.html" class="text-sm text-gray-400 hover:text-white transition">Home</a>
@@ -195,7 +195,8 @@
       <section class="mb-16">
         <h2 class="text-3xl font-bold mb-6">Routes Directory (Alternative)</h2>
         <p class="text-gray-400 mb-6">
-          The <code class="text-primary">routes/</code> directory provides a simpler file-based routing approach.
+          The <code class="text-primary">routes/</code> directory provides a simpler file-based routing approach
+          (Standard in v4).
         </p>
 
         <div class="rounded-xl bg-[#111] border border-gray-800 overflow-hidden mb-6">
@@ -243,7 +244,8 @@ export default function BlogPost({ params }: PageProps) {
             <div>
               <h4 class="font-semibold text-blue-400 mb-1">Catch-All Routes</h4>
               <p class="text-sm text-gray-400">Use <code class="text-primary">[...slug]</code> for catch-all routes or
-                <code class="text-primary">[[...slug]]</code> for optional catch-all.</p>
+                <code class="text-primary">[[...slug]]</code> for optional catch-all.
+              </p>
             </div>
           </div>
         </div>
